@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Componentes_ProyectoGimnasioMMA.GestionUsuarios.GestionUsuarios"
+             Title="GestionUsuarios">
+    <Grid  Padding="20" RowDefinitions="Auto, Auto, Auto, *">
+        <Label
+            Text="Gestión Usuarios"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" 
+            Grid.Row="0"
+            />
+
+        <Picker x:Name="PickerOpcion" 
+                SelectedIndexChanged="SelectedIndexChanged" 
+                Title="Seleccione una Opción"
+                Grid.Row="1"/>
+
+        <Picker x:Name="PickerUsuario" 
+                SelectedIndexChanged="SelectedIndexChanged" 
+                Title="Seleccione el tipo de usuario"
+                Grid.Row="2"/>
+        <!-- ScrollView -->
+        <ScrollView x:Name="ScrollViewUsuarios" 
+                    VerticalOptions="FillAndExpand" 
+                    Grid.Row="3">
+            <VerticalStackLayout x:Name="VerticalStackLayoutUsuarios" 
+                                 Spacing="15" 
+                                 VerticalOptions="Start"/>
+        </ScrollView>
+
+
+
+    </Grid>
+</ContentPage>

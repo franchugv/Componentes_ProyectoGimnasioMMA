@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Componentes_ProyectoGimnasioMMA.Views.SelectorEscuela"
+             Title="SelectorEscuela">
+    <Grid Padding="20" RowDefinitions="Auto, *">
+
+        <!-- Título y Picker -->
+        <Label Text="Seleccione una Escuela" 
+               HorizontalOptions="Center" 
+               Grid.Row="0"/>
+
+        <!-- ScrollView -->
+        <ScrollView x:Name="ScrollViewClientes" 
+                    VerticalOptions="FillAndExpand" 
+                    Grid.Row="1">
+            <VerticalStackLayout x:Name="VerticalStackLayoutEscuelas" 
+                                 Spacing="15" 
+                                 VerticalOptions="Start"/>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>
