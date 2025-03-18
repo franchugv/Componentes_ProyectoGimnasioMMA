@@ -35,7 +35,10 @@ public partial class EntryConfirmacion : ContentView
 
     public bool EstaSeleccionado
     {
-        get => radioOpcion.IsChecked;
+        get
+        {
+            return radioOpcion.IsChecked;
+        }
     }
 
     // MÉTODOS

@@ -4,8 +4,10 @@
              x:Class="Componentes_ProyectoGimnasioMMA.Componentes.EntryConfirmacion">
     <VerticalStackLayout>
         <HorizontalStackLayout>
+            
             <RadioButton x:Name="radioOpcion" />
             <Entry x:Name="entryDato" />
+            
         </HorizontalStackLayout>
         <Label x:Name="lError" TextColor="Red"/>
     </VerticalStackLayout>
