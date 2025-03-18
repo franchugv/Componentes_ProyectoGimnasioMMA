@@ -18,22 +18,26 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Componentes\GestionPersonas\Editar\**" />
+	  <Compile Remove="Componentes\GestionPersonas\Eliminar\**" />
+	  <EmbeddedResource Remove="Componentes\GestionPersonas\Editar\**" />
+	  <EmbeddedResource Remove="Componentes\GestionPersonas\Eliminar\**" />
+	  <MauiCss Remove="Componentes\GestionPersonas\Editar\**" />
+	  <MauiCss Remove="Componentes\GestionPersonas\Eliminar\**" />
+	  <MauiXaml Remove="Componentes\GestionPersonas\Editar\**" />
+	  <MauiXaml Remove="Componentes\GestionPersonas\Eliminar\**" />
+	  <None Remove="Componentes\GestionPersonas\Editar\**" />
+	  <None Remove="Componentes\GestionPersonas\Eliminar\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="Componentes\EntryConfirmacion.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Componentes\EntryValidacion.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Componentes\GestionGimnasios\FormularioGimnasio.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="Componentes\GestionPersonas\FormularioPersona.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="GestionUsuarios\GestionUsuarios.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\GestionEscuelas.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\GestionUsuarios.xaml">
@@ -48,18 +52,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Componentes\GestionGimnasios\Eliminar\" />
-	  <Folder Include="Componentes\GestionPersonas\Editar\" />
-	  <Folder Include="Componentes\GestionPersonas\Eliminar\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <PackageReference Include="MySqlConnector" Version="2.4.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Reference Include="BibliotecaClases_ProyectoGimnasioMMA">
-	    <HintPath>..\..\..\DLL\BibliotecaClases_ProyectoGimnasioMMA.dll</HintPath>
+	    <HintPath>..\..\BibliotecaClases_ProyectoGimnasioMMA\BibliotecaClases_ProyectoGimnasioMMA\bin\Debug\net7.0\BibliotecaClases_ProyectoGimnasioMMA.dll</HintPath>
 	  </Reference>
 	</ItemGroup>
 
