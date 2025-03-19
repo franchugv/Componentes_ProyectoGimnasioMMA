@@ -126,13 +126,20 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             };
 
             // Agregar el gesto de toque (tap)
-            var tapGesture = new TapGestureRecognizer();
+            TapGestureRecognizer tapGesture = new TapGestureRecognizer();
             tapGesture.Tapped += evento; // Se asigna el evento recibido como parámetro
 
             carta.GestureRecognizers.Add(tapGesture);
 
             return carta;
         }
+
+        public static async Task<bool> MostrarConfirmacion(Page page, string titulo, string mensaje)
+        {
+            bool respuesta = await page.DisplayAlert(titulo, mensaje, "Sí", "No");
+            return respuesta;
+        }
+
 
     }
 }

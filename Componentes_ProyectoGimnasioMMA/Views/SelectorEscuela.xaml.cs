@@ -38,7 +38,6 @@ public partial class SelectorEscuela : ContentPage
 
         GenerarInterfaz();
 
-        //_accion = accion;
 
     }
 
