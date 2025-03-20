@@ -5,7 +5,7 @@
     <VerticalStackLayout>
         <HorizontalStackLayout>
 
-            <RadioButton x:Name="radioOpcion" />
+            <CheckBox x:Name="checkBox" />
             <Entry x:Name="entryDato" />
             
         </HorizontalStackLayout>

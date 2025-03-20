@@ -27,13 +27,10 @@ public partial class PickerConfirmacion : ContentView
     {
         get
         {
-            return radioOpcion.IsChecked;
+            return checkBox.IsChecked;
         }
     }
-    private void RadioButton_Tapped(object sender, TappedEventArgs e)
-    {
-        radioOpcion.IsChecked = !radioOpcion.IsChecked;
-    }
+
 
 
 }

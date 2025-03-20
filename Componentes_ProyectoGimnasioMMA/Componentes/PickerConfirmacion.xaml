@@ -3,11 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Componentes_ProyectoGimnasioMMA.Componentes.PickerConfirmacion">
     <HorizontalStackLayout>
-        <RadioButton x:Name="radioOpcion">
-            <RadioButton.GestureRecognizers>
-                <TapGestureRecognizer Tapped="RadioButton_Tapped"/>
-            </RadioButton.GestureRecognizers>
-        </RadioButton>
+
+        <CheckBox x:Name="checkBox" />
         <Picker x:Name="pickerDato"/>
     </HorizontalStackLayout>
 </ContentView>

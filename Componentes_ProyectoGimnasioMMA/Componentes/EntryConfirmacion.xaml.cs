@@ -1,3 +1,5 @@
+using Microsoft.Maui.Controls;
+
 namespace Componentes_ProyectoGimnasioMMA.Componentes;
 
 public partial class EntryConfirmacion : ContentView
@@ -39,7 +41,7 @@ public partial class EntryConfirmacion : ContentView
     {
         get
         {
-            return radioOpcion.IsChecked;
+            return checkBox.IsChecked;
         }
     }
 
