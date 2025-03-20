@@ -22,6 +22,8 @@ public partial class Login : ContentPage
         _api_bd = new API_BD();
 
         cargarConstructor();
+
+
     }
 
 
@@ -157,6 +159,10 @@ public partial class Login : ContentPage
         if (_usuario.TipoDeUsuario == tipoUsuario)
         {
             Navigation.PushAsync(contentPage);
+        }
+        else
+        {
+            DisplayAlert("Error de autentificación", $"Tipo de usuario incorrecto, se solicita un {tipoUsuario}", "Ok");
         }
     }
 }

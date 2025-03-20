@@ -15,6 +15,11 @@ public partial class SelectorEscuela : ContentPage
     List<Escuela> _listaEscuelas;
     Usuario _usuario;
     protected Escuela _escuelaElegida;
+
+
+    // Evento que será lanzado al hacer clic en una escuela
+    public event Action<Escuela> EscuelaSeleccionadaEvento;
+
     public SelectorEscuela(Usuario usuario)
     {
         InitializeComponent();
@@ -48,7 +53,7 @@ public partial class SelectorEscuela : ContentPage
     {
         foreach (Escuela escuela in _listaEscuelas)
         {
-            VerticalStackLayoutEscuelas.Children.Add(GeneracionUI.CrearCarta(escuela, CartaClickeada));
+            VerticalStackLayoutEscuelas.Children.Add(GeneracionUI.CrearCartaEscuela(escuela, CartaClickeada));
         }
     }
 
@@ -73,6 +78,8 @@ public partial class SelectorEscuela : ContentPage
                             if (_listaEscuelas[indice].Id == Convert.ToInt32(nombreLabel.Text))
                             {
                                 _escuelaElegida = _listaEscuelas[indice];
+
+                                EscuelaSeleccionadaEvento?.Invoke(_escuelaElegida);
                             }
                         }
                     }
