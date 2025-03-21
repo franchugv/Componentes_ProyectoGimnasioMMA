@@ -20,6 +20,18 @@ public partial class SelectorEscuela : ContentPage
     // Evento que será lanzado al hacer clic en una escuela
     public event Action<Escuela> EscuelaSeleccionadaEvento;
 
+    public VerticalStackLayout MAINVSL
+    {
+        get
+        {
+            return VerticalStackLayoutEscuelas;
+        }
+        set
+        {
+            VerticalStackLayoutEscuelas = value;
+        }
+    }
+
     public SelectorEscuela(Usuario usuario)
     {
         InitializeComponent();
@@ -49,7 +61,7 @@ public partial class SelectorEscuela : ContentPage
 
 
 
-    private void GenerarInterfaz()
+    protected virtual void GenerarInterfaz()
     {
         foreach (Escuela escuela in _listaEscuelas)
         {

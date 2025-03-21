@@ -18,6 +18,7 @@ public partial class Login : ContentPage
     public Login()
     {
         InitializeComponent();
+        Shell.SetNavBarIsVisible(this, false);
 
         _api_bd = new API_BD();
 

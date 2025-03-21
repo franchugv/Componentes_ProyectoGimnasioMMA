@@ -3,14 +3,26 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Componentes_ProyectoGimnasioMMA.Views.Login"
              Title="Login">
-    <VerticalStackLayout x:Name="mainVSL"
-                         VerticalOptions="Center"
-                         HorizontalOptions="Center">
 
+    <Grid RowDefinitions="Auto,*"
+          ColumnDefinitions="*"
+          VerticalOptions="Center"
+          HorizontalOptions="Center">
 
-
+        <!-- Título del login -->
         <Label Text="Iniciar Sesión"
                HorizontalOptions="Center"
-              />
-    </VerticalStackLayout>
+               FontSize="24"
+               Grid.Row="0"
+               Grid.Column="0"/>
+
+        <!-- Contenedor para controles de login -->
+        <VerticalStackLayout x:Name="mainVSL"
+                             Grid.Row="1"
+                             Grid.Column="0"
+                             VerticalOptions="Center"
+                             HorizontalOptions="Center">
+        </VerticalStackLayout>
+
+    </Grid>
 </ContentPage>
