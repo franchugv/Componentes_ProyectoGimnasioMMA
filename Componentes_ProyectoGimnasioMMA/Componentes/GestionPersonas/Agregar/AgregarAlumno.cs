@@ -90,7 +90,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
             }
             catch (Exception error)
             {
-
+                Application.Current.MainPage.DisplayAlert("ERROR", error.Message, "Ok");
             }
         }
     }

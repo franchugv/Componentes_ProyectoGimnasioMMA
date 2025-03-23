@@ -37,13 +37,19 @@
 	  <MauiXaml Update="Componentes\EntryValidacion.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Componentes\GestionEscuelas\SelectorEscuela.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Componentes\GestionPersonas\FormularioPersona.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Componentes\PickerConfirmacion.xaml">
+	  <MauiXaml Update="Componentes\GestionUsuarios\FormularioUsuario.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\GestionUsuarios.xaml">
+	  <MauiXaml Update="Componentes\GestionUsuarios\SelectorUsuario.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Componentes\PickerConfirmacion.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Login.xaml">
@@ -62,12 +68,6 @@
 	  <Reference Include="BibliotecaClases_ProyectoGimnasioMMA">
 	    <HintPath>..\..\BibliotecaClases_ProyectoGimnasioMMA\BibliotecaClases_ProyectoGimnasioMMA\bin\Debug\net7.0\BibliotecaClases_ProyectoGimnasioMMA.dll</HintPath>
 	  </Reference>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Compile Update="Views\GestionUsuarios.xaml.cs">
-	    <DependentUpon>GestionUsuarios.xaml</DependentUpon>
-	  </Compile>
 	</ItemGroup>
 
 </Project>

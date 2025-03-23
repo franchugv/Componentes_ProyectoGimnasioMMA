@@ -41,7 +41,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
         }
 
 
-        public static Button CrearBoton(string texto, string styleId, EventHandler evento)
+        public static Button CrearBoton(string texto, string styleId, EventHandler? evento = null)
         {
             Button boton = new Button()
             {
@@ -54,7 +54,8 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
                 Margin = new Thickness(10),
                 Padding = new Thickness(10)
             };
-            boton.Clicked += evento;
+            if (evento != null) boton.Clicked += evento;
+
             return boton;
         }
 
