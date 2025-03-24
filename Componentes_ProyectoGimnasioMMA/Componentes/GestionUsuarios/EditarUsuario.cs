@@ -29,7 +29,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
         public Escuela escuela;
 
         // Constructor
-        public EditarUsuario(Usuario usuario, ModoFiltroUsuarios modoFiltro) : base()
+        public EditarUsuario(Usuario usuario, ModoFiltroUsuarios modoFiltro, TipoUsuario tipoUsuario) : base(tipoUsuario)
         {
             _api_bd = new API_BD();
 
@@ -42,7 +42,6 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
 
             //_escuela = escuela;
             _usuario = usuario;
-            _modoFiltro = modoFiltro;
         }
 
         // Metodos
@@ -61,7 +60,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
             _eCorreo = GeneracionUI.CrearEntryConfirmacion("Ingrese el nuevo Correo", "_eCorreo", entryUnfocus);
             _eNombre = GeneracionUI.CrearEntryConfirmacion("Ingrese el nuevo Nombre", "_eNombre", entryUnfocus);
             _eContrasenia = GeneracionUI.CrearEntryConfirmacion("Ingrese la nueva Contraseña", "_eContrasenia", entryUnfocus);
-            _selectorTipoUsuario = GeneracionUI.CrearPickerConfirmacion("eTipoUsuario", "Seleccione un nuevo Tipo de Usuario", Usuario.ObtenerTiposUsuarios, SelectedIndexChanged);
+            _selectorTipoUsuario = GeneracionUI.CrearPickerConfirmacion("eTipoUsuario", "Seleccione un nuevo Tipo de Usuario", _tiposUsuariosPicker, SelectedIndexChanged);
             _selectorEscuela = GeneracionUI.CrearPickerConfirmacion("eEscuela", "Selecciona la nueva Escuela", listaNombreEscuelas, SelectedIndexChanged);
 
             // Añadir interfaz al vsl
@@ -179,7 +178,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
                 }
 
                 // Insercciones en la Base de datos
-                // Si la escuela no es nula significa que el usuario tiene una escuela, si es así, podremos editar su escuela
+                // En caso de que la casilla este seleccionada y el picker sea null
 
                 switch (_modoFiltro)
                 {
@@ -199,7 +198,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
                 }
 
 
-                if (correo != null || contrasenia != null || tipoUsuario != null)
+                if (correo != null || contrasenia != null || tipoUsuario != null || nombre != null)
                     _api_bd.ActualizarUsuario(_usuario.Correo, correo, nombre, contrasenia, tipoUsuario);
 
                 Application.Current.MainPage.DisplayAlert("Actualización Correcta!!", $"El Usuario {_usuario.Nombre} ha sido actualizado con exito", "Aceptar");

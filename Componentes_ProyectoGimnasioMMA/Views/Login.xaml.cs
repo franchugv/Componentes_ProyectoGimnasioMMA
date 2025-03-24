@@ -28,7 +28,13 @@ public partial class Login : ContentPage
     }
 
 
-
+    public Usuario usuarioElegido
+    {
+        get
+        {
+            return _usuario;
+        }
+    }
 
 
 
@@ -152,18 +158,17 @@ public partial class Login : ContentPage
     {
         _usuario = _api_bd.DevolverUsuario(_entryCorreo.Texto, _entryContrasenia.Texto);
 
+
+
     }
 
-    protected void FuncionLogin(TipoUsuario tipoUsuario, ContentPage contentPage)
+    protected void FuncionLogin(TipoUsuario tipoUsuario)
     {
 
-        if (_usuario.TipoDeUsuario == tipoUsuario)
+        if (_usuario.TipoDeUsuario != tipoUsuario)
         {
-            Navigation.PushAsync(contentPage);
+            throw new Exception($"Tipo de usuario incorrecto, se solicita un {tipoUsuario}");
         }
-        else
-        {
-            DisplayAlert("Error de autentificación", $"Tipo de usuario incorrecto, se solicita un {tipoUsuario}", "Ok");
-        }
+
     }
 }

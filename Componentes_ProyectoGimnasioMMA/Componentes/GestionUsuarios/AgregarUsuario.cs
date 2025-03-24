@@ -17,7 +17,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
         Escuela _escuela;
 
 
-        public AgregarUsuario() : base()
+        public AgregarUsuario(TipoUsuario tipoUsuario) : base(tipoUsuario)
         {
             GenerarUI();
             _api_bd = new API_BD();
@@ -30,8 +30,6 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
 
             _botonAgregar = GeneracionUI.CrearBoton("Agregar Usuario", "_botonUpdate", ControladorBoton);
 
-            List<string> nombreEscuelas = new List<string>();
-
 
             MAIN_VSL.Add(_botonAgregar);
         }
@@ -40,17 +38,21 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
         {
             try
             {
-                // Prevenir que se lance una excepcion sin controlar
-                if (_selectorEscuela.SelectedItem == null) throw new Exception("Seleccione una Escuela");
 
-                foreach (Escuela escuela in _listaEscuelas)
+                // Haciendo esto podremos añadir un usuario sin escuela simplemente dejando vacio el picker
+                if (_selectorEscuela.SelectedItem != null)
                 {
-                    if (escuela.Nombre == _selectorEscuela.SelectedItem.ToString())
+                    foreach (Escuela escuela in _listaEscuelas)
                     {
-                        _escuela = escuela;
-                        break;
+                        if (escuela.Nombre == _selectorEscuela.SelectedItem.ToString())
+                        {
+                            _escuela = escuela;
+                            break;
+                        }
                     }
                 }
+
+
 
                 if (_eTipoUsuario.SelectedItem == null) throw new Exception("Seleccione un tipo de usuario");
                 Usuario usuario = new Usuario(_eCorreo.Texto, _eNombre.Texto, _eContrasenia.Texto, _eTipoUsuario.SelectedItem.ToString());
@@ -59,7 +61,10 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
 
                 // Insercciones en la Base de datos
                 _api_bd.InsertarUsuario(usuario);
-                _api_bd.CrearRelacionUsuariosEscuelas(usuario, _escuela.Id);
+
+                // Exactamente lo mismo que al principio
+                if (_selectorEscuela.SelectedItem != null)
+                    _api_bd.CrearRelacionUsuariosEscuelas(usuario, _escuela.Id);
             }
             catch (Exception error)
             {

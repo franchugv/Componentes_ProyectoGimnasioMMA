@@ -1,12 +1,17 @@
 using BibliotecaClases_ProyectoGimnasioMMA.APIs;
 using BibliotecaClases_ProyectoGimnasioMMA.Escuelas;
 using BibliotecaClases_ProyectoGimnasioMMA.Usuarios;
+using Componentes_ProyectoGimnasioMMA.Componentes.Funciones;
 
 namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios;
 
 public partial class FormularioUsuario : ContentView
 {
     // Recursos
+    protected TipoUsuario _tipoUsuario;
+    protected List<string> _tiposUsuariosPicker;
+
+
     protected EntryValidacion _eCorreo;
     protected EntryValidacion _eNombre;
     protected EntryValidacion _eContrasenia;
@@ -17,9 +22,21 @@ public partial class FormularioUsuario : ContentView
 
     protected Usuario _usuario;
     API_BD api_bd;
-    public FormularioUsuario()
+    public FormularioUsuario(TipoUsuario tipoUsuario)
     {
         InitializeComponent();
+
+        _tipoUsuario = tipoUsuario;
+
+        switch (_tipoUsuario)
+        {
+            case TipoUsuario.Administrador:
+                _tiposUsuariosPicker = Usuario.ObtenerTiposUsuarios;
+                break;
+            case TipoUsuario.GestorGimnasios:
+                _tiposUsuariosPicker = Usuario.ObtenerTiposUsuariosGestorGym;
+                break;
+        }
 
         // CargarEnConstructor();
         api_bd = new API_BD();
@@ -66,13 +83,7 @@ public partial class FormularioUsuario : ContentView
         }
     }
 
-    public TipoUsuario TipoDeUsuario
-    {
-        get
-        {
-            return (TipoUsuario)_eTipoUsuario.SelectedIndex;
-        }
-    }
+
 
 
     // EVENTOS
@@ -85,7 +96,7 @@ public partial class FormularioUsuario : ContentView
         }
         catch (Exception error)
         {
-            App.Current.MainPage.DisplayAlert("Error", error.Message, "Aceptar");
+            Application.Current.MainPage.DisplayAlert("Error", error.Message, "Aceptar");
         }
     }
 
@@ -165,7 +176,7 @@ public partial class FormularioUsuario : ContentView
         _eCorreo = GeneracionUI.CrearEntryError("Ingrese el Correo", "eCorreo", entryUnfocus);
         _eNombre = GeneracionUI.CrearEntryError("Ingrese el Nombre", "eNombre", entryUnfocus);
         _eContrasenia = GeneracionUI.CrearEntryError("Ingrese la contraseña", "eContrasenia", entryUnfocus);
-        _eTipoUsuario = GeneracionUI.CrearPicker("eTipoUsuario", "Seleccione un Tipo de Usuario", Usuario.ObtenerTiposUsuarios, SelectedIndexChanged);
+        _eTipoUsuario = GeneracionUI.CrearPicker("eTipoUsuario", "Seleccione un Tipo de Usuario", _tiposUsuariosPicker, SelectedIndexChanged);
         _selectorEscuela = GeneracionUI.CrearPicker("pEscuela", "Seleccione una Escuela", nombreEscuela, SelectedIndexChanged);
 
         // Añadir interfaz al vsl
