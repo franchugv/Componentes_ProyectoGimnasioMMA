@@ -12,10 +12,11 @@ public partial class SelectorUsuario : ContentView
 
 
     // RECURSOS
-
     API_BD _api_bd;
     List<Usuario> _listaUsuarios;
     Usuario _usuarioElegido;
+
+    // Usuario que ha inidiado sesión
 
     // Evento que será lanzado al hacer clic en una escuela
     public event Action<Usuario> UsuarioSeleccionadaEvento;
@@ -24,7 +25,7 @@ public partial class SelectorUsuario : ContentView
     public SelectorUsuario(Escuela escuela, ModoFiltroUsuarios modoFiltro)
     {
         InitializeComponent();
-
+        // Aquí Instanciamos el Api encargado de la conexión
         _api_bd = new API_BD();
         _listaUsuarios = new List<Usuario>();
 

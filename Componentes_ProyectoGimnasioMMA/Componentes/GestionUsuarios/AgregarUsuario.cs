@@ -24,6 +24,12 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
 
         }
 
+        public AgregarUsuario(TipoUsuario tipoUsuario, Usuario usuario) : base(usuario, tipoUsuario)
+        {
+            GenerarUI();
+            _api_bd = new API_BD();
+        }
+
         public override void GenerarUI()
         {
             base.GenerarUI();
@@ -34,7 +40,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
             MAIN_VSL.Add(_botonAgregar);
         }
 
-        private void ControladorBoton(object sender, EventArgs e)
+        protected virtual void ControladorBoton(object sender, EventArgs e)
         {
             try
             {

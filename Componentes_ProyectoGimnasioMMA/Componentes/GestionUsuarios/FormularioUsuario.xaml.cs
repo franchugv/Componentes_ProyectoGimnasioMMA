@@ -41,9 +41,13 @@ public partial class FormularioUsuario : ContentView
         // CargarEnConstructor();
         api_bd = new API_BD();
         _listaEscuelas = new List<Escuela>();
-
         _listaEscuelas = api_bd.ObtenerEscuelas();
 
+    }
+
+    public FormularioUsuario(Usuario usuario, TipoUsuario tipoUsuario) : this(tipoUsuario)
+    {
+       _listaEscuelas = api_bd.ObtenerEscuelasDeUsuario(usuario.Correo);
     }
 
 

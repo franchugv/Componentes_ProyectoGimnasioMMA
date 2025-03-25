@@ -15,20 +15,18 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
     public class AgregarAlumno : FormularioPersona
     {
         // Recursos
-        Picker _pickerDeporte;
-        Picker _pickerCategoriaEdad;
-        
-        API_BD _api_bd;
+        protected Picker _pickerDeporte;
+        protected Picker _pickerCategoriaEdad;
 
-        Usuario _usuario;
-        Escuela _escuela;
-        
-        List<Deporte> _listaDeportes;
-        List<string> _listaNombreDeportes;
-        public AgregarAlumno(Usuario usuario, Escuela escuela) : base(usuario)
+        protected API_BD _api_bd;
+
+        protected Escuela _escuela;
+
+        protected List<Deporte> _listaDeportes;
+        protected List<string> _listaNombreDeportes;
+        public AgregarAlumno(Escuela escuela) : base()
         {
             _api_bd = new API_BD();
-            _usuario = usuario;
             _escuela = escuela;
 
             cargarConstructor();
@@ -43,7 +41,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
             }
             catch (Exception error)
             {
-
+                Application.Current.MainPage.DisplayAlert("Error", error.Message, "Ok");
             }
         }
 

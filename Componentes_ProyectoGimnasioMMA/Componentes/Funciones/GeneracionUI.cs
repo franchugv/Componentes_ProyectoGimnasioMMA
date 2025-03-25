@@ -15,7 +15,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             EntryValidacion entry = new EntryValidacion(texto);
             entry.EntryEditar.StyleId = styleId;
 
-            entry.EntryEditar.BackgroundColor = Color.FromHex("#f5f5f5");
+            entry.EntryEditar.BackgroundColor = Color.FromArgb("#f5f5f5");
             entry.EntryEditar.TextColor = Colors.Black;
             entry.EntryEditar.PlaceholderColor = Colors.Gray;
             entry.EntryEditar.Margin = new Thickness(10);
@@ -30,7 +30,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             EntryConfirmacion entry = new EntryConfirmacion(texto);
             entry.EntryEditar.StyleId = styleId;
 
-            entry.EntryEditar.BackgroundColor = Color.FromHex("#f5f5f5");
+            entry.EntryEditar.BackgroundColor = Color.FromArgb("#f5f5f5");
             entry.EntryEditar.TextColor = Colors.Black;
             entry.EntryEditar.PlaceholderColor = Colors.Gray;
             entry.EntryEditar.Margin = new Thickness(10);
@@ -47,7 +47,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             {
                 Text = texto,
                 StyleId = styleId,
-                BackgroundColor = Color.FromHex("#6200EE"),
+                BackgroundColor = Color.FromArgb("#6200EE"),
                 TextColor = Colors.White,
                 FontSize = 16,
                 CornerRadius = 10,
@@ -85,7 +85,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             PickerConfirmacion picker = new PickerConfirmacion(titulo);
 
             picker.PickerEditar.StyleId = styleId;
-            picker.PickerEditar.BackgroundColor = Color.FromHex("#f5f5f5");
+            picker.PickerEditar.BackgroundColor = Color.FromArgb("#f5f5f5");
             picker.PickerEditar.TextColor = Colors.Black;
             picker.PickerEditar.Title = titulo;
             picker.PickerEditar.Margin = new Thickness(10);

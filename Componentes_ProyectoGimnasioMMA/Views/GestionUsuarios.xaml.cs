@@ -12,17 +12,17 @@ public partial class GestionUsuarios : ContentPage
     // Recursos
     protected TipoUsuario _tipoUsuario;
 
-    ModoFiltroUsuarios _modoFiltro = new ModoFiltroUsuarios();
-    Escuela _escuela;
-    API_BD api_bd;
-
+    protected ModoFiltroUsuarios _modoFiltro = new ModoFiltroUsuarios();
+    protected Escuela _escuela;
+    protected API_BD api_bd;
+    protected Usuario _usuario;
     // Controles
-    SelectorEscuelaCV _selectorEscuela;
-    SelectorUsuario _selectorUsuario;
+    protected SelectorEscuelaCV _selectorEscuela;
+    protected SelectorUsuario _selectorUsuario;
 
-
-    AgregarUsuario _agregarUsuario;
-    EditarUsuario _editarUsuario;
+    // Componentes
+    protected AgregarUsuario _agregarUsuario;
+    protected EditarUsuario _editarUsuario;
 
 
 
@@ -35,12 +35,38 @@ public partial class GestionUsuarios : ContentPage
         InitializeComponent();
 
         CargarDatosConstructor();
-
     }
 
+   public GestionUsuarios(Usuario usuario, Escuela escuela) : this()
+    {
+        _escuela = escuela;
+        _usuario = usuario;
+    } 
 
+    // PROPIEDADES
+    protected Microsoft.Maui.Controls.Picker PickerAccionPropiedad
+    {
+        get
+        {
+            return PickerAccion;
+        }
+        set
+        {
+            PickerAccion = value;
+        }
+    }
 
-
+    public StackLayout MAINVSL
+    {
+        get
+        {
+            return VerticalStackLayoutUsuarios;
+        }
+        set
+        {
+            VerticalStackLayoutUsuarios = value;
+        }
+    }
     // EVENTOS
     private void CargarDatosConstructor()
     {
@@ -65,6 +91,14 @@ public partial class GestionUsuarios : ContentPage
 
     }
 
+    protected virtual void InstanciarSlelectorEscuela()
+    {
+        // Instanciar el selector de escuela y sus eventos
+        _selectorEscuela = new SelectorEscuelaCV(true);
+        _selectorEscuela.EscuelaSeleccionadaEvento += ControladorCardsSelectorEscuela;
+        _selectorEscuela.BotonSeleccionadoEvento += ControladorBoton;
+    }
+
     // Evento Picker
     protected virtual async void SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -73,12 +107,13 @@ public partial class GestionUsuarios : ContentPage
         {
 
             // Instanciar el content view agregar usuario
-            _agregarUsuario = new AgregarUsuario(_tipoUsuario);
+            if(_tipoUsuario != TipoUsuario.Administrador)
+                _agregarUsuario = new AgregarUsuario(_tipoUsuario, _usuario);
+            else
+                _agregarUsuario = new AgregarUsuario(_tipoUsuario);
 
-            // Instanciar el selector de escuela y sus eventos
-            _selectorEscuela = new SelectorEscuelaCV(true);
-            _selectorEscuela.EscuelaSeleccionadaEvento += ControladorCardsSelectorEscuela;
-            _selectorEscuela.BotonSeleccionadoEvento += ControladorBoton;
+            InstanciarSlelectorEscuela();
+
 
 
             switch (picker.StyleId)
@@ -177,7 +212,7 @@ public partial class GestionUsuarios : ContentPage
     // EVENTOS
 
     // Controlador para el evento generado por las cards de Escuelas
-    private async void ControladorCardsSelectorEscuela(Escuela escuela)
+    protected async void ControladorCardsSelectorEscuela(Escuela escuela)
     {
         try
         {
@@ -204,7 +239,7 @@ public partial class GestionUsuarios : ContentPage
     }
 
     // Controlador para el evento generado por las cards de usuarios
-    private async void ControladorCardsSelectorUsuario(Usuario usuario)
+    protected virtual async void ControladorCardsSelectorUsuario(Usuario usuario)
     {
         try
         {

@@ -13,7 +13,7 @@ public partial class SelectorEscuela : ContentPage
 
     API_BD _api_bd;
     List<Escuela> _listaEscuelas;
-    Usuario _usuario;
+    protected Usuario _usuario;
     protected Escuela _escuelaElegida;
 
 
@@ -32,6 +32,10 @@ public partial class SelectorEscuela : ContentPage
         }
     }
 
+    /// <summary>
+    /// Contructor en el cual, podremos seleccionar escuelas por Usuario
+    /// </summary>
+    /// <param name="usuario"></param>
     public SelectorEscuela(Usuario usuario)
     {
         InitializeComponent();
@@ -45,6 +49,9 @@ public partial class SelectorEscuela : ContentPage
 
     }
 
+    /// <summary>
+    /// Constructor que nos mostrará todas las escuelas
+    /// </summary>
     public SelectorEscuela()
     {
         InitializeComponent();

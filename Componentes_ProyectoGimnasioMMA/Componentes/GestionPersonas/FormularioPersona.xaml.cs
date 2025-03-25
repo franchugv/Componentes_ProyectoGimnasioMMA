@@ -12,15 +12,13 @@ public partial class FormularioPersona : ContentView
     private EntryValidacion _eNombre;
     private EntryValidacion _eApellidos;
     private EntryValidacion _eID_Escuela;
-    protected Usuario _usuario;
 
-    public FormularioPersona(Usuario usuario)
+    public FormularioPersona()
 	{
 		InitializeComponent();
 
         // CargarEnConstructor();
 
-        _usuario = usuario;
     }
 
 
