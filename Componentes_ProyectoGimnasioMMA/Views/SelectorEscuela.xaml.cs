@@ -20,17 +20,7 @@ public partial class SelectorEscuela : ContentPage
     // Evento que será lanzado al hacer clic en una escuela
     public event Action<Escuela> EscuelaSeleccionadaEvento;
 
-    public VerticalStackLayout MAINVSL
-    {
-        get
-        {
-            return VerticalStackLayoutEscuelas;
-        }
-        set
-        {
-            VerticalStackLayoutEscuelas = value;
-        }
-    }
+
 
     /// <summary>
     /// Contructor en el cual, podremos seleccionar escuelas por Usuario
@@ -65,16 +55,20 @@ public partial class SelectorEscuela : ContentPage
 
     }
 
-
-
-
-    protected virtual void GenerarInterfaz()
+    // Propiedades
+    public VerticalStackLayout MAINVSL
     {
-        foreach (Escuela escuela in _listaEscuelas)
+        get
         {
-            VerticalStackLayoutEscuelas.Children.Add(GeneracionUI.CrearCartaEscuela(escuela, CartaClickeada));
+            return VerticalStackLayoutEscuelas;
+        }
+        set
+        {
+            VerticalStackLayoutEscuelas = value;
         }
     }
+
+
 
 
     // EVENTOS
@@ -118,6 +112,14 @@ public partial class SelectorEscuela : ContentPage
 
     }
 
+    // Métodos
+    protected virtual void GenerarInterfaz()
+    {
+        foreach (Escuela escuela in _listaEscuelas)
+        {
+            VerticalStackLayoutEscuelas.Children.Add(GeneracionUI.CrearCartaEscuela(escuela, CartaClickeada));
+        }
+    }
 
 
 }

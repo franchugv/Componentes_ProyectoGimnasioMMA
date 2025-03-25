@@ -21,32 +21,17 @@ public partial class SelectorUsuario : ContentView
     // Evento que será lanzado al hacer clic en una escuela
     public event Action<Usuario> UsuarioSeleccionadaEvento;
 
-
+    /// <summary>
+    /// Constructor de Selector de Usuarios, podremos elegir el modo de filtro, si queremos por una escuela en concreto, de todos, o de los usuarios sin escuelas
+    /// </summary>
+    /// <param name="escuela"></param>
+    /// <param name="modoFiltro"></param>
+    /// <exception cref="Exception"></exception>
     public SelectorUsuario(Escuela escuela, ModoFiltroUsuarios modoFiltro)
     {
         InitializeComponent();
-        // Aquí Instanciamos el Api encargado de la conexión
-        _api_bd = new API_BD();
-        _listaUsuarios = new List<Usuario>();
 
-        switch (modoFiltro)
-        {
-            case ModoFiltroUsuarios.Todos:
-                _listaUsuarios = _api_bd.ObtenerListaTotalUsuarios();
-                break;
-            case ModoFiltroUsuarios.PorEscuela:
-
-                if (escuela == null) throw new Exception("no es posible buscar por escuela si esta el nula");
-                _listaUsuarios = _api_bd.ObtenerListaUsuarios(escuela.Id);
-                break;
-            case ModoFiltroUsuarios.SinEscuelas:
-                _listaUsuarios = _api_bd.ObtenerListaUsuariosSinEscuela();
-                break;
-        }
-
-
-
-        GenerarInterfaz();
+        CargarDatosConstructor(escuela, modoFiltro);
 
     }
 
@@ -59,7 +44,38 @@ public partial class SelectorUsuario : ContentView
     }
 
 
+    private void CargarDatosConstructor(Escuela escuela, ModoFiltroUsuarios modoFiltro)
+    {
 
+        try
+        {
+            // Aquí Instanciamos el Api encargado de la conexión
+            _api_bd = new API_BD();
+            _listaUsuarios = new List<Usuario>();
+
+            switch (modoFiltro)
+            {
+                case ModoFiltroUsuarios.Todos:
+                    _listaUsuarios = _api_bd.ObtenerListaTotalUsuarios();
+                    break;
+                case ModoFiltroUsuarios.PorEscuela:
+
+                    if (escuela == null) throw new Exception("no es posible buscar por escuela si esta el nula");
+                    _listaUsuarios = _api_bd.ObtenerListaUsuarios(escuela.Id);
+                    break;
+                case ModoFiltroUsuarios.SinEscuelas:
+                    _listaUsuarios = _api_bd.ObtenerListaUsuariosSinEscuela();
+                    break;
+            }
+
+            GenerarInterfaz();
+        }
+        catch(Exception error)
+        {
+            Application.Current.MainPage.DisplayAlert("ERROR", error.Message, "Ok");
+        }
+
+    }
 
     private void GenerarInterfaz()
     {
@@ -94,6 +110,7 @@ public partial class SelectorUsuario : ContentView
                             {
                                 _usuarioElegido = _listaUsuarios[indice];
 
+                                // Invocar a nuestro action, para que, desde otra clase podamos hacer un evento junto al usuario cliqueado
                                 UsuarioSeleccionadaEvento?.Invoke(_usuarioElegido);
 
                                 // Finalizar el bucle

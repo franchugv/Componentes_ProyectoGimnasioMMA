@@ -37,6 +37,7 @@ public partial class GestionUsuarios : ContentPage
         CargarDatosConstructor();
     }
 
+    // Constructores
    public GestionUsuarios(Usuario usuario, Escuela escuela) : this()
     {
         _escuela = escuela;
@@ -67,6 +68,7 @@ public partial class GestionUsuarios : ContentPage
             VerticalStackLayoutUsuarios = value;
         }
     }
+
     // EVENTOS
     private void CargarDatosConstructor()
     {
@@ -211,7 +213,7 @@ public partial class GestionUsuarios : ContentPage
 
     // EVENTOS
 
-    // Controlador para el evento generado por las cards de Escuelas
+    // Controlador para el evento generado por las cards de Escuelas, el cual pasa al selector de usuarios
     protected async void ControladorCardsSelectorEscuela(Escuela escuela)
     {
         try

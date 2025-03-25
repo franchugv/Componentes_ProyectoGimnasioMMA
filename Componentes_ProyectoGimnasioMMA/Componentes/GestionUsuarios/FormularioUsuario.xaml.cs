@@ -8,10 +8,11 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios;
 public partial class FormularioUsuario : ContentView
 {
     // Recursos
+
     protected TipoUsuario _tipoUsuario;
     protected List<string> _tiposUsuariosPicker;
 
-
+    // Componentes
     protected EntryValidacion _eCorreo;
     protected EntryValidacion _eNombre;
     protected EntryValidacion _eContrasenia;
@@ -19,35 +20,28 @@ public partial class FormularioUsuario : ContentView
     protected Picker _selectorEscuela;
 
     protected List<Escuela> _listaEscuelas;
-
     protected Usuario _usuario;
-    API_BD api_bd;
+
+    API_BD _api_bd;
+
+
     public FormularioUsuario(TipoUsuario tipoUsuario)
     {
         InitializeComponent();
 
-        _tipoUsuario = tipoUsuario;
-
-        switch (_tipoUsuario)
-        {
-            case TipoUsuario.Administrador:
-                _tiposUsuariosPicker = Usuario.ObtenerTiposUsuarios;
-                break;
-            case TipoUsuario.GestorGimnasios:
-                _tiposUsuariosPicker = Usuario.ObtenerTiposUsuariosGestorGym;
-                break;
-        }
-
-        // CargarEnConstructor();
-        api_bd = new API_BD();
-        _listaEscuelas = new List<Escuela>();
-        _listaEscuelas = api_bd.ObtenerEscuelas();
+        CargarEnConstructor(tipoUsuario);
 
     }
 
+    /// <summary>
+    /// En este constructor, al pasarle el usuario, filtraremos las escuelas en función del usuario, en vez de todas las escuelas, 
+    /// dado a que cada usuario tiene su escuela asignada
+    /// </summary>
+    /// <param name="usuario"></param>
+    /// <param name="tipoUsuario"></param>
     public FormularioUsuario(Usuario usuario, TipoUsuario tipoUsuario) : this(tipoUsuario)
     {
-       _listaEscuelas = api_bd.ObtenerEscuelasDeUsuario(usuario.Correo);
+       _listaEscuelas = _api_bd.ObtenerEscuelasDeUsuario(usuario.Correo);
     }
 
 
@@ -64,39 +58,34 @@ public partial class FormularioUsuario : ContentView
             UI_VSL = value;
         }
     }
-    public string Correo
-    {
-        get
-        {
-            return _eCorreo.Texto;
-        }
-    }
-    public string Nombre
-    {
-        get
-        {
-            return _eNombre.Texto;
-        }
-    }
-
-    public string Contrasenia
-    {
-        get
-        {
-            return _eContrasenia.Texto;
-        }
-    }
 
 
 
 
     // EVENTOS
 
-    private void CargarEnConstructor()
+    private void CargarEnConstructor(TipoUsuario tipoUsuario)
     {
         try
         {
-            GenerarUI();
+            _tipoUsuario = tipoUsuario;
+            // Aquí estamos asignando los datos del picker en función del tipo de usuario
+            switch (_tipoUsuario)
+            {
+                case TipoUsuario.Administrador:
+                    _tiposUsuariosPicker = Usuario.ObtenerTiposUsuarios;
+                    break;
+                case TipoUsuario.GestorGimnasios:
+                    _tiposUsuariosPicker = Usuario.ObtenerTiposUsuariosGestorGym;
+                    break;
+            }
+
+            // Instanciar api de base de datos
+            _api_bd = new API_BD();
+
+            // Asignar la lista de escuelas torales
+            _listaEscuelas = new List<Escuela>();
+            _listaEscuelas = _api_bd.ObtenerEscuelas();
         }
         catch (Exception error)
         {
@@ -108,6 +97,7 @@ public partial class FormularioUsuario : ContentView
 
     protected virtual void entryUnfocus(object sender, FocusEventArgs e)
     {
+        // Recursos
         Entry entry = (Entry)sender;
         Usuario usuario = null;
 

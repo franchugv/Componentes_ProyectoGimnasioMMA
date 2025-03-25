@@ -11,13 +11,21 @@ using static Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios.Selecto
 
 namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
 {
+    /// <summary>
+    /// Clase que hereda de FormularioUsuario
+    /// </summary>
     public class EditarUsuario : FormularioUsuario
     {
         // Recursos
+
         Button _botonInsertar;
         API_BD _api_bd;
+        
+        
         ModoFiltroUsuarios _modoFiltro;
+        
         // Componentes
+        // Uso componentes diferentes a la clase heredada ya que son especiales, pudiendo elegir si queremos editarlos o no
         EntryConfirmacion _eCorreo;
         EntryConfirmacion _eNombre;
         EntryConfirmacion _eContrasenia;
@@ -36,7 +44,22 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
             _modoFiltro = modoFiltro;
 
             // Instanciamos la lista de Escuelas
-            _escuelas = _api_bd.ObtenerEscuelas();
+            //_escuelas = _api_bd.ObtenerEscuelas();
+
+            GenerarUI();
+
+            //_escuela = escuela;
+            _usuario = usuario;
+        }
+
+        public EditarUsuario(Usuario usuario, ModoFiltroUsuarios modoFiltro, TipoUsuario tipoUsuario) : base(usuario, tipoUsuario)
+        {
+            _api_bd = new API_BD();
+
+            _modoFiltro = modoFiltro;
+
+            // Instanciamos la lista de Escuelas
+            //_escuelas = _api_bd.ObtenerEscuelas();
 
             GenerarUI();
 
@@ -51,7 +74,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
 
             List<string> listaNombreEscuelas = new List<string>();
 
-            foreach (Escuela escuela in _escuelas)
+            foreach (Escuela escuela in _listaEscuelas)
             {
                 listaNombreEscuelas.Add(escuela.Nombre);
             }
@@ -144,6 +167,8 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
                 string tipoUsuario = null;
                 Escuela nuevaEscuela = null;
 
+                // En caso de estar seleccionado el checkbox, editaremos el valor
+
                 if (_eNombre.EstaSeleccionado)
                 {
                     // Validar
@@ -162,18 +187,24 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
                     Usuario usuario = new Usuario(_eContrasenia.Texto, TipoDato.Contrasenia);
                     contrasenia = usuario.Contrasenia;
                 }
+
+
+
                 if (_selectorTipoUsuario.EstaSeleccionado)
                 {
+                    // Evitar que enviemos un dato null
                     if (_selectorTipoUsuario.PickerEditar.SelectedItem == null) throw new Exception("Seleccione un tipo de usuario");
 
+                    // Asignar a la variable el dato elegido
                     tipoUsuario = _selectorTipoUsuario.PickerEditar.SelectedItem.ToString();
                 }
+
                 if (_selectorEscuela.EstaSeleccionado)
                 {
                     if (_selectorEscuela.PickerEditar.SelectedItem == null) throw new Exception("Seleccione una Escuela");
-                    for (int indice = 0; indice < _escuelas.Count; indice++)
+                    for (int indice = 0; indice < _listaEscuelas.Count; indice++)
                     {
-                        if (_selectorEscuela.PickerEditar.SelectedItem.ToString() == _escuelas[indice].Nombre) nuevaEscuela = _escuelas[indice];
+                        if (_selectorEscuela.PickerEditar.SelectedItem.ToString() == _listaEscuelas[indice].Nombre) nuevaEscuela = _listaEscuelas[indice];
                     }
                 }
 
@@ -199,9 +230,13 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
 
 
                 if (correo != null || contrasenia != null || tipoUsuario != null || nombre != null)
+                {
                     _api_bd.ActualizarUsuario(_usuario.Correo, correo, nombre, contrasenia, tipoUsuario);
+                    Application.Current.MainPage.DisplayAlert("Actualización Correcta!!", $"El Usuario {_usuario.Nombre} ha sido actualizado con exito", "Aceptar");
+                }
+                    
 
-                Application.Current.MainPage.DisplayAlert("Actualización Correcta!!", $"El Usuario {_usuario.Nombre} ha sido actualizado con exito", "Aceptar");
+
 
 
             }
