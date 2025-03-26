@@ -39,6 +39,11 @@ public partial class SelectorEscuelaCV : ContentView
         //_accion = accion;
 
     }
+    /// <summary>
+    /// Al pasarle el usuario, solo saldrán las escuelas de dicho usuario
+    /// </summary>
+    /// <param name="usuario"></param>
+    /// <param name="generarBotones"></param>
     public SelectorEscuelaCV(Usuario usuario, bool generarBotones)
     {
         InitializeComponent();
@@ -110,6 +115,7 @@ public partial class SelectorEscuelaCV : ContentView
                             {
                                 _escuelaElegida = _listaEscuelas[indice];
 
+                                // Invocar al action
                                 EscuelaSeleccionadaEvento?.Invoke(_escuelaElegida);
 
                                 // Finalizar el bucle

@@ -45,7 +45,7 @@ public partial class GestionUsuarios : ContentPage
     } 
 
     // PROPIEDADES
-    protected Microsoft.Maui.Controls.Picker PickerAccionPropiedad
+    protected Picker PickerAccionPropiedad
     {
         get
         {
@@ -109,6 +109,8 @@ public partial class GestionUsuarios : ContentPage
         {
 
             // Instanciar el content view agregar usuario
+            // En caso de no ser administrador, le pasaremos el usuario,
+            // si hacemos esto, este filtrará las escuelas por usuario en vez de mostrarnos todas las escuelas
             if(_tipoUsuario != TipoUsuario.Administrador)
                 _agregarUsuario = new AgregarUsuario(_tipoUsuario, _usuario);
             else
@@ -129,7 +131,8 @@ public partial class GestionUsuarios : ContentPage
 
                             VerticalStackLayoutUsuarios.Add(_agregarUsuario);
 
-
+                            // Cuendo elijamos la opción, se limpirará el picker
+                            PickerAccion.SelectedItem = null;
 
 
                             break;
@@ -151,6 +154,7 @@ public partial class GestionUsuarios : ContentPage
         {
             await DisplayAlert("ERROR", error.Message, "OK");
         }
+
     }
 
     private void GenerarCV_SelectorEscuelas()
@@ -251,7 +255,7 @@ public partial class GestionUsuarios : ContentPage
                 case 1: // Editar
                     VerticalStackLayoutUsuarios.Clear();
 
-                    _editarUsuario = new EditarUsuario(usuario, _modoFiltro, _tipoUsuario);
+                    _editarUsuario = new EditarUsuario(_usuario, usuario, _modoFiltro, _tipoUsuario);
                     if (_escuela != null) _editarUsuario.escuela = _escuela;
 
 
@@ -281,6 +285,10 @@ public partial class GestionUsuarios : ContentPage
         catch (Exception error)
         {
             await DisplayAlert("ERROR", error.Message, "OK");
+        }
+        finally
+        {
+            PickerAccion.SelectedItem = null;
         }
     }
 

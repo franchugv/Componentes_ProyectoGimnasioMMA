@@ -24,7 +24,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
 
         protected List<Deporte> _listaDeportes;
         protected List<string> _listaNombreDeportes;
-        public AgregarAlumno(Escuela escuela) : base()
+        public AgregarAlumno(Usuario usuario, Escuela escuela) : base(usuario)
         {
             _api_bd = new API_BD();
             _escuela = escuela;

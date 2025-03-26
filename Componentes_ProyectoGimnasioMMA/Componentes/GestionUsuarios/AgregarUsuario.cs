@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
 {
+    /// <summary>
+    /// Esta clase hereda de FormularioUsuario
+    /// </summary>
     public class AgregarUsuario : FormularioUsuario
     {
         Button _botonAgregar;
@@ -24,6 +27,11 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
 
         }
 
+        /// <summary>
+        /// En este constructor, si le pasamos el usuario, solo nos mostrará las escuelas de dicho usuario
+        /// </summary>
+        /// <param name="tipoUsuario"></param>
+        /// <param name="usuario"></param>
         public AgregarUsuario(TipoUsuario tipoUsuario, Usuario usuario) : base(usuario, tipoUsuario)
         {
             GenerarUI();
@@ -45,7 +53,6 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
             try
             {
 
-                // Haciendo esto podremos añadir un usuario sin escuela simplemente dejando vacio el picker
                 if (_selectorEscuela.SelectedItem != null)
                 {
                     foreach (Escuela escuela in _listaEscuelas)
@@ -67,6 +74,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
 
                 // Insercciones en la Base de datos
                 _api_bd.InsertarUsuario(usuario);
+                Application.Current.MainPage.DisplayAlert("¡Usuario insertado correctamente!", $"Usted a agregado al usuario {usuario.Nombre}.", "Ok");
 
                 // Exactamente lo mismo que al principio
                 if (_selectorEscuela.SelectedItem != null)

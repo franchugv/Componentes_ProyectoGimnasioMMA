@@ -35,37 +35,39 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
         // Escuelas
         List<Escuela> _escuelas;
         public Escuela escuela;
+        protected Usuario _usuarioEditar;
+
+
+        public event Action EventoCerrarSesion;
+
+        public event Action EventoVolverPaginaPrincipal;
+
 
         // Constructor
-        public EditarUsuario(Usuario usuario, ModoFiltroUsuarios modoFiltro, TipoUsuario tipoUsuario) : base(tipoUsuario)
+        public EditarUsuario(Usuario usuarioApp, Usuario usuarioEditar, ModoFiltroUsuarios modoFiltro, TipoUsuario tipoUsuario) : base(tipoUsuario)
         {
             _api_bd = new API_BD();
 
             _modoFiltro = modoFiltro;
 
             // Instanciamos la lista de Escuelas
+
+            // En caso de que no sea administrador, obtendremos las escuelas por usuario,
+            // si no hacemos esto la lista tendra todas las escuelas, definido en el constructor base
+            if(usuarioApp.TipoDeUsuario != TipoUsuario.Administrador)
+            {
+                _listaEscuelas = _api_bd.ObtenerEscuelasDeUsuario(usuarioApp.Correo);
+            }
+
             //_escuelas = _api_bd.ObtenerEscuelas();
 
             GenerarUI();
 
             //_escuela = escuela;
-            _usuario = usuario;
+            _usuario = usuarioApp;
+            _usuarioEditar = usuarioEditar;
         }
 
-        public EditarUsuario(Usuario usuario, ModoFiltroUsuarios modoFiltro, TipoUsuario tipoUsuario) : base(usuario, tipoUsuario)
-        {
-            _api_bd = new API_BD();
-
-            _modoFiltro = modoFiltro;
-
-            // Instanciamos la lista de Escuelas
-            //_escuelas = _api_bd.ObtenerEscuelas();
-
-            GenerarUI();
-
-            //_escuela = escuela;
-            _usuario = usuario;
-        }
 
         // Metodos
         public override void GenerarUI()
@@ -108,6 +110,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
             MAIN_VSL.Add(_botonInsertar);
         }
 
+        // Evento a sobreescribir
 
         protected override void entryUnfocus(object sender, FocusEventArgs e)
         {
@@ -216,23 +219,34 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
 
                     case ModoFiltroUsuarios.Todos:
                         if (escuela != null && _selectorEscuela.EstaSeleccionado) _api_bd.
-                        EditarRelacionUsuariosEscuelas(_usuario, escuela.Id, nuevaEscuela.Id);
+                        EditarRelacionUsuariosEscuelas(_usuarioEditar, escuela.Id, nuevaEscuela.Id);
                         break;
                     case ModoFiltroUsuarios.PorEscuela:
                         if (escuela != null && _selectorEscuela.EstaSeleccionado) _api_bd.
-                        EditarRelacionUsuariosEscuelas(_usuario, escuela.Id, nuevaEscuela.Id);
+                        EditarRelacionUsuariosEscuelas(_usuarioEditar, escuela.Id, nuevaEscuela.Id);
                         break;
                     case ModoFiltroUsuarios.SinEscuelas:
                         if (nuevaEscuela != null && _selectorEscuela.EstaSeleccionado) _api_bd.
-                        CrearRelacionUsuariosEscuelas(_usuario, nuevaEscuela.Id);
+                        CrearRelacionUsuariosEscuelas(_usuarioEditar, nuevaEscuela.Id);
                         break;
                 }
 
 
+                // En caso de dejar solo un valor a editar, este se actualizará
                 if (correo != null || contrasenia != null || tipoUsuario != null || nombre != null)
                 {
-                    _api_bd.ActualizarUsuario(_usuario.Correo, correo, nombre, contrasenia, tipoUsuario);
-                    Application.Current.MainPage.DisplayAlert("Actualización Correcta!!", $"El Usuario {_usuario.Nombre} ha sido actualizado con exito", "Aceptar");
+                    _api_bd.ActualizarUsuario(_usuarioEditar.Correo, correo, nombre, contrasenia, tipoUsuario);
+                    Application.Current.MainPage.DisplayAlert("Actualización Correcta!!", $"El Usuario {_usuarioEditar.Nombre} ha sido actualizado con exito", "Aceptar");
+
+                    // En caso de actualizar el correo del usuario actual, se reiniciará la aplicación
+                    if (_usuario.Correo == _usuarioEditar.Correo)
+                    {
+                        EventoCerrarSesion?.Invoke();
+                    }
+                    else
+                    {
+                        EventoVolverPaginaPrincipal?.Invoke();
+                    }
                 }
                     
 
@@ -250,5 +264,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
                 LimpiarDatos();
             }
         }
+
+
     }
 }

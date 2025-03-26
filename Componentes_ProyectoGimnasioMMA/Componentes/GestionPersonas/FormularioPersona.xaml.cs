@@ -1,3 +1,5 @@
+using BibliotecaClases_ProyectoGimnasioMMA.APIs;
+using BibliotecaClases_ProyectoGimnasioMMA.Escuelas;
 using BibliotecaClases_ProyectoGimnasioMMA.Persona;
 using BibliotecaClases_ProyectoGimnasioMMA.Personas;
 using BibliotecaClases_ProyectoGimnasioMMA.Usuarios;
@@ -5,19 +7,30 @@ using Componentes_ProyectoGimnasioMMA.Componentes.Funciones;
 
 namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas;
 
+/// <summary>
+/// Esta Aplicación esta pensada solo para los Gestores de Gimnasios
+/// </summary>
 public partial class FormularioPersona : ContentView
 {
     // Recursos
     private EntryValidacion _eDNI;
     private EntryValidacion _eNombre;
     private EntryValidacion _eApellidos;
-    private EntryValidacion _eID_Escuela;
 
-    public FormularioPersona()
+    private Picker _selectorEscuela;
+
+    API_BD _api_bd;
+
+    Usuario _usuario;
+    Escuela _escuela;
+    List<Escuela> _escuelaList;
+
+    // CONSTRUCOR
+    public FormularioPersona(Usuario usuario)
 	{
 		InitializeComponent();
 
-        // CargarEnConstructor();
+        CargarEnConstructor(usuario);
 
     }
 
@@ -35,48 +48,24 @@ public partial class FormularioPersona : ContentView
             UI_VSL = value;
         }
     }
-    public string DNI
-    {
-        get
-        {
-            return _eDNI.Texto;
-        }
-    }
-    public string Nombre
-    {
-        get
-        {
-            return _eNombre.Texto;
-        }
-    }
-    public string Apellidos
-    {
-        get
-        {
-            return _eApellidos.Texto;
-        }
-    }
-    public int ID_Escuela
-    {
-        get
-        {
-            return Convert.ToInt32(_eID_Escuela.Texto);
-        }
-    }
-
+    
 
 
     // EVENTOS
 
-    private void CargarEnConstructor()
+    protected virtual void CargarEnConstructor(Usuario usuario)
     {
         try
         {
-            GenerarUI();
+            _usuario = usuario;
+            _api_bd = new API_BD();
+
+            // Asignamos esta lista para el picker
+            _escuelaList = _api_bd.ObtenerEscuelasDeUsuario(_usuario.Correo);
         }
         catch (Exception error)
         {
-
+            Application.Current.MainPage.DisplayAlert("ERROR", error.Message, "Ok");
         }
     }
 
@@ -106,10 +95,7 @@ public partial class FormularioPersona : ContentView
                     persona = new PersonaValidacion(_eApellidos.Texto, TipoMiembro.Apellidos);
                     break;
 
-                case "eID_Escuela":
-                    _eID_Escuela.limpiarError();
-                    persona = new PersonaValidacion(_eID_Escuela.Texto, TipoMiembro.ID_Escuela);
-                    break;
+               
 
             }
 
@@ -127,9 +113,6 @@ public partial class FormularioPersona : ContentView
                 case "eApellidos":
                     _eApellidos.mostrarError(error.Message);
                     break;
-                case "eID_Escuela":
-                    _eID_Escuela.mostrarError(error.Message);
-                    break;
 
             }
         }
@@ -146,11 +129,18 @@ public partial class FormularioPersona : ContentView
 
     public virtual void GenerarUI()
     {
+        List<string> listaNombresEscuelas = new List<string>();
+
+        foreach(Escuela escuela in _escuelaList)
+        {
+            listaNombresEscuelas.Add(escuela.Nombre);
+        }
+
         // Inctanciar Componentes de la interfaz
         _eDNI = GeneracionUI.CrearEntryError("DNI", "eDNI", entryUnfocus);
         _eNombre = GeneracionUI.CrearEntryError("Nombre", "eNombre", entryUnfocus);
         _eApellidos = GeneracionUI.CrearEntryError("Apellidos", "eApellidos", entryUnfocus);
-        _eID_Escuela = GeneracionUI.CrearEntryError("ID Escuela", "eID_Escuela", entryUnfocus);
+        _selectorEscuela = GeneracionUI.CrearPicker("sEscuela", "Seleccione una Escuela", listaNombresEscuelas, pickerFocusChanged);
 
         // Añadir interfaz al vsl
         UI_VSL.Children.Add(
@@ -163,10 +153,14 @@ public partial class FormularioPersona : ContentView
             _eApellidos
         );
         UI_VSL.Children.Add(
-            _eID_Escuela
+            _selectorEscuela
         );
 
 
     }
 
+    private void pickerFocusChanged(object sender, EventArgs e)
+    {
+
+    }
 }

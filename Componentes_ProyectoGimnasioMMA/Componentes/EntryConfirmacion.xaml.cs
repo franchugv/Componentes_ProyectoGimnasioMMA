@@ -4,7 +4,6 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes;
 
 public partial class EntryConfirmacion : ContentView
 {
-    private bool _cambiandoEstado = false;
 
     public EntryConfirmacion(string nombre)
     {
