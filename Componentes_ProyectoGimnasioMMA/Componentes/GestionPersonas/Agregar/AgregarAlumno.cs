@@ -17,7 +17,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
         // Recursos
         protected Picker _pickerDeporte;
         protected Picker _pickerCategoriaEdad;
-
+        protected Button _botonInsertar;
         protected API_BD _api_bd;
 
         protected Escuela _escuela;
@@ -38,6 +38,8 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
             try
             {
                 GenerarUI();
+                
+                // TODO: Hacer conexión con la base de datos para conseguir la lista de deportes y asignarla a la clase Deportes
             }
             catch (Exception error)
             {
@@ -57,6 +59,8 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
             base.GenerarUI();
 
             _pickerCategoriaEdad = GeneracionUI.CrearPicker("ePicker", "Seleccione una Categoría", Alumno.ObtenerCategoriasEdad, SelectedIndexChanged);
+            _botonInsertar = GeneracionUI.CrearBoton("Insertar Alumno", "eBoton", controladorBoton);
+
 
             _listaDeportes = new List<Deporte>();
             _listaNombreDeportes = new List<string>();
@@ -76,7 +80,32 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
 
         }
 
+        public virtual void controladorBoton(object sender, EventArgs e)
+        {
+            // Recursos
+            Escuela nuevaEscuela = null;
 
+            try
+            {
+                if (_selectorEscuela.SelectedItem == null) throw new Exception("Seleccione una escuels");
+                foreach (Escuela escuela in _escuelaList)
+                {
+                    // En caso de coincidir los nombres, asignaremos la escuela
+                    if(escuela.Nombre == _selectorEscuela.SelectedItem.ToString())
+                    {
+                        nuevaEscuela = escuela;
+                    }
+                }
+
+
+
+                Alumno alumno = new Alumno(_eDNI.Texto, _eApellidos, _pickerCategoriaEdad, nuevaEscuela, );
+            }
+            catch(Exception error)
+            {
+                Application.Current.MainPage.DisplayAlert("Error", error.Message, "Ok");
+            }
+        }
 
 
         private void SelectedIndexChanged(object sender, EventArgs e)

@@ -1,4 +1,5 @@
 using BibliotecaClases_ProyectoGimnasioMMA.APIs;
+using BibliotecaClases_ProyectoGimnasioMMA.Deportes;
 using BibliotecaClases_ProyectoGimnasioMMA.Escuelas;
 using BibliotecaClases_ProyectoGimnasioMMA.Persona;
 using BibliotecaClases_ProyectoGimnasioMMA.Personas;
@@ -13,24 +14,25 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas;
 public partial class FormularioPersona : ContentView
 {
     // Recursos
-    private EntryValidacion _eDNI;
-    private EntryValidacion _eNombre;
-    private EntryValidacion _eApellidos;
+    protected EntryValidacion _eDNI;
+    protected EntryValidacion _eNombre;
+    protected EntryValidacion _eApellidos;
 
-    private Picker _selectorEscuela;
+    protected Picker _selectorEscuela;
 
-    API_BD _api_bd;
+    protected API_BD _api_bd;
 
-    Usuario _usuario;
-    Escuela _escuela;
-    List<Escuela> _escuelaList;
+    protected Usuario _usuario;
+    protected Escuela _escuela;
 
+    protected List<Escuela> _escuelaList;
+    protected List<Deporte> _deporteList;
     // CONSTRUCOR
-    public FormularioPersona(Usuario usuario)
+    public FormularioPersona(Escuela escuela, Usuario usuario)
 	{
 		InitializeComponent();
 
-        CargarEnConstructor(usuario);
+        CargarEnConstructor(escuela, usuario);
 
     }
 
@@ -53,15 +55,18 @@ public partial class FormularioPersona : ContentView
 
     // EVENTOS
 
-    protected virtual void CargarEnConstructor(Usuario usuario)
+    protected virtual void CargarEnConstructor(Escuela escuela, Usuario usuario)
     {
         try
         {
+            _escuela = escuela;
             _usuario = usuario;
             _api_bd = new API_BD();
 
             // Asignamos esta lista para el picker
             _escuelaList = _api_bd.ObtenerEscuelasDeUsuario(_usuario.Correo);
+            _deporteList = _api_bd.DevolverListaDeportes(_escuela.Id);
+
         }
         catch (Exception error)
         {
@@ -119,11 +124,7 @@ public partial class FormularioPersona : ContentView
 
     }
 
-    // Evento a heredar en las clases hijas
-    public virtual void controladorBoton(object sender, EventArgs e)
-    {
 
-    }
 
 
 
