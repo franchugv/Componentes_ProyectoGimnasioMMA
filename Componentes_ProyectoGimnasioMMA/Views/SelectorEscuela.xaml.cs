@@ -26,9 +26,11 @@ public partial class SelectorEscuela : ContentPage
     /// Contructor en el cual, podremos seleccionar escuelas por Usuario
     /// </summary>
     /// <param name="usuario"></param>
-    public SelectorEscuela(Usuario usuario)
+    public SelectorEscuela(Usuario usuario, string titulo)
     {
         InitializeComponent();
+
+        Titulo.Text = titulo;
 
         _usuario = usuario;
 

@@ -3,9 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Componentes_ProyectoGimnasioMMA.Views.GestionUsuarios"
              Title="GestionUsuarios">
-    <Grid Padding="20" RowDefinitions="Auto, Auto, *">
+    <Grid Padding="20" RowDefinitions="Auto, Auto, *, Auto">
         <Label
-            Text="Gestión Escuelas"
+            Text="Gestión Usuarios"
             VerticalOptions="Center" 
             HorizontalOptions="Center" 
             Grid.Row="0"
@@ -24,5 +24,10 @@
             <StackLayout x:Name="VerticalStackLayoutUsuarios" 
                          VerticalOptions="Start"/>
         </ScrollView>
+
+        <Button x:Name="BotonAccion"
+                Text="Seleccione una Opción"
+                Clicked="ControladorBotonXAML"
+                Grid.Row="3"/>
     </Grid>
 </ContentPage>

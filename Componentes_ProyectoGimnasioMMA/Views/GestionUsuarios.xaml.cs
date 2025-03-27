@@ -33,6 +33,7 @@ public partial class GestionUsuarios : ContentPage
     public GestionUsuarios()
     {
         InitializeComponent();
+        //_usuario = usuario;
 
         CargarDatosConstructor();
     }
@@ -41,7 +42,6 @@ public partial class GestionUsuarios : ContentPage
    public GestionUsuarios(Usuario usuario, Escuela escuela) : this()
     {
         _escuela = escuela;
-        _usuario = usuario;
     } 
 
     // PROPIEDADES
@@ -98,62 +98,13 @@ public partial class GestionUsuarios : ContentPage
         // Instanciar el selector de escuela y sus eventos
         _selectorEscuela = new SelectorEscuelaCV(true);
         _selectorEscuela.EscuelaSeleccionadaEvento += ControladorCardsSelectorEscuela;
-        _selectorEscuela.BotonSeleccionadoEvento += ControladorBoton;
+        _selectorEscuela.BotonSeleccionadoEvento += ControladorBotonSelector;
     }
 
     // Evento Picker
-    protected virtual async void SelectedIndexChanged(object sender, EventArgs e)
+    protected virtual void SelectedIndexChanged(object sender, EventArgs e)
     {
-        Picker picker = (Picker)sender;
-        try
-        {
-
-            // Instanciar el content view agregar usuario
-            // En caso de no ser administrador, le pasaremos el usuario,
-            // si hacemos esto, este filtrará las escuelas por usuario en vez de mostrarnos todas las escuelas
-            if(_tipoUsuario != TipoUsuario.Administrador)
-                _agregarUsuario = new AgregarUsuario(_tipoUsuario, _usuario);
-            else
-                _agregarUsuario = new AgregarUsuario(_tipoUsuario);
-
-            InstanciarSlelectorEscuela();
-
-
-
-            switch (picker.StyleId)
-            {
-                case "PickerAccion":
-                    switch (PickerAccion.SelectedIndex)
-                    {
-                        case 0: // Agregar
-
-                            VerticalStackLayoutUsuarios.Clear();
-
-                            VerticalStackLayoutUsuarios.Add(_agregarUsuario);
-
-                            // Cuendo elijamos la opción, se limpirará el picker
-                            PickerAccion.SelectedItem = null;
-
-
-                            break;
-
-
-                        case 1: // Editar
-                        case 2: // Eliminar
-                            GenerarCV_SelectorEscuelas();
-                            break;
-                    }
-
-                    break;
-
-            }
-
-
-        }
-        catch (Exception error)
-        {
-            await DisplayAlert("ERROR", error.Message, "OK");
-        }
+       
 
     }
 
@@ -167,7 +118,7 @@ public partial class GestionUsuarios : ContentPage
     }
 
     // Controlador para los eventos que generan los botones Todos y Sin Escuela
-    private async void ControladorBoton(object sender, EventArgs e)
+    protected async void ControladorBotonSelector(object sender, EventArgs e)
     {
         try
         {
@@ -218,7 +169,7 @@ public partial class GestionUsuarios : ContentPage
     // EVENTOS
 
     // Controlador para el evento generado por las cards de Escuelas, el cual pasa al selector de usuarios
-    protected async void ControladorCardsSelectorEscuela(Escuela escuela)
+    protected virtual async void ControladorCardsSelectorEscuela(Escuela escuela)
     {
         try
         {
@@ -292,7 +243,8 @@ public partial class GestionUsuarios : ContentPage
         }
     }
 
-
-
-
+    protected virtual void ControladorBotonXAML(object sender, EventArgs e)
+    {
+        
+    }
 }

@@ -46,6 +46,9 @@
 	  <MauiXaml Update="Componentes\GestionPersonas\FormularioPersona.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Componentes\GestionPersonas\SelectorAlumno.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Componentes\GestionUsuarios\FormularioUsuario.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -77,6 +80,10 @@
 	  <Reference Include="BibliotecaClases_ProyectoGimnasioMMA">
 	    <HintPath>..\..\BibliotecaClases_ProyectoGimnasioMMA\BibliotecaClases_ProyectoGimnasioMMA\bin\Debug\net7.0\BibliotecaClases_ProyectoGimnasioMMA.dll</HintPath>
 	  </Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Componentes\GestionPersonas\Listar\" />
 	</ItemGroup>
 
 </Project>

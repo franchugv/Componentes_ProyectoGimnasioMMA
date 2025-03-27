@@ -26,9 +26,9 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
         
         // Componentes
         // Uso componentes diferentes a la clase heredada ya que son especiales, pudiendo elegir si queremos editarlos o no
-        EntryConfirmacion _eCorreo;
-        EntryConfirmacion _eNombre;
-        EntryConfirmacion _eContrasenia;
+        EntryConfirmacion _eCCorreo;
+        EntryConfirmacion _eCNombre;
+        EntryConfirmacion _eCContrasenia;
         PickerConfirmacion _selectorTipoUsuario;
         PickerConfirmacion _selectorEscuela;
 
@@ -44,7 +44,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
 
 
         // Constructor
-        public EditarUsuario(Usuario usuarioApp, Usuario usuarioEditar, ModoFiltroUsuarios modoFiltro, TipoUsuario tipoUsuario) : base(tipoUsuario)
+        public EditarUsuario(Usuario usuarioEditar, ModoFiltroUsuarios modoFiltro, TipoUsuario tipoUsuario) : base(tipoUsuario)
         {
             _api_bd = new API_BD();
 
@@ -54,18 +54,22 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
 
             // En caso de que no sea administrador, obtendremos las escuelas por usuario,
             // si no hacemos esto la lista tendra todas las escuelas, definido en el constructor base
-            if(usuarioApp.TipoDeUsuario != TipoUsuario.Administrador)
-            {
-                _listaEscuelas = _api_bd.ObtenerEscuelasDeUsuario(usuarioApp.Correo);
-            }
+
 
             //_escuelas = _api_bd.ObtenerEscuelas();
 
             GenerarUI();
 
             //_escuela = escuela;
-            _usuario = usuarioApp;
             _usuarioEditar = usuarioEditar;
+        }
+        public EditarUsuario(Usuario usuarioApp, Usuario usuarioEditar, ModoFiltroUsuarios modoFiltro, TipoUsuario tipoUsuario) : this(usuarioEditar, modoFiltro, tipoUsuario)
+        {
+            if (tipoUsuario != TipoUsuario.Administrador)
+            {
+                _listaEscuelas = _api_bd.ObtenerEscuelasDeUsuario(usuarioApp.Correo);
+            }
+            _usuario = usuarioApp;
         }
 
 
@@ -82,9 +86,10 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
             }
 
             // Inctanciar Componentes de la interfaz
-            _eCorreo = GeneracionUI.CrearEntryConfirmacion("Ingrese el nuevo Correo", "_eCorreo", entryUnfocus);
-            _eNombre = GeneracionUI.CrearEntryConfirmacion("Ingrese el nuevo Nombre", "_eNombre", entryUnfocus);
-            _eContrasenia = GeneracionUI.CrearEntryConfirmacion("Ingrese la nueva Contraseña", "_eContrasenia", entryUnfocus);
+            _eCCorreo = GeneracionUI.CrearEntryConfirmacion("Ingrese el nuevo Correo", "_eCorreo", entryUnfocus);
+            _eCNombre = GeneracionUI.CrearEntryConfirmacion("Ingrese el nuevo Nombre", "_eNombre", entryUnfocus);
+            _eCContrasenia = GeneracionUI.CrearEntryConfirmacion("Ingrese la nueva Contraseña", "_eContrasenia", entryUnfocus);
+            _eCContrasenia.EntryEditar.IsPassword = true;
             _selectorTipoUsuario = GeneracionUI.CrearPickerConfirmacion("eTipoUsuario", "Seleccione un nuevo Tipo de Usuario", _tiposUsuariosPicker, SelectedIndexChanged);
             _selectorEscuela = GeneracionUI.CrearPickerConfirmacion("eEscuela", "Selecciona la nueva Escuela", listaNombreEscuelas, SelectedIndexChanged);
 
@@ -172,19 +177,19 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
 
                 // En caso de estar seleccionado el checkbox, editaremos el valor
 
-                if (_eNombre.EstaSeleccionado)
+                if (_eCNombre.EstaSeleccionado)
                 {
                     // Validar
                     Usuario usuario = new Usuario(_eNombre.Texto, TipoDato.Nombre);
                     nombre = usuario.Nombre;
                 }
-                if (_eCorreo.EstaSeleccionado)
+                if (_eCCorreo.EstaSeleccionado)
                 {
                     // Validar
                     Usuario usuario = new Usuario(_eCorreo.Texto, TipoDato.Correo);
                     correo = usuario.Correo;
                 }
-                if (_eContrasenia.EstaSeleccionado)
+                if (_eCContrasenia.EstaSeleccionado)
                 {
                     // Validar
                     Usuario usuario = new Usuario(_eContrasenia.Texto, TipoDato.Contrasenia);
@@ -239,14 +244,19 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
                     Application.Current.MainPage.DisplayAlert("Actualización Correcta!!", $"El Usuario {_usuarioEditar.Nombre} ha sido actualizado con exito", "Aceptar");
 
                     // En caso de actualizar el correo del usuario actual, se reiniciará la aplicación
-                    if (_usuario.Correo == _usuarioEditar.Correo)
+
+                    if(_usuario != null)
                     {
-                        EventoCerrarSesion?.Invoke();
+                        if (_usuario.Correo == _usuarioEditar.Correo)
+                        {
+                            EventoCerrarSesion?.Invoke();
+                        }
+                        else
+                        {
+                            EventoVolverPaginaPrincipal?.Invoke();
+                        }
                     }
-                    else
-                    {
-                        EventoVolverPaginaPrincipal?.Invoke();
-                    }
+
                 }
                     
 

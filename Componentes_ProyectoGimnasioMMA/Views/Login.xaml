@@ -13,6 +13,7 @@
         <Label Text="Iniciar Sesión"
                HorizontalOptions="Center"
                FontSize="24"
+               x:Name="Titulo"
                Grid.Row="0"
                Grid.Column="0"/>
 

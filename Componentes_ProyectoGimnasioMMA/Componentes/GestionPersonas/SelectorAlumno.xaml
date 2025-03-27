@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Componentes_ProyectoGimnasioMMA.Views.SelectorEscuela"
-             Title="SelectorEscuela">
+             x:Class="Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.SelectorAlumno">
     <Grid Padding="20" RowDefinitions="Auto, *">
 
         <!-- Título y Picker -->
-        <Label Text="Seleccione una Escuela" 
+        <Label Text="Seleccione un Alumno"
                HorizontalOptions="Center" 
-               Grid.Row="0"
-               x:Name="Titulo"/>
+               Grid.Row="0"/>
 
         <!-- ScrollView -->
-        <ScrollView x:Name="ScrollViewClientes" 
+        <ScrollView x:Name="ScrollViewUsuarios" 
                     VerticalOptions="FillAndExpand" 
                     Grid.Row="1">
             <VerticalStackLayout x:Name="VerticalStackLayoutEscuelas" 
@@ -21,4 +19,4 @@
         </ScrollView>
 
     </Grid>
-</ContentPage>
+</ContentView>

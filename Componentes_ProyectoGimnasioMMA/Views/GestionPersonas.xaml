@@ -5,7 +5,7 @@
              Title="GestionPersonas">
     <Grid Padding="20" RowDefinitions="Auto, Auto, Auto, *, Auto">
         <Label
-            Text="Gestión Escuelas"
+            Text="Gestión Personal"
             VerticalOptions="Center" 
             HorizontalOptions="Center" 
             Grid.Row="0"

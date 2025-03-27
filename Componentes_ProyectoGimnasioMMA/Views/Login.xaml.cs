@@ -36,6 +36,18 @@ public partial class Login : ContentPage
         }
     }
 
+    public Label TituloLogin
+    {
+        get
+        {
+            return Titulo;
+        }
+        set
+        {
+            Titulo = value;
+        }
+    }
+
 
 
     // EVENTOS
