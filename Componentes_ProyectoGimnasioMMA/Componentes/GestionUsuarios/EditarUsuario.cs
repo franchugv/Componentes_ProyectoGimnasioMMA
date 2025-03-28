@@ -18,7 +18,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
     {
         // Recursos
 
-        Button _botonInsertar;
+        Button _botonEditar;
         API_BD _api_bd;
         
         
@@ -110,9 +110,9 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
                 _selectorEscuela
             );
 
-            _botonInsertar = GeneracionUI.CrearBoton("Editar Usuario", "_botonInsertar", ControladorBoton);
+            _botonEditar = GeneracionUI.CrearBoton("Editar Usuario", "_botonInsertar", ControladorBoton);
 
-            MAIN_VSL.Add(_botonInsertar);
+            MAIN_VSL.Add(_botonEditar);
         }
 
         // Evento a sobreescribir
