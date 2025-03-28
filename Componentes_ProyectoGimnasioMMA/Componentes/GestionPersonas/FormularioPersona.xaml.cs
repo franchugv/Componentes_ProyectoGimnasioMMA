@@ -128,7 +128,7 @@ public partial class FormularioPersona : ContentView
 
 
 
-    public virtual void GenerarUI()
+    protected virtual void GenerarUI()
     {
         List<string> listaNombresEscuelas = new List<string>();
 
@@ -160,7 +160,7 @@ public partial class FormularioPersona : ContentView
 
     }
 
-    private void pickerFocusChanged(object sender, EventArgs e)
+    protected void pickerFocusChanged(object sender, EventArgs e)
     {
 
     }

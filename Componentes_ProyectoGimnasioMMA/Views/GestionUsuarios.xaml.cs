@@ -27,7 +27,7 @@ public partial class GestionUsuarios : ContentPage
 
 
     // Acciones disponibles
-    public static readonly string[] ACCIONES = { "Agregar", "Editar", "Eliminar" };
+    public static readonly string[] ACCIONES = { "Agregar", "Editar", "Eliminar", "Listar"};
 
 
     public GestionUsuarios()
@@ -93,13 +93,6 @@ public partial class GestionUsuarios : ContentPage
 
     }
 
-    protected virtual void InstanciarSlelectorEscuela()
-    {
-        // Instanciar el selector de escuela y sus eventos
-        _selectorEscuela = new SelectorEscuelaCV(true);
-        _selectorEscuela.EscuelaSeleccionadaEvento += ControladorCardsSelectorEscuela;
-        _selectorEscuela.BotonSeleccionadoEvento += ControladorBotonSelector;
-    }
 
     // Evento Picker
     protected virtual void SelectedIndexChanged(object sender, EventArgs e)
@@ -108,139 +101,27 @@ public partial class GestionUsuarios : ContentPage
 
     }
 
-    private void GenerarCV_SelectorEscuelas()
-    {
-        VerticalStackLayoutUsuarios.Clear();
 
-        VerticalStackLayoutUsuarios.Add(_selectorEscuela);
-
-
-    }
 
     // Controlador para los eventos que generan los botones Todos y Sin Escuela
-    protected async void ControladorBotonSelector(object sender, EventArgs e)
+    protected virtual void ControladorBotonSelector(object sender, EventArgs e)
     {
-        try
-        {
-
-            Button boton = (Button)sender;
-
-            _modoFiltro = new ModoFiltroUsuarios();
-
-            switch (boton.StyleId)
-            {
-                case "_botonSinEscuela":
-                    _modoFiltro = ModoFiltroUsuarios.SinEscuelas;
-                    break;
-                case "_botonTodos":
-                    _modoFiltro = ModoFiltroUsuarios.Todos;
-                    break;
-            }
-
-            switch (PickerAccion.SelectedIndex)
-            {
-                case 1: // Editar
-                    VerticalStackLayoutUsuarios.Clear();
-
-
-                    _selectorUsuario = new SelectorUsuario(_escuela, _modoFiltro);
-                    VerticalStackLayoutUsuarios.Add(_selectorUsuario);
-                    _selectorUsuario.UsuarioSeleccionadaEvento += ControladorCardsSelectorUsuario;
-
-                    break;
-                case 2: // Eliminar
-                    VerticalStackLayoutUsuarios.Clear();
-
-
-                    _selectorUsuario = new SelectorUsuario(_escuela, _modoFiltro);
-                    VerticalStackLayoutUsuarios.Add(_selectorUsuario);
-                    _selectorUsuario.UsuarioSeleccionadaEvento += ControladorCardsSelectorUsuario;
-
-                    break;
-            }
-        }
-        catch (Exception error)
-        {
-            await DisplayAlert("ERROR", error.Message, "OK");
-        }
+        
 
     }
 
     // EVENTOS
 
     // Controlador para el evento generado por las cards de Escuelas, el cual pasa al selector de usuarios
-    protected virtual async void ControladorCardsSelectorEscuela(Escuela escuela)
+    protected virtual void ControladorCardsSelectorEscuela(Escuela escuela)
     {
-        try
-        {
-            _escuela = escuela;
 
-            switch (PickerAccion.SelectedIndex)
-            {
-                case 1: // Editar
-                case 2: // Eliminar
-                    VerticalStackLayoutUsuarios.Clear();
-
-                    _modoFiltro = ModoFiltroUsuarios.PorEscuela;
-                    _selectorUsuario = new SelectorUsuario(escuela, ModoFiltroUsuarios.PorEscuela);
-                    VerticalStackLayoutUsuarios.Add(_selectorUsuario);
-                    _selectorUsuario.UsuarioSeleccionadaEvento += ControladorCardsSelectorUsuario;
-
-                    break;
-            }
-        }
-        catch (Exception error)
-        {
-            await DisplayAlert("ERROR", error.Message, "OK");
-        }
     }
 
     // Controlador para el evento generado por las cards de usuarios
-    protected virtual async void ControladorCardsSelectorUsuario(Usuario usuario)
+    protected virtual void ControladorCardsSelectorUsuario(Usuario usuario)
     {
-        try
-        {
 
-            switch (PickerAccion.SelectedIndex)
-            {
-                case 1: // Editar
-                    VerticalStackLayoutUsuarios.Clear();
-
-                    _editarUsuario = new EditarUsuario(_usuario, usuario, _modoFiltro, _tipoUsuario);
-                    if (_escuela != null) _editarUsuario.escuela = _escuela;
-
-
-                    VerticalStackLayoutUsuarios.Add(_editarUsuario);
-
-                    break;
-                case 2: // Eliminar
-
-                    bool confirmar = await GeneracionUI.MostrarConfirmacion(Application.Current.MainPage, "Ventana confirmación", $"¿Desea Eliminar el Usuario {usuario.Nombre}?");
-                    
-                    if (confirmar)
-                    {
-                        VerticalStackLayoutUsuarios.Clear();
-
-                        api_bd.EliminarUsuario(usuario.Correo);
-
-                        await DisplayAlert("Escuela eliminada con éxito", $"Escuela: {usuario.Correo}\nUbicación: {usuario.Nombre}", "OK");
-
-
-                    }
-
-
-
-                    break;
-            }
-        }
-        catch (Exception error)
-        {
-            await DisplayAlert("ERROR", error.Message, "OK");
-        }
-        finally
-        {
-            PickerAccion.SelectedItem = null;
-        }
     }
 
     protected virtual void ControladorBotonXAML(object sender, EventArgs e)

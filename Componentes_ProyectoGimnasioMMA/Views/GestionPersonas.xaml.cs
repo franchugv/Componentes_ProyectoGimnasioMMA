@@ -15,7 +15,7 @@ public partial class GestionPersonas : ContentPage
 
 
 
-    public static readonly string[] ACCIONES = { "Agregar", "Editar", "Eliminar" };
+    public static readonly string[] ACCIONES = { "Agregar", "Editar", "Eliminar", "Listar"};
 
 
     public GestionPersonas(Escuela escuela)

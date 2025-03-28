@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
 {
+
+
+
     /// <summary>
     /// Esta clase hereda de FormularioUsuario
     /// </summary>
@@ -19,6 +22,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
         API_BD _api_bd;
         Escuela _escuela;
 
+        public event Action EventoVolverPaginaPrincipal;
 
         public AgregarUsuario(TipoUsuario tipoUsuario) : base(tipoUsuario)
         {
@@ -79,6 +83,9 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
                 // Exactamente lo mismo que al principio
                 if (_selectorEscuela.SelectedItem != null)
                     _api_bd.CrearRelacionUsuariosEscuelas(usuario, _escuela.Id);
+
+                EventoVolverPaginaPrincipal?.Invoke();
+
             }
             catch (Exception error)
             {

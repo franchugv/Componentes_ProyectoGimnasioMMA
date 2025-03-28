@@ -82,8 +82,4 @@
 	  </Reference>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Componentes\GestionPersonas\Listar\" />
-	</ItemGroup>
-
 </Project>

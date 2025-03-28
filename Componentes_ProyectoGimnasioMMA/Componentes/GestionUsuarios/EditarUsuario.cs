@@ -95,13 +95,13 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
 
             // Añadir interfaz al vsl
             MAIN_VSL.Children.Add(
-                _eCorreo
+                _eCCorreo
             );
             MAIN_VSL.Children.Add(
-                _eNombre
+                _eCNombre
             );
             MAIN_VSL.Children.Add(
-                _eContrasenia
+                _eCContrasenia
             );
             MAIN_VSL.Children.Add(
                 _selectorTipoUsuario
@@ -127,18 +127,18 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
                 switch (entry.StyleId)
                 {
                     case "_eCorreo":
-                        _eCorreo.limpiarError();
-                        usuario = new Usuario(_eCorreo.Texto, TipoDato.Correo);
+                        _eCCorreo.limpiarError();
+                        usuario = new Usuario(_eCCorreo.Texto, TipoDato.Correo);
                         break;
 
-                    case "eNombre":
-                        _eNombre.limpiarError();
-                        usuario = new Usuario(_eNombre.Texto, TipoDato.Nombre);
+                    case "_eNombre":
+                        _eCNombre.limpiarError();
+                        usuario = new Usuario(_eCNombre.Texto, TipoDato.Nombre);
                         break;
 
                     case "_eContrasenia":
-                        _eContrasenia.limpiarError();
-                        usuario = new Usuario(_eContrasenia.Texto, TipoDato.Contrasenia);
+                        _eCContrasenia.limpiarError();
+                        usuario = new Usuario(_eCContrasenia.Texto, TipoDato.Contrasenia);
                         break;
 
                 }
@@ -149,13 +149,13 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
                 switch (entry.StyleId)
                 {
                     case "_eCorreo":
-                        _eCorreo.mostrarError(error.Message);
+                        _eCCorreo.mostrarError(error.Message);
                         break;
-                    case "eNombre":
-                        _eNombre.mostrarError(error.Message);
+                    case "_eNombre":
+                        _eCNombre.mostrarError(error.Message);
                         break;
                     case "_eContrasenia":
-                        _eContrasenia.mostrarError(error.Message);
+                        _eCContrasenia.mostrarError(error.Message);
                         break;
 
 
@@ -180,19 +180,19 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
                 if (_eCNombre.EstaSeleccionado)
                 {
                     // Validar
-                    Usuario usuario = new Usuario(_eNombre.Texto, TipoDato.Nombre);
+                    Usuario usuario = new Usuario(_eCNombre.Texto, TipoDato.Nombre);
                     nombre = usuario.Nombre;
                 }
                 if (_eCCorreo.EstaSeleccionado)
                 {
                     // Validar
-                    Usuario usuario = new Usuario(_eCorreo.Texto, TipoDato.Correo);
+                    Usuario usuario = new Usuario(_eCCorreo.Texto, TipoDato.Correo);
                     correo = usuario.Correo;
                 }
                 if (_eCContrasenia.EstaSeleccionado)
                 {
                     // Validar
-                    Usuario usuario = new Usuario(_eContrasenia.Texto, TipoDato.Contrasenia);
+                    Usuario usuario = new Usuario(_eCContrasenia.Texto, TipoDato.Contrasenia);
                     contrasenia = usuario.Contrasenia;
                 }
 
@@ -255,6 +255,10 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
                         {
                             EventoVolverPaginaPrincipal?.Invoke();
                         }
+                    }
+                    else
+                    {
+                        EventoVolverPaginaPrincipal?.Invoke();
                     }
 
                 }
