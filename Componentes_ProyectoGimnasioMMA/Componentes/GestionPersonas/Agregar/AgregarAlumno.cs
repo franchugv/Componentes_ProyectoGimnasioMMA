@@ -64,7 +64,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
         }
 
 
-        public override void GenerarUI()
+        protected override void GenerarUI()
         {
             base.GenerarUI();
 
