@@ -19,7 +19,7 @@ public partial class FormularioUsuario : ContentView
     protected Picker _eTipoUsuario;
     protected Picker _selectorEscuela;
 
-    protected List<Escuela> _listaEscuelas;
+    protected List<Escuela> _listaEscuelasAgregar;
     protected Usuario _usuario;
 
     API_BD _api_bd;
@@ -41,7 +41,7 @@ public partial class FormularioUsuario : ContentView
     /// <param name="tipoUsuario"></param>
     public FormularioUsuario(Usuario usuario, TipoUsuario tipoUsuario) : this(tipoUsuario)
     {
-       _listaEscuelas = _api_bd.ObtenerEscuelasDeUsuario(usuario.Correo);
+       _listaEscuelasAgregar = _api_bd.ObtenerEscuelasDeUsuario(usuario.Correo);
     }
 
 
@@ -84,8 +84,8 @@ public partial class FormularioUsuario : ContentView
             _api_bd = new API_BD();
 
             // Asignar la lista de escuelas torales
-            _listaEscuelas = new List<Escuela>();
-            _listaEscuelas = _api_bd.ObtenerEscuelas();
+            _listaEscuelasAgregar = new List<Escuela>();
+            _listaEscuelasAgregar = _api_bd.ObtenerEscuelas();
         }
         catch (Exception error)
         {
@@ -161,7 +161,7 @@ public partial class FormularioUsuario : ContentView
     {
         List<string> nombreEscuela = new List<string>();
 
-        foreach (Escuela escuela in _listaEscuelas)
+        foreach (Escuela escuela in _listaEscuelasAgregar)
         {
             nombreEscuela.Add(escuela.Nombre);
         }

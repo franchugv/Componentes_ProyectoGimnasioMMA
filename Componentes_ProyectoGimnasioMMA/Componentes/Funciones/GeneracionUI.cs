@@ -194,7 +194,13 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
                     FontSize = 16,
                     TextColor = Colors.Gray
                 },
-              
+                new Label
+                {
+                    Text = usuario.OntenerTipoUsuario,
+                    FontAttributes = FontAttributes.Bold,
+                    FontSize = 16,
+                    TextColor = Colors.Red
+                },
                 }
                 }
             };

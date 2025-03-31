@@ -59,7 +59,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
 
                 if (_selectorEscuela.SelectedItem != null)
                 {
-                    foreach (Escuela escuela in _listaEscuelas)
+                    foreach (Escuela escuela in _listaEscuelasAgregar)
                     {
                         if (escuela.Nombre == _selectorEscuela.SelectedItem.ToString())
                         {

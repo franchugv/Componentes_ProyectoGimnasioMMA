@@ -18,15 +18,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Componentes\GestionPersonas\Editar\**" />
 	  <Compile Remove="Componentes\GestionPersonas\Eliminar\**" />
-	  <EmbeddedResource Remove="Componentes\GestionPersonas\Editar\**" />
 	  <EmbeddedResource Remove="Componentes\GestionPersonas\Eliminar\**" />
-	  <MauiCss Remove="Componentes\GestionPersonas\Editar\**" />
 	  <MauiCss Remove="Componentes\GestionPersonas\Eliminar\**" />
-	  <MauiXaml Remove="Componentes\GestionPersonas\Editar\**" />
 	  <MauiXaml Remove="Componentes\GestionPersonas\Eliminar\**" />
-	  <None Remove="Componentes\GestionPersonas\Editar\**" />
 	  <None Remove="Componentes\GestionPersonas\Eliminar\**" />
 	</ItemGroup>
 

@@ -78,7 +78,7 @@ public partial class GestionPersonas : ContentPage
     }
 
     // Evento Picker
-    protected virtual async void SelectedIndexChanged(object sender, EventArgs e)
+    protected virtual void SelectedIndexChanged(object sender, EventArgs e)
     {
 
     }

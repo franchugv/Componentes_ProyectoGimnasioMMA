@@ -22,33 +22,41 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
         API_BD _api_bd;
         
         
-        ModoFiltroUsuarios _modoFiltro;
         
         // Componentes
         // Uso componentes diferentes a la clase heredada ya que son especiales, pudiendo elegir si queremos editarlos o no
         EntryConfirmacion _eCCorreo;
         EntryConfirmacion _eCNombre;
         EntryConfirmacion _eCContrasenia;
+
+        // Pickers
         PickerConfirmacion _selectorTipoUsuario;
-        PickerConfirmacion _selectorEscuela;
+        PickerConfirmacion _selectorEscuelaAgregar;
+        PickerConfirmacion _selectorEscuelaEliminar;
 
         // Escuelas
-        List<Escuela> _escuelas;
+
+
+        public List<Escuela> _listaEscuelasEliminar;
+
         public Escuela escuela;
         protected Usuario _usuarioEditar;
 
 
+
+        // EVENTOS Action
         public event Action EventoCerrarSesion;
 
         public event Action EventoVolverPaginaPrincipal;
 
 
+
+
         // Constructor
-        public EditarUsuario(Usuario usuarioEditar, ModoFiltroUsuarios modoFiltro, TipoUsuario tipoUsuario) : base(tipoUsuario)
+        public EditarUsuario(Usuario usuarioEditar, TipoUsuario tipoUsuario) : base(tipoUsuario)
         {
             _api_bd = new API_BD();
 
-            _modoFiltro = modoFiltro;
 
             // Instanciamos la lista de Escuelas
 
@@ -58,18 +66,37 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
 
             //_escuelas = _api_bd.ObtenerEscuelas();
 
-            GenerarUI();
 
             //_escuela = escuela;
             _usuarioEditar = usuarioEditar;
+
+            _listaEscuelasAgregar = _api_bd.ListarEscuelasNoRegistradasUsuario(usuarioEditar.Correo);
+            _listaEscuelasEliminar = _api_bd.ObtenerEscuelasDeUsuario(usuarioEditar.Correo);
+            GenerarUI();
+
+
         }
-        public EditarUsuario(Usuario usuarioApp, Usuario usuarioEditar, ModoFiltroUsuarios modoFiltro, TipoUsuario tipoUsuario) : this(usuarioEditar, modoFiltro, tipoUsuario)
+
+
+        public EditarUsuario(Usuario usuarioApp, Usuario usuarioEditar, TipoUsuario tipoUsuario) : base(tipoUsuario)
         {
+            _api_bd = new API_BD();
+
+
+            _usuarioEditar = usuarioEditar;
+            _usuario = usuarioApp;
+
+
             if (tipoUsuario != TipoUsuario.Administrador)
             {
-                _listaEscuelas = _api_bd.ObtenerEscuelasDeUsuario(usuarioApp.Correo);
+                _listaEscuelasAgregar = _api_bd.ListarEscuelasDisponiblesUsuarioNoRegistrado(usuarioApp.Correo, usuarioEditar.Correo);
+                _listaEscuelasEliminar = _api_bd.ObtenerEscuelasDeUsuario(usuarioEditar.Correo);
             }
-            _usuario = usuarioApp;
+
+            GenerarUI();
+
+
+
         }
 
 
@@ -80,9 +107,19 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
 
             List<string> listaNombreEscuelas = new List<string>();
 
-            foreach (Escuela escuela in _listaEscuelas)
+            foreach (Escuela escuela in _listaEscuelasAgregar)
             {
                 listaNombreEscuelas.Add(escuela.Nombre);
+            }
+
+            List<string> listaNombreEscuelasSinUsuario = new List<string>();
+
+            if(_listaEscuelasEliminar != null)
+            {
+                foreach (Escuela escuela in _listaEscuelasEliminar)
+                {
+                    listaNombreEscuelasSinUsuario.Add(escuela.Nombre);
+                }
             }
 
             // Inctanciar Componentes de la interfaz
@@ -90,8 +127,10 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
             _eCNombre = GeneracionUI.CrearEntryConfirmacion("Ingrese el nuevo Nombre", "_eNombre", entryUnfocus);
             _eCContrasenia = GeneracionUI.CrearEntryConfirmacion("Ingrese la nueva Contraseña", "_eContrasenia", entryUnfocus);
             _eCContrasenia.EntryEditar.IsPassword = true;
+            
             _selectorTipoUsuario = GeneracionUI.CrearPickerConfirmacion("eTipoUsuario", "Seleccione un nuevo Tipo de Usuario", _tiposUsuariosPicker, SelectedIndexChanged);
-            _selectorEscuela = GeneracionUI.CrearPickerConfirmacion("eEscuela", "Selecciona la nueva Escuela", listaNombreEscuelas, SelectedIndexChanged);
+            _selectorEscuelaAgregar = GeneracionUI.CrearPickerConfirmacion("eEscuela", "Selecciona la nueva Escuela", listaNombreEscuelas, SelectedIndexChanged);
+            _selectorEscuelaEliminar = GeneracionUI.CrearPickerConfirmacion("eEscuela", "Selecciona una Escuela a Eliminar", listaNombreEscuelasSinUsuario, SelectedIndexChanged);
 
             // Añadir interfaz al vsl
             MAIN_VSL.Children.Add(
@@ -103,12 +142,30 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
             MAIN_VSL.Children.Add(
                 _eCContrasenia
             );
-            MAIN_VSL.Children.Add(
-                _selectorTipoUsuario
-            );
-            MAIN_VSL.Children.Add(
-                _selectorEscuela
-            );
+
+            if(_usuario.TipoDeUsuario == TipoUsuario.Administrador || _usuarioEditar.TipoDeUsuario != TipoUsuario.GestorGimnasios)
+            {
+                // Controlar que no podamos editar estos valores usando nuestro usuario para evitar errores
+                if(_usuario.Correo != _usuarioEditar.Correo)
+                {
+                    MAIN_VSL.Children.Add(
+                     _selectorTipoUsuario
+                    );
+                    MAIN_VSL.Children.Add(
+                        _selectorEscuelaAgregar
+                    );
+                    MAIN_VSL.Children.Add(
+                    _selectorEscuelaEliminar
+                    );
+                }
+
+
+            }
+
+
+            
+
+
 
             _botonEditar = GeneracionUI.CrearBoton("Editar Usuario", "_botonInsertar", ControladorBoton);
 
@@ -173,7 +230,9 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
                 string nombre = null;
                 string contrasenia = null;
                 string tipoUsuario = null;
+
                 Escuela nuevaEscuela = null;
+                Escuela escuelaEliminar = null;
 
                 // En caso de estar seleccionado el checkbox, editaremos el valor
 
@@ -207,34 +266,40 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
                     tipoUsuario = _selectorTipoUsuario.PickerEditar.SelectedItem.ToString();
                 }
 
-                if (_selectorEscuela.EstaSeleccionado)
+                // Escuelas a Agregar
+                if (_selectorEscuelaAgregar.EstaSeleccionado)
                 {
-                    if (_selectorEscuela.PickerEditar.SelectedItem == null) throw new Exception("Seleccione una Escuela");
-                    for (int indice = 0; indice < _listaEscuelas.Count; indice++)
+                    if (_selectorEscuelaAgregar.PickerEditar.SelectedItem == null) throw new Exception("Seleccione una Escuela a Agregar");
+                    for (int indice = 0; indice < _listaEscuelasAgregar.Count; indice++)
                     {
-                        if (_selectorEscuela.PickerEditar.SelectedItem.ToString() == _listaEscuelas[indice].Nombre) nuevaEscuela = _listaEscuelas[indice];
+                        if (_selectorEscuelaAgregar.PickerEditar.SelectedItem.ToString() == _listaEscuelasAgregar[indice].Nombre) nuevaEscuela = _listaEscuelasAgregar[indice];
+                    }
+
+
+                }
+
+                // Escuelas a Eliminar
+                if (_selectorEscuelaEliminar.EstaSeleccionado)
+                {
+                    if (_selectorEscuelaEliminar.PickerEditar.SelectedItem == null) throw new Exception("Seleccione una Escuela a Eliminar");
+                    for (int indice = 0; indice < _listaEscuelasEliminar.Count; indice++)
+                    {
+                        if (_selectorEscuelaEliminar.PickerEditar.SelectedItem.ToString() == _listaEscuelasEliminar[indice].Nombre) escuelaEliminar = _listaEscuelasEliminar[indice];
                     }
                 }
 
                 // Insercciones en la Base de datos
-                // En caso de que la casilla este seleccionada y el picker sea null
+                if (nuevaEscuela != null && _selectorEscuelaAgregar.EstaSeleccionado) _api_bd.
+                CrearRelacionUsuariosEscuelas(_usuarioEditar, nuevaEscuela.Id);
 
-                switch (_modoFiltro)
+
+                if (escuela != null && _selectorEscuelaEliminar.EstaSeleccionado)
                 {
-
-                    case ModoFiltroUsuarios.Todos:
-                        if (escuela != null && _selectorEscuela.EstaSeleccionado) _api_bd.
-                        EditarRelacionUsuariosEscuelas(_usuarioEditar, escuela.Id, nuevaEscuela.Id);
-                        break;
-                    case ModoFiltroUsuarios.PorEscuela:
-                        if (escuela != null && _selectorEscuela.EstaSeleccionado) _api_bd.
-                        EditarRelacionUsuariosEscuelas(_usuarioEditar, escuela.Id, nuevaEscuela.Id);
-                        break;
-                    case ModoFiltroUsuarios.SinEscuelas:
-                        if (nuevaEscuela != null && _selectorEscuela.EstaSeleccionado) _api_bd.
-                        CrearRelacionUsuariosEscuelas(_usuarioEditar, nuevaEscuela.Id);
-                        break;
+                    if (_listaEscuelasEliminar.Count <= 1) throw new Exception("No puedes dejar un usuario sin Escuelas");
+                    _api_bd.EliminarRelacionUsuariosEscuelas(_usuarioEditar, escuelaEliminar.Id);
                 }
+                   
+
 
 
                 // En caso de dejar solo un valor a editar, este se actualizará
