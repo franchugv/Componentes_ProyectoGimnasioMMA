@@ -15,8 +15,8 @@ public partial class SelectorUsuario : ContentView
     API_BD _api_bd;
     List<Usuario> _listaUsuarios;
     Usuario _usuarioElegido;
+    TipoUsuario _tipoUsuarioAPP;
 
-    // Usuario que ha inidiado sesión
 
     // Evento que será lanzado al hacer clic en una escuela
     public event Action<Usuario> UsuarioSeleccionadaEvento;
@@ -27,7 +27,7 @@ public partial class SelectorUsuario : ContentView
     /// <param name="escuela"></param>
     /// <param name="modoFiltro"></param>
     /// <exception cref="Exception"></exception>
-    public SelectorUsuario(Escuela escuela, ModoFiltroUsuarios modoFiltro)
+    public SelectorUsuario(Escuela escuela, ModoFiltroUsuarios modoFiltro, TipoUsuario tipoUsuario)
     {
         InitializeComponent();
 
@@ -82,7 +82,10 @@ public partial class SelectorUsuario : ContentView
 
         foreach (Usuario usuario in _listaUsuarios)
         {
-            VerticalStackLayoutEscuelas.Children.Add(GeneracionUI.CrearCartaUsuario(usuario, CartaClickeada));
+            if(usuario.TipoDeUsuario != TipoUsuario.GestorGimnasios && _tipoUsuarioAPP != TipoUsuario.GestorGimnasios)
+            {
+                VerticalStackLayoutEscuelas.Children.Add(GeneracionUI.CrearCartaUsuario(usuario, CartaClickeada));
+            }
         }
 
     }

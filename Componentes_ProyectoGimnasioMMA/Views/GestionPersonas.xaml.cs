@@ -83,8 +83,5 @@ public partial class GestionPersonas : ContentPage
 
     }
 
-    protected virtual void controladorBoton(object sender, EventArgs e)
-    {
 
-    }
 }

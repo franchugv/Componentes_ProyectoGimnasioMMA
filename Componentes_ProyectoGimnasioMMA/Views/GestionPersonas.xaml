@@ -3,36 +3,40 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Componentes_ProyectoGimnasioMMA.Views.GestionPersonas"
              Title="GestionPersonas">
-    <Grid Padding="20" RowDefinitions="Auto, Auto, Auto, *, Auto">
-        <Label
-            Text="Gestión Personal"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" 
-            Grid.Row="0"
-        />
+    
+    <Grid Padding="20" RowDefinitions="Auto, *, *" ColumnDefinitions="*, *">
+    <Label
+        Text="Gestión Personal"
+        VerticalOptions="Center" 
+        HorizontalOptions="Center" 
+        Grid.Row="0"
+        Grid.ColumnSpan="2"/>
 
-        <Picker x:Name="PickerAccion" 
-                Title="Seleccione la acción a realizar"
-                SelectedIndexChanged="SelectedIndexChanged" 
-                Grid.Row="1"/>
+    <Picker x:Name="PickerAccion" 
+            Title="Seleccione la acción a realizar"
+            SelectedItem="0"
+            Grid.Row="1"
+            Grid.ColumnSpan="2"/>
 
-        <Picker x:Name="PickerSelectorTipoPersona"
-                Title="Seleccione al tipo de persona a Agregar"
-                SelectedIndexChanged="SelectedIndexChanged" 
-                Grid.Row="2"/>
+    <Picker x:Name="PickerSelectorTipoPersona"
+            Title="Seleccione al tipo de persona a Agregar"
+            SelectedIndexChanged="SelectedIndexChanged" 
+            SelectedItem="0"
+            Grid.Row="2"
+            Grid.ColumnSpan="2"/>
 
         <!-- ScrollView -->
+        <!--
         <ScrollView x:Name="ScrollViewPersonas" 
                     VerticalOptions="FillAndExpand" 
                     Grid.Row="3">
 
             <StackLayout x:Name="VerticalStackLayoutPersonas" 
                          VerticalOptions="Start"/>
-        </ScrollView>
-
-        <Button x:Name="botonOpcion"
-                Clicked="controladorBoton"
-                Text="Seleccione la opción"
-                Grid.Row="4"/>
+        </ScrollView>-->
     </Grid>
-</ContentPage>
+
+
+
+
+
