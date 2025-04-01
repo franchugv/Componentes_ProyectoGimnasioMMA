@@ -38,16 +38,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
             {
                 GenerarUI();
 
-                // TODO: Transladar esto a Profesor
 
-                //_listaDeportes = _api_bd.DevolverListaDeportes(_escuela.Id);
-
-                //if (_listaDeportes == null) throw new Exception("");
-
-                //foreach(Deporte deporte in _listaDeportes)
-                //{
-                //    _listaNombreDeportes.Add(deporte.Nombre);
-                //}
 
                 
             }

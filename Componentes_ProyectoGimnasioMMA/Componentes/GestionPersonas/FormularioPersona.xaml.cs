@@ -26,7 +26,7 @@ public partial class FormularioPersona : ContentView
     protected Escuela _escuela;
 
     protected List<Escuela> _escuelaList;
-    protected List<Deporte> _deporteList;
+
     // CONSTRUCOR
     public FormularioPersona(Escuela escuela, Usuario usuario)
 	{
@@ -65,7 +65,6 @@ public partial class FormularioPersona : ContentView
 
             // Asignamos esta lista para el picker
             _escuelaList = _api_bd.ObtenerEscuelasDeUsuario(_usuario.Correo);
-            _deporteList = _api_bd.DevolverListaDeportes(_escuela.Id);
 
         }
         catch (Exception error)

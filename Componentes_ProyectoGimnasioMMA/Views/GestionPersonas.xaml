@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Componentes_ProyectoGimnasioMMA.Views.GestionPersonas"
              Title="GestionPersonas">
-    
-    <Grid Padding="20" RowDefinitions="Auto, *, *" ColumnDefinitions="*, *">
+
+    <Grid Padding="20" RowDefinitions="Auto, Auto, Auto" ColumnDefinitions="*, *">
     <Label
         Text="Gestión Personal"
         VerticalOptions="Center" 
@@ -16,13 +16,16 @@
             Title="Seleccione la acción a realizar"
             SelectedItem="0"
             Grid.Row="1"
-            Grid.ColumnSpan="2"/>
+            Grid.ColumnSpan="2"
+            HorizontalOptions="FillAndExpand"
+            />
 
     <Picker x:Name="PickerSelectorTipoPersona"
             Title="Seleccione al tipo de persona a Agregar"
             SelectedIndexChanged="SelectedIndexChanged" 
             SelectedItem="0"
             Grid.Row="2"
+            HorizontalOptions="FillAndExpand"
             Grid.ColumnSpan="2"/>
 
         <!-- ScrollView -->
@@ -35,7 +38,7 @@
                          VerticalOptions="Start"/>
         </ScrollView>-->
     </Grid>
-
+</ContentPage>
 
 
 

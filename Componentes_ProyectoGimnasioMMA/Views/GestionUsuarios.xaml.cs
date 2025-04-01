@@ -57,17 +57,7 @@ public partial class GestionUsuarios : ContentPage
         }
     }
 
-    public StackLayout MAINVSL
-    {
-        get
-        {
-            return VerticalStackLayoutUsuarios;
-        }
-        set
-        {
-            VerticalStackLayoutUsuarios = value;
-        }
-    }
+
 
     // EVENTOS
     private void CargarDatosConstructor()
@@ -124,8 +114,6 @@ public partial class GestionUsuarios : ContentPage
 
     }
 
-    protected virtual void ControladorBotonXAML(object sender, EventArgs e)
-    {
-        
-    }
+
+
 }
