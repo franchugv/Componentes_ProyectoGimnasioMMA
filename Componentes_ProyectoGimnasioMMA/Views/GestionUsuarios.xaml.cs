@@ -1,5 +1,6 @@
 using BibliotecaClases_ProyectoGimnasioMMA.APIs;
 using BibliotecaClases_ProyectoGimnasioMMA.Escuelas;
+using BibliotecaClases_ProyectoGimnasioMMA.Personas;
 using BibliotecaClases_ProyectoGimnasioMMA.Usuarios;
 using Componentes_ProyectoGimnasioMMA.Componentes.Funciones;
 using Componentes_ProyectoGimnasioMMA.Componentes.GestionGimnasios.CV;
@@ -10,6 +11,11 @@ namespace Componentes_ProyectoGimnasioMMA.Views;
 public partial class GestionUsuarios : ContentPage
 {
     // Recursos
+
+    List<Usuario> _listaUsuarios;
+    protected Usuario _usuarioElegido;
+
+
     protected TipoUsuario _tipoUsuario;
 
     protected ModoFiltroUsuarios _modoFiltro = new ModoFiltroUsuarios();
@@ -26,36 +32,42 @@ public partial class GestionUsuarios : ContentPage
 
 
 
-    // Acciones disponibles
-    public static readonly string[] ACCIONES = { "Agregar", "Editar", "Eliminar", "Listar"};
 
 
-    public GestionUsuarios()
+
+    public GestionUsuarios(TipoUsuario tipoUsuario)
     {
+        _tipoUsuario = tipoUsuario;
+
         InitializeComponent();
         //_usuario = usuario;
 
         CargarDatosConstructor();
+        _listaUsuarios = api_bd.ObtenerListaTotalUsuarios();
+
+        GenerarInterfaz();
     }
 
     // Constructores
-   public GestionUsuarios(Usuario usuario, Escuela escuela) : this()
+   public GestionUsuarios(Usuario usuario, Escuela escuela) 
     {
+        _tipoUsuario = usuario.TipoDeUsuario;
+
+        InitializeComponent();
+        _usuario = usuario;
+
+        CargarDatosConstructor();
+        _listaUsuarios = api_bd.ObtenerListaTotalUsuarios();
+
+
         _escuela = escuela;
-    } 
+        _listaUsuarios = api_bd.ObtenerListaUsuarios(_escuela.Id);
+
+        GenerarInterfaz();
+
+    }
 
     // PROPIEDADES
-    protected Picker PickerAccionPropiedad
-    {
-        get
-        {
-            return PickerAccion;
-        }
-        set
-        {
-            PickerAccion = value;
-        }
-    }
 
 
 
@@ -66,29 +78,14 @@ public partial class GestionUsuarios : ContentPage
         {
             Shell.SetNavBarIsVisible(this, false);
             api_bd = new API_BD();
-            AsignarOpcionesPicker();
+
+
+            //AsignarOpcionesPicker();
         }
         catch (Exception error)
         {
             DisplayAlert("ERROR", error.Message, "OK");
         }
-    }
-
-    private void AsignarOpcionesPicker()
-    {
-        // Asignamos las opciones al picker
-        if (PickerAccion.ItemsSource != null) PickerAccion.ItemsSource.Clear();
-
-        PickerAccion.ItemsSource = ACCIONES;
-
-    }
-
-
-    // Evento Picker
-    protected virtual void SelectedIndexChanged(object sender, EventArgs e)
-    {
-       
-
     }
 
 
@@ -99,6 +96,95 @@ public partial class GestionUsuarios : ContentPage
         
 
     }
+
+
+
+
+    protected virtual void GenerarInterfazAdministrador(bool todos)
+    {
+        if (todos)
+        {
+            _listaUsuarios = api_bd.ObtenerListaTotalUsuarios();
+        }
+        else
+        {
+            _listaUsuarios = api_bd.ObtenerListaUsuariosSinEscuela();
+        }
+        bool generarBotones = true;
+
+        foreach (Usuario usuario in _listaUsuarios)
+        {
+            if (_tipoUsuario == TipoUsuario.GestorGimnasios && usuario.TipoDeUsuario == TipoUsuario.GestorGimnasios)
+            {
+                generarBotones = false;
+            }
+            else generarBotones = true;
+
+            VerticalStackLayoutPersonas.Children.Add(GeneracionUI.CrearCartaUsuarioGestor(usuario, CartaClickeada, ControladorBotones, ControladorBotones, generarBotones));
+        }
+
+    }
+
+    protected virtual void GenerarInterfaz()
+    {
+
+        bool generarBotones = true;
+
+        foreach (Usuario usuario in _listaUsuarios)
+        {
+            if(_tipoUsuario == TipoUsuario.GestorGimnasios && usuario.TipoDeUsuario == TipoUsuario.GestorGimnasios)
+            {
+                generarBotones = false;
+            }
+            else generarBotones = true;
+
+            VerticalStackLayoutPersonas.Children.Add(GeneracionUI.CrearCartaUsuarioGestor(usuario, CartaClickeada, ControladorBotones, ControladorBotones, generarBotones));
+        }
+
+    }
+    public virtual void CartaClickeada(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            // Buscar el Frame desde el sender
+            Frame carta = null;
+            if (sender is Frame frame)
+            {
+                carta = frame; // El sender ya es la carta
+            }
+            else if (sender is VisualElement elemento)
+            {
+                // Buscar en la jerarquía de elementos hasta encontrar el Frame
+                while (elemento != null && !(elemento is Frame))
+                {
+                    elemento = elemento.Parent as VisualElement;
+                }
+                carta = elemento as Frame;
+            }
+
+            if (carta != null && carta.Content is VerticalStackLayout layout)
+            {
+                if (layout.Children[0] is Label nombreLabel)
+                {
+                    foreach (var usuario in _listaUsuarios)
+                    {
+                        if (usuario.Correo == nombreLabel.Text)
+                        {
+                            _usuarioElegido = usuario;
+                            break; // Terminar el bucle cuando encontramos el usuario
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception error)
+        {
+            Application.Current.MainPage.DisplayAlert("Error", error.Message, "Aceptar");
+        }
+    }
+
+
+
 
     // EVENTOS
 
@@ -114,6 +200,29 @@ public partial class GestionUsuarios : ContentPage
 
     }
 
+    protected virtual void ControladorBotones(object sender, EventArgs e)
+    {
+        // Recursos
+        Button boton = (Button)sender;
 
+        try
+        {
+            switch (boton.StyleId)
+            {
+                case "bagregar":
 
+                    break;
+                case "beditar":
+
+                    break;
+                case "beliminar":
+
+                    break;
+            }
+        }
+        catch(Exception error)
+        {
+            DisplayAlert("ERROR", error.Message, "OK");
+        }
+    }
 }

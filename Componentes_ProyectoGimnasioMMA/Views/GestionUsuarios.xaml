@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Componentes_ProyectoGimnasioMMA.Views.GestionUsuarios"
              Title="GestionUsuarios">
-    <Grid Padding="20" RowDefinitions="Auto, Auto" ColumnDefinitions="*, *">
+    <Grid Padding="20" RowDefinitions="Auto, Auto, *" ColumnDefinitions="*, *">
         <Label
             Text="Gestión Usuarios"
             VerticalOptions="Center" 
@@ -12,13 +12,25 @@
             Grid.ColumnSpan="2"
         />
 
-        <Picker x:Name="PickerAccion" 
-                Title="Seleccione la acción a realizar"
-                SelectedIndexChanged="SelectedIndexChanged" 
+        <Button Text="Agregar"
+                x:Name="bagregar"
+                Clicked="ControladorBotones"
+                BackgroundColor="Green"
                 Grid.Row="1"
+                Grid.Column="0"
                 Grid.ColumnSpan="2"
-                HorizontalOptions="FillAndExpand"/>
+                />
+        
+        <ScrollView x:Name="ScrollViewPersonas" 
+                    VerticalOptions="FillAndExpand" 
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2">
 
-      
+            <StackLayout x:Name="VerticalStackLayoutPersonas" 
+                         VerticalOptions="Start"/>
+        </ScrollView>
+
+
     </Grid>
 </ContentPage>

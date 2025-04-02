@@ -15,7 +15,6 @@ public partial class GestionPersonas : ContentPage
 
 
 
-    public static readonly string[] ACCIONES = { "Agregar", "Editar", "Eliminar", "Listar"};
 
 
     public GestionPersonas(Escuela escuela)
@@ -28,28 +27,7 @@ public partial class GestionPersonas : ContentPage
     }
 
     // PROPIEDADES
-    public Picker PickerAccionPropiedad
-    {
-        get
-        {
-            return PickerAccion;
-        }
-        set
-        {
-             PickerAccion = value;
-        }
-    }
-    public Picker PickerSelectorTipoPersonaPropiedad
-    {
-        get
-        {
-            return PickerSelectorTipoPersona;
-        }
-        set
-        {
-            PickerSelectorTipoPersona = value;
-        }
-    }
+
 
 
     // EVENTOS
@@ -59,22 +37,11 @@ public partial class GestionPersonas : ContentPage
         {
             Shell.SetNavBarIsVisible(this, false);
             api_bd = new API_BD();
-            AsignarOpcionesPicker();
         }
         catch (Exception error)
         {
             DisplayAlert("ERROR", error.Message, "OK");
         }
-    }
-
-    private void AsignarOpcionesPicker()
-    {
-        // Asignamos las opciones al picker
-        if (PickerAccion.ItemsSource != null) PickerAccion.ItemsSource.Clear();
-        PickerAccion.ItemsSource = ACCIONES;
-
-        if (PickerSelectorTipoPersona.ItemsSource != null) PickerSelectorTipoPersona.ItemsSource.Clear();
-        PickerSelectorTipoPersona.ItemsSource = PickerSelectorTipoPersona.ItemsSource = Persona.ListaPersonas;
     }
 
     // Evento Picker
@@ -83,5 +50,8 @@ public partial class GestionPersonas : ContentPage
 
     }
 
+    protected virtual void controladorBotones(object sender, EventArgs e)
+    {
 
+    }
 }

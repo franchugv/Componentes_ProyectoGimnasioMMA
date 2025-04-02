@@ -4,7 +4,7 @@
              x:Class="Componentes_ProyectoGimnasioMMA.Views.GestionPersonas"
              Title="GestionPersonas">
 
-    <Grid Padding="20" RowDefinitions="Auto, Auto, Auto" ColumnDefinitions="*, *">
+    <Grid Padding="20" RowDefinitions="Auto, Auto, Auto" ColumnDefinitions="Auto, Auto">
     <Label
         Text="Gestión Personal"
         VerticalOptions="Center" 
@@ -12,31 +12,19 @@
         Grid.Row="0"
         Grid.ColumnSpan="2"/>
 
-    <Picker x:Name="PickerAccion" 
-            Title="Seleccione la acción a realizar"
-            SelectedItem="0"
-            Grid.Row="1"
-            Grid.ColumnSpan="2"
-            HorizontalOptions="FillAndExpand"
-            />
+        <Button Text="Alumnos" Grid.Column="0" Grid.Row="1" x:Name="bAlumnos" Clicked="controladorBotones"/>
 
-    <Picker x:Name="PickerSelectorTipoPersona"
-            Title="Seleccione al tipo de persona a Agregar"
-            SelectedIndexChanged="SelectedIndexChanged" 
-            SelectedItem="0"
-            Grid.Row="2"
-            HorizontalOptions="FillAndExpand"
-            Grid.ColumnSpan="2"/>
-
-        <!-- ScrollView -->
-        <!--
+        <Button Text="Profesores" Grid.Column="1" Grid.Row="2" x:Name="bProfesores" Clicked="controladorBotones"/>
+        
+        <!--ScrollView--> 
+        
         <ScrollView x:Name="ScrollViewPersonas" 
                     VerticalOptions="FillAndExpand" 
                     Grid.Row="3">
 
             <StackLayout x:Name="VerticalStackLayoutPersonas" 
                          VerticalOptions="Start"/>
-        </ScrollView>-->
+        </ScrollView>
     </Grid>
 </ContentPage>
 

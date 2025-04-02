@@ -53,6 +53,9 @@
 	  <MauiXaml Update="Componentes\PickerConfirmacion.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\GestionClases.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\GestionPersonas.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

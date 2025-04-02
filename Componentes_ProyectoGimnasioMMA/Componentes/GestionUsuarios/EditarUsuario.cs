@@ -70,8 +70,13 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
             //_escuela = escuela;
             _usuarioEditar = usuarioEditar;
 
-            _listaEscuelasAgregar = _api_bd.ListarEscuelasNoRegistradasUsuario(usuarioEditar.Correo);
-            _listaEscuelasEliminar = _api_bd.ObtenerEscuelasDeUsuario(usuarioEditar.Correo);
+            if(_usuarioEditar.TipoDeUsuario != TipoUsuario.Administrador)
+            {
+                _listaEscuelasAgregar = _api_bd.ListarEscuelasDisponiblesUsuarioAdmin(usuarioEditar.Correo);
+                _listaEscuelasEliminar = _api_bd.ObtenerEscuelasDeUsuario(usuarioEditar.Correo);
+            }
+
+
             GenerarUI();
 
 
@@ -143,13 +148,12 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
                 _eCContrasenia
             );
 
-            if(_usuario.TipoDeUsuario == TipoUsuario.Administrador || _usuarioEditar.TipoDeUsuario != TipoUsuario.GestorGimnasios)
+            if(_tipoUsuario != TipoUsuario.GestorGimnasios || _usuarioEditar.TipoDeUsuario != TipoUsuario.GestorGimnasios)
             {
-                // Controlar que no podamos editar estos valores usando nuestro usuario para evitar errores
-                if(_usuario.Correo != _usuarioEditar.Correo)
+                if(_usuarioEditar.TipoDeUsuario != TipoUsuario.Administrador)
                 {
                     MAIN_VSL.Children.Add(
-                     _selectorTipoUsuario
+                    _selectorTipoUsuario
                     );
                     MAIN_VSL.Children.Add(
                         _selectorEscuelaAgregar
@@ -158,6 +162,9 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
                     _selectorEscuelaEliminar
                     );
                 }
+               
+
+                
 
 
             }
