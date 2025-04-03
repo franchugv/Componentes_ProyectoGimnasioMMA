@@ -3,29 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Componentes_ProyectoGimnasioMMA.Views.GestionPersonas"
              Title="GestionPersonas">
+    <StackLayout Padding="20">
+        <Label Text="Gestión Personal"
+           VerticalOptions="Center"
+           HorizontalOptions="Center"/>
 
-    <Grid Padding="20" RowDefinitions="Auto, Auto, Auto" ColumnDefinitions="Auto, Auto">
-    <Label
-        Text="Gestión Personal"
-        VerticalOptions="Center" 
-        HorizontalOptions="Center" 
-        Grid.Row="0"
-        Grid.ColumnSpan="2"/>
+        <Grid ColumnDefinitions="*, *">
+            <Button Text="Alumnos" Grid.Column="0" x:Name="bAlumnos" Clicked="controladorBotones"/>
+            <Button Text="Profesores" Grid.Column="1" x:Name="bProfesores" Clicked="controladorBotones"/>
+        </Grid>
 
-        <Button Text="Alumnos" Grid.Column="0" Grid.Row="1" x:Name="bAlumnos" Clicked="controladorBotones"/>
-
-        <Button Text="Profesores" Grid.Column="1" Grid.Row="2" x:Name="bProfesores" Clicked="controladorBotones"/>
-        
-        <!--ScrollView--> 
-        
-        <ScrollView x:Name="ScrollViewPersonas" 
-                    VerticalOptions="FillAndExpand" 
-                    Grid.Row="3">
-
-            <StackLayout x:Name="VerticalStackLayoutPersonas" 
-                         VerticalOptions="Start"/>
+        <ScrollView VerticalOptions="FillAndExpand">
+            <StackLayout x:Name="VerticalStackLayoutPersonas" VerticalOptions="Start"/>
         </ScrollView>
-    </Grid>
+    </StackLayout>
+
 </ContentPage>
 
 

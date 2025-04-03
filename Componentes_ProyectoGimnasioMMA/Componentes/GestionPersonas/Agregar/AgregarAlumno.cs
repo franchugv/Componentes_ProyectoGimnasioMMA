@@ -20,6 +20,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
         protected API_BD _api_bd;
 
         protected Escuela _escuela;
+        public event Action EventoVolverPaginaPrincipal;
 
         //protected List<Deporte> _listaDeportes;
         //protected List<string> _listaNombreDeportes;
@@ -68,7 +69,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
 
         }
 
-        public virtual void controladorBoton(object sender, EventArgs e)
+        public async virtual void controladorBoton(object sender, EventArgs e)
         {
             // Recursos
             Escuela nuevaEscuela = null;
@@ -92,12 +93,15 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
                 _api_bd.InsertarAlumno(alumno);
                 _api_bd.CrearRelacionEscuelaAlumno(alumno, nuevaEscuela.Id);
 
-                Application.Current.MainPage.DisplayAlert("Insercción Exitosa", $"El Alumno {alumno.Nombre} a sido Insertado Correctamente en la escuela {nuevaEscuela.Nombre}", "Ok");
+
+                EventoVolverPaginaPrincipal?.Invoke();
+
             }
-            catch(Exception error)
+            catch (Exception error)
             {
-                Application.Current.MainPage.DisplayAlert("Error", error.Message, "Ok");
+                await Application.Current.MainPage.DisplayAlert("Error", error.Message, "Ok");
             }
+            
         }
 
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Componentes_ProyectoGimnasioMMA.Views.GestionAlumnos"
+             Title="GestionAlumnos">
+    <StackLayout Padding="20">
+        <Label Text="Gestión Alumnos"
+           VerticalOptions="Center"
+           HorizontalOptions="Center"/>
+
+        <Grid ColumnDefinitions="*, *">
+            <Button Text="Agregar Alumnos" Grid.Column="0" Grid.ColumnSpan="2" x:Name="bAlumnos" Clicked="controladorBotones" BackgroundColor="Green"/>
+        </Grid>
+
+        <ScrollView VerticalOptions="FillAndExpand">
+            <StackLayout x:Name="VerticalStackLayoutAlumnos" VerticalOptions="Start"/>
+        </ScrollView>
+    </StackLayout>
+</ContentPage>

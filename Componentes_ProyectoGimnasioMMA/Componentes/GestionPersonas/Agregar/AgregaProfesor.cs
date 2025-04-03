@@ -32,13 +32,13 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
         protected List<Usuario> _listaUsuariosDisponibles;
         protected List<string> _listaNombresUsuariosDisponibles;
 
+        public event Action EventoVolverPaginaPrincipal;
+
+
         // CONSTRUCTORES
         public AgregaProfesor(Escuela escuela, Usuario usuario) : base(escuela, usuario)
         {
-            CargarDatosConstructor();
-
-            GenerarUI();
-            
+            CargarDatosConstructor();            
 
         }
 
@@ -90,6 +90,8 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
                 {
                     _listaNombreEscuelas.Add(escuela.Nombre);
                 }
+
+                GenerarUI();
             }
             catch(Exception error)
             {
@@ -178,11 +180,15 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
                 if (deporteElegido != null)
                     _api_bd.AsignarDeporteAProfesor(profesor.DNI, deporteElegido.Id);
 
+                EventoVolverPaginaPrincipal?.Invoke();
+
+
             }
-            catch(Exception error)
+            catch (Exception error)
             {
                 Application.Current.MainPage.DisplayAlert("ERROR", error.Message, "Ok");
             }
+            
         }
 
         private void selectedIndexChanged(object sender, EventArgs e)

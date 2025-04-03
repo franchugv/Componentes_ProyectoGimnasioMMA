@@ -418,6 +418,105 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             return carta;
         }
 
+        public static Frame CrearCartaAlumnoGestor(Alumno alumno, EventHandler<TappedEventArgs> evento, EventHandler editar, EventHandler eliminar, bool generarBotones)
+        {
+            // Crear el gesto de toque (tap)
+            TapGestureRecognizer tapGesture = new TapGestureRecognizer();
+            tapGesture.Tapped += evento;
+
+            // Crear la lista de elementos de la carta
+            var elementos = new List<View>
+    {
+        new Label
+        {
+            Text = alumno.DNI,
+            FontAttributes = FontAttributes.Bold,
+            FontSize = 16,
+            TextColor = Colors.Gray
+        },
+        new Label
+        {
+            Text = alumno.Nombre,
+            FontAttributes = FontAttributes.Bold,
+            FontSize = 16,
+            TextColor = Colors.Gray
+        },
+        new Label
+        {
+            Text = alumno.Apellidos,
+            FontAttributes = FontAttributes.Bold,
+            FontSize = 16,
+            TextColor = Colors.Gray
+        }
+    };
+
+            // Si se deben generar los botones, los agregamos a la lista
+            if (generarBotones)
+            {
+                Button btnEditar = new Button
+                {
+                    Text = "Editar",
+                    BackgroundColor = Colors.Blue,
+                    FontSize = 16,
+                    StyleId = "btnEditar"
+                };
+                btnEditar.Clicked += (sender, args) =>
+                {
+                    evento.Invoke(sender, new TappedEventArgs(null)); // Disparar evento Tapped
+                    editar.Invoke(sender, args); // Ejecutar el evento de edición
+                };
+
+                Button btnEliminar = new Button
+                {
+                    Text = "Eliminar",
+                    BackgroundColor = Colors.Red,
+                    FontSize = 16,
+                    StyleId = "btnEliminar"
+                };
+                btnEliminar.Clicked += (sender, args) =>
+                {
+                    evento.Invoke(sender, new TappedEventArgs(null)); // Disparar evento Tapped
+                    eliminar.Invoke(sender, args); // Ejecutar el evento de eliminación
+                };
+
+                elementos.Add(btnEditar);
+                elementos.Add(btnEliminar);
+            }
+
+            // Crear el Frame (carta)
+            Frame carta = new Frame
+            {
+                CornerRadius = 20,
+                BorderColor = Colors.LightGray,
+                BackgroundColor = Color.FromArgb("#F5F5F5"),
+                Margin = new Thickness(16),
+                Padding = new Thickness(24),
+                Shadow = new Shadow
+                {
+                    Brush = new SolidColorBrush(Colors.Black),
+                    Offset = new Point(2, 2),
+                    Opacity = 0.15f,
+                    Radius = 6
+                },
+                Content = new VerticalStackLayout
+                {
+                    Spacing = 10,
+                    Children = { } // Se inicializa vacío
+                }
+            };
+
+            // Agregar los elementos a la carta
+            foreach (var elemento in elementos)
+            {
+                ((VerticalStackLayout)carta.Content).Children.Add(elemento);
+            }
+
+            // Agregar el gesto de toque (tap)
+            carta.GestureRecognizers.Add(tapGesture);
+
+            return carta;
+        }
+
 
         public static Frame CrearCartaAlumno(Alumno alumno, EventHandler<TappedEventArgs> evento)
         {
@@ -474,6 +573,162 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
 
             return carta;
         }
+
+        public static Frame CrearCartaProfesor(Profesores profesor, EventHandler<TappedEventArgs> evento)
+        {
+            Frame carta = new Frame
+            {
+                CornerRadius = 20,
+                BorderColor = Colors.LightGray,
+                BackgroundColor = Color.FromArgb("#F5F5F5"),
+                Margin = new Thickness(16),
+                Padding = new Thickness(24),
+                Shadow = new Shadow
+                {
+                    Brush = new SolidColorBrush(Colors.Black),
+                    Offset = new Point(2, 2),
+                    Opacity = 0.15f,
+                    Radius = 6
+                },
+                Content = new VerticalStackLayout
+                {
+                    Spacing = 10,
+                    Children =
+                {
+
+                new Label
+                {
+                    Text = profesor.DNI,
+                    FontAttributes = FontAttributes.Bold,
+                    FontSize = 16,
+                    TextColor = Colors.Gray
+                },
+                new Label
+                {
+                    Text = profesor.Nombre,
+                    FontAttributes = FontAttributes.Bold,
+                    FontSize = 16,
+                    TextColor = Colors.Gray
+                },
+                 new Label
+                {
+                    Text = profesor.Apellidos,
+                    FontAttributes = FontAttributes.Bold,
+                    FontSize = 16,
+                    TextColor = Colors.Gray
+                },
+                }
+                }
+            };
+
+            // Agregar el gesto de toque (tap)
+            TapGestureRecognizer tapGesture = new TapGestureRecognizer();
+            tapGesture.Tapped += evento; // Se asigna el evento recibido como parámetro
+
+            carta.GestureRecognizers.Add(tapGesture);
+
+            return carta;
+        }
+
+        public static Frame CrearCartaProfesorGestor(Profesores profesor, EventHandler<TappedEventArgs> evento, EventHandler editar, EventHandler eliminar, bool generarBotones)
+        {
+            // Crear el gesto de toque (tap)
+            TapGestureRecognizer tapGesture = new TapGestureRecognizer();
+            tapGesture.Tapped += evento;
+
+            // Crear la lista de elementos de la carta
+            var elementos = new List<View>
+    {
+        new Label
+        {
+            Text = profesor.DNI,
+            FontAttributes = FontAttributes.Bold,
+            FontSize = 16,
+            TextColor = Colors.Gray
+        },
+        new Label
+        {
+            Text = profesor.Nombre,
+            FontAttributes = FontAttributes.Bold,
+            FontSize = 16,
+            TextColor = Colors.Gray
+        },
+        new Label
+        {
+            Text = profesor.Apellidos,
+            FontAttributes = FontAttributes.Bold,
+            FontSize = 16,
+            TextColor = Colors.Gray
+        }
+    };
+
+            // Si se deben generar los botones, los agregamos a la lista
+            if (generarBotones)
+            {
+                Button btnEditar = new Button
+                {
+                    Text = "Editar",
+                    BackgroundColor = Colors.Blue,
+                    FontSize = 16,
+                    StyleId = "btnEditar"
+                };
+                btnEditar.Clicked += (sender, args) =>
+                {
+                    evento.Invoke(sender, new TappedEventArgs(null)); // Disparar evento Tapped
+                    editar.Invoke(sender, args); // Ejecutar el evento de edición
+                };
+
+                Button btnEliminar = new Button
+                {
+                    Text = "Eliminar",
+                    BackgroundColor = Colors.Red,
+                    FontSize = 16,
+                    StyleId = "btnEliminar"
+                };
+                btnEliminar.Clicked += (sender, args) =>
+                {
+                    evento.Invoke(sender, new TappedEventArgs(null)); // Disparar evento Tapped
+                    eliminar.Invoke(sender, args); // Ejecutar el evento de eliminación
+                };
+
+                elementos.Add(btnEditar);
+                elementos.Add(btnEliminar);
+            }
+
+            // Crear el Frame (carta)
+            Frame carta = new Frame
+            {
+                CornerRadius = 20,
+                BorderColor = Colors.LightGray,
+                BackgroundColor = Color.FromArgb("#F5F5F5"),
+                Margin = new Thickness(16),
+                Padding = new Thickness(24),
+                Shadow = new Shadow
+                {
+                    Brush = new SolidColorBrush(Colors.Black),
+                    Offset = new Point(2, 2),
+                    Opacity = 0.15f,
+                    Radius = 6
+                },
+                Content = new VerticalStackLayout
+                {
+                    Spacing = 10,
+                    Children = { } // Se inicializa vacío
+                }
+            };
+
+            // Agregar los elementos a la carta
+            foreach (var elemento in elementos)
+            {
+                ((VerticalStackLayout)carta.Content).Children.Add(elemento);
+            }
+
+            // Agregar el gesto de toque (tap)
+            carta.GestureRecognizers.Add(tapGesture);
+
+            return carta;
+        }
+
 
         public static async Task<bool> MostrarConfirmacion(Page page, string titulo, string mensaje)
         {

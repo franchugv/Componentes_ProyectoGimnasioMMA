@@ -57,8 +57,6 @@ public partial class GestionUsuarios : ContentPage
         _usuario = usuario;
 
         CargarDatosConstructor();
-        _listaUsuarios = api_bd.ObtenerListaTotalUsuarios();
-
 
         _escuela = escuela;
         _listaUsuarios = api_bd.ObtenerListaUsuarios(_escuela.Id);
@@ -97,7 +95,27 @@ public partial class GestionUsuarios : ContentPage
 
     }
 
+    protected void recargarUI()
+    {
+        try
+        {
+            if(_tipoUsuario == TipoUsuario.Administrador)
+            {
+                _listaUsuarios = api_bd.ObtenerListaTotalUsuarios();
+            }
+            else
+            {
+                _listaUsuarios = api_bd.ObtenerListaUsuarios(_escuela.Id);
+            }
 
+            VerticalStackLayoutPersonas.Clear();
+            GenerarInterfaz();
+        }
+        catch (Exception error)
+        {
+            DisplayAlert("ERROR", error.Message, "OK");
+        }
+    }
 
 
     protected virtual void GenerarInterfazAdministrador(bool todos)
@@ -181,6 +199,10 @@ public partial class GestionUsuarios : ContentPage
         {
             Application.Current.MainPage.DisplayAlert("Error", error.Message, "Aceptar");
         }
+        finally
+        {
+            recargarUI();
+        }
     }
 
 
@@ -202,27 +224,6 @@ public partial class GestionUsuarios : ContentPage
 
     protected virtual void ControladorBotones(object sender, EventArgs e)
     {
-        // Recursos
-        Button boton = (Button)sender;
 
-        try
-        {
-            switch (boton.StyleId)
-            {
-                case "bagregar":
-
-                    break;
-                case "beditar":
-
-                    break;
-                case "beliminar":
-
-                    break;
-            }
-        }
-        catch(Exception error)
-        {
-            DisplayAlert("ERROR", error.Message, "OK");
-        }
     }
 }
