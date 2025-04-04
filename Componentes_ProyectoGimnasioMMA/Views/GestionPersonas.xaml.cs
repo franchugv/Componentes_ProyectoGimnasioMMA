@@ -85,12 +85,24 @@ public partial class GestionPersonas : ContentPage
     {
 
     }
+    private BoxView generarLinea()
+    {
+        BoxView line = new BoxView
+        {
+            Color = Colors.Black,  // Color de la línea
+            HeightRequest = 1,     // Grosor de la línea
+        };
+
+        return line;
+    }
     protected virtual void generarUI()
     {
 
 
+
         // Generar Cards de Profesores
         VerticalStackLayoutPersonas.Add(new Label() { Text = "Profesores" , HorizontalOptions = LayoutOptions.Center, FontAttributes = FontAttributes.Bold });
+        VerticalStackLayoutPersonas.Add(generarLinea());
 
         foreach (Profesores profesores in _listaProfesores)
         {
@@ -101,6 +113,7 @@ public partial class GestionPersonas : ContentPage
 
         // Generar Cards de Alumnos
         VerticalStackLayoutPersonas.Add(new Label() { Text = "Alumnos", HorizontalOptions = LayoutOptions.Center, FontAttributes = FontAttributes.Bold });
+        VerticalStackLayoutPersonas.Add(generarLinea());
 
         foreach (Alumno alumnos in _listaAlumnos)
         {

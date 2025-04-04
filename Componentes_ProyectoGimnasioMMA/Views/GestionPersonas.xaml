@@ -9,8 +9,8 @@
            HorizontalOptions="Center"/>
 
         <Grid ColumnDefinitions="*, *">
-            <Button Text="Alumnos" Grid.Column="0" x:Name="bAlumnos" Clicked="controladorBotones"/>
-            <Button Text="Profesores" Grid.Column="1" x:Name="bProfesores" Clicked="controladorBotones"/>
+            <Button Text="Alumnos" Grid.Column="0" x:Name="bAlumnos" Clicked="controladorBotones" BackgroundColor="Green"/>
+            <Button Text="Profesores" Grid.Column="1" x:Name="bProfesores" Clicked="controladorBotones" BackgroundColor="Green"/>
         </Grid>
 
         <ScrollView VerticalOptions="FillAndExpand">
