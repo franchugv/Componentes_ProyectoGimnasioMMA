@@ -108,7 +108,7 @@ public partial class GestionUsuarios : ContentPage
                 _listaUsuarios = api_bd.ObtenerListaUsuarios(_escuela.Id);
             }
 
-            VerticalStackLayoutPersonas.Clear();
+            VerticalStackLayoutUsuarios.Clear();
             GenerarInterfaz();
         }
         catch (Exception error)
@@ -138,7 +138,7 @@ public partial class GestionUsuarios : ContentPage
             }
             else generarBotones = true;
 
-            VerticalStackLayoutPersonas.Children.Add(GeneracionUI.CrearCartaUsuarioGestor(usuario, CartaClickeada, ControladorBotones, ControladorBotones, generarBotones));
+            VerticalStackLayoutUsuarios.Children.Add(GeneracionUI.CrearCartaUsuarioGestor(usuario, CartaClickeada, ControladorBotones, ControladorBotones, generarBotones));
         }
 
     }
@@ -148,16 +148,24 @@ public partial class GestionUsuarios : ContentPage
 
         bool generarBotones = true;
 
-        foreach (Usuario usuario in _listaUsuarios)
+        if(_listaUsuarios.Count >= 1)
         {
-            if(_tipoUsuario == TipoUsuario.GestorGimnasios && usuario.TipoDeUsuario == TipoUsuario.GestorGimnasios)
+            foreach (Usuario usuario in _listaUsuarios)
             {
-                generarBotones = false;
-            }
-            else generarBotones = true;
+                if (_tipoUsuario == TipoUsuario.GestorGimnasios && usuario.TipoDeUsuario == TipoUsuario.GestorGimnasios)
+                {
+                    generarBotones = false;
+                }
+                else generarBotones = true;
 
-            VerticalStackLayoutPersonas.Children.Add(GeneracionUI.CrearCartaUsuarioGestor(usuario, CartaClickeada, ControladorBotones, ControladorBotones, generarBotones));
+                VerticalStackLayoutUsuarios.Children.Add(GeneracionUI.CrearCartaUsuarioGestor(usuario, CartaClickeada, ControladorBotones, ControladorBotones, generarBotones));
+            }
         }
+        else
+        {
+            VerticalStackLayoutUsuarios.Children.Add(new Label() { Text = "No hay Usuarios Disponibles", TextColor = Colors.Gray });
+        }
+
 
     }
     public virtual void CartaClickeada(object sender, TappedEventArgs e)

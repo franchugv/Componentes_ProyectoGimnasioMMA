@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Componentes_ProyectoGimnasioMMA.Views.GestionUsuarios"
-             Title="GestionUsuarios">
+             x:Class="Componentes_ProyectoGimnasioMMA.Views.GestionDeportes"
+             Title="GestionDeportes">
     <Grid Padding="20" RowDefinitions="Auto, Auto, *" ColumnDefinitions="*, *">
         <Label
-            Text="Gestión Usuarios"
+            Text="Gestión Deportes"
             VerticalOptions="Center" 
             HorizontalOptions="Center" 
             Grid.Row="0"
             Grid.ColumnSpan="2"
+            FontAttributes="Bold"
         />
 
-        <Button Text="Agregar"
+        <Button Text="Agregar Deportes"
                 x:Name="bagregar"
                 Clicked="ControladorBotones"
                 BackgroundColor="Green"
@@ -20,14 +21,14 @@
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 />
-        
+
         <ScrollView x:Name="ScrollViewPersonas" 
                     VerticalOptions="FillAndExpand" 
                     Grid.Row="2"
                     Grid.Column="0"
                     Grid.ColumnSpan="2">
 
-            <StackLayout x:Name="VerticalStackLayoutUsuarios" 
+            <StackLayout x:Name="VerticalStackLayoutPersonas" 
                          VerticalOptions="Start"/>
         </ScrollView>
 

@@ -1,4 +1,5 @@
-﻿using BibliotecaClases_ProyectoGimnasioMMA.Escuelas;
+﻿using BibliotecaClases_ProyectoGimnasioMMA.Deportes;
+using BibliotecaClases_ProyectoGimnasioMMA.Escuelas;
 using BibliotecaClases_ProyectoGimnasioMMA.Personas;
 using BibliotecaClases_ProyectoGimnasioMMA.Usuarios;
 using System;
@@ -11,6 +12,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
 {
     public static class GeneracionUI
     {
+        #region Crear Entry Personalizados
         public static EntryValidacion CrearEntryError(string texto, string styleId, EventHandler<FocusEventArgs> evento)
         {
             EntryValidacion entry = new EntryValidacion(texto);
@@ -41,6 +43,9 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             return entry;
         }
 
+        #endregion
+
+        #region Crear Botones Personalizados
 
         public static Button CrearBoton(string texto, string styleId, EventHandler? evento = null)
         {
@@ -60,6 +65,9 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             return boton;
         }
 
+        #endregion
+
+        #region Crear Pickers Personalizados
         public static Picker CrearPicker(string styleId, string titulo, List<string> items, EventHandler evento)
         {
             Picker picker = new Picker
@@ -101,6 +109,9 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             return picker;
         }
 
+        #endregion
+
+        #region Crear Cards Personalizados
 
         public static Frame CrearCartaEscuela(Escuela escuela, EventHandler<TappedEventArgs> evento)
         {
@@ -157,6 +168,44 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
 
             return carta;
         }
+
+
+        public static Frame CrearCartaMensaje(string mensaje)
+        {
+            Frame carta = new Frame
+            {
+                CornerRadius = 20,
+                BorderColor = Colors.LightGray,
+                BackgroundColor = Color.FromArgb("#F5F5F5"),
+                Margin = new Thickness(16),
+                Padding = new Thickness(24),
+                Shadow = new Shadow
+                {
+                    Brush = new SolidColorBrush(Colors.Black),
+                    Offset = new Point(2, 2),
+                    Opacity = 0.15f,
+                    Radius = 6
+                },
+                Content = new VerticalStackLayout
+                {
+                    Spacing = 10,
+                    Children =
+                {
+
+                new Label
+                {
+                    Text = mensaje,
+                    FontAttributes = FontAttributes.Bold,
+                    FontSize = 22,
+                    TextColor = Color.FromArgb("#1E88E5")
+                }
+                }
+                }
+            };
+
+            return carta;
+        }
+
 
         public static Frame CrearCartaUsuario(Usuario usuario, EventHandler<TappedEventArgs> evento)
         {
@@ -307,7 +356,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             {
                 ((VerticalStackLayout)carta.Content).Children.Add(elemento);
             }
-            
+
 
 
             // Agregar el gesto de toque (tap)
@@ -630,6 +679,108 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             return carta;
         }
 
+
+        public static Frame CrearCartaDeporteGestor(Deporte deporte, EventHandler<TappedEventArgs> evento, EventHandler editar, EventHandler eliminar)
+        {
+            // Crear el gesto de toque (tap)
+            TapGestureRecognizer tapGesture = new TapGestureRecognizer();
+            tapGesture.Tapped += evento; // Se asigna el evento recibido como parámetro
+
+            // Crear la lista de elementos de la carta
+            var elementos = new List<View>
+    {
+        new Label
+        {
+            Text = deporte.Id.ToString(),
+            FontAttributes = FontAttributes.Bold,
+            FontSize = 16,
+            TextColor = Colors.Gray
+        },
+        new Label
+        {
+            Text = deporte.Nombre,
+            FontAttributes = FontAttributes.Bold,
+            FontSize = 16,
+            TextColor = Colors.Gray
+        },
+        new Label
+        {
+            Text = deporte.Federacion,
+            FontAttributes = FontAttributes.Bold,
+            FontSize = 16,
+            TextColor = Colors.Red
+        }
+    };
+
+            // Si se deben generar los botones, los agregamos a la lista
+           
+                Button btnEditar = new Button
+                {
+                    Text = "Editar",
+                    BackgroundColor = Colors.Blue,
+                    FontSize = 16,
+                    StyleId = "btnEditar"
+                };
+                btnEditar.Clicked += (sender, args) =>
+                {
+                    evento.Invoke(sender, new TappedEventArgs(null)); // Disparar evento Tapped
+                    editar.Invoke(sender, args); // Luego ejecutar el evento de edición
+                };
+
+                Button btnEliminar = new Button
+                {
+                    Text = "Eliminar",
+                    BackgroundColor = Colors.Red,
+                    FontSize = 16,
+                    StyleId = "btnEliminar"
+                };
+                btnEliminar.Clicked += (sender, args) =>
+                {
+                    evento.Invoke(sender, new TappedEventArgs(null)); // Disparar evento Tapped
+                    eliminar.Invoke(sender, args); // Luego ejecutar el evento de eliminación
+                };
+
+                elementos.Add(btnEditar);
+                elementos.Add(btnEliminar);
+            
+
+            // Crear el Frame (carta)
+            Frame carta = new Frame
+            {
+                CornerRadius = 20,
+                BorderColor = Colors.LightGray,
+                BackgroundColor = Color.FromArgb("#F5F5F5"),
+                Margin = new Thickness(16),
+                Padding = new Thickness(24),
+                Shadow = new Shadow
+                {
+                    Brush = new SolidColorBrush(Colors.Black),
+                    Offset = new Point(2, 2),
+                    Opacity = 0.15f,
+                    Radius = 6
+                },
+                Content = new VerticalStackLayout
+                {
+                    Spacing = 10,
+                    Children = { } // Se inicializa vacío
+                }
+            };
+
+
+            // Agregar los elementos a la carta
+            foreach (var elemento in elementos)
+            {
+                ((VerticalStackLayout)carta.Content).Children.Add(elemento);
+            }
+
+
+
+            // Agregar el gesto de toque (tap)
+            carta.GestureRecognizers.Add(tapGesture);
+
+            return carta;
+        }
+
         public static Frame CrearCartaProfesorGestor(Profesores profesor, EventHandler<TappedEventArgs> evento, EventHandler editar, EventHandler eliminar, bool generarBotones)
         {
             // Crear el gesto de toque (tap)
@@ -728,6 +879,9 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
 
             return carta;
         }
+        #endregion
+
+
 
 
         public static async Task<bool> MostrarConfirmacion(Page page, string titulo, string mensaje)
@@ -736,6 +890,9 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             return respuesta;
         }
 
-
+        internal static Picker CrearPicker(string v1, string v2, object unfocusedPicker)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

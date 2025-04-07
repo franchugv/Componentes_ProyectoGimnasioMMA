@@ -85,16 +85,7 @@ public partial class GestionPersonas : ContentPage
     {
 
     }
-    private BoxView generarLinea()
-    {
-        BoxView line = new BoxView
-        {
-            Color = Colors.Black,  // Color de la línea
-            HeightRequest = 1,     // Grosor de la línea
-        };
 
-        return line;
-    }
     protected virtual void generarUI()
     {
 
@@ -102,25 +93,41 @@ public partial class GestionPersonas : ContentPage
 
         // Generar Cards de Profesores
         VerticalStackLayoutPersonas.Add(new Label() { Text = "Profesores" , HorizontalOptions = LayoutOptions.Center, FontAttributes = FontAttributes.Bold });
-        VerticalStackLayoutPersonas.Add(generarLinea());
 
-        foreach (Profesores profesores in _listaProfesores)
+
+        if(_listaProfesores.Count >= 1)
         {
-          
-            
-            VerticalStackLayoutPersonas.Children.Add(GeneracionUI.CrearCartaProfesorGestor(profesores, CartaClickeadaProfesores, controladorBotonesProfesor, controladorBotonesProfesor, true));
+            foreach (Profesores profesores in _listaProfesores)
+            {
+
+
+                VerticalStackLayoutPersonas.Children.Add(GeneracionUI.CrearCartaProfesorGestor(profesores, CartaClickeadaProfesores, controladorBotonesProfesor, controladorBotonesProfesor, true));
+
+            }
+        }
+        else
+        {
+            VerticalStackLayoutPersonas.Children.Add(new Label() { Text = "No hay Profesores Disponibles", TextColor = Colors.Gray });
         }
 
         // Generar Cards de Alumnos
         VerticalStackLayoutPersonas.Add(new Label() { Text = "Alumnos", HorizontalOptions = LayoutOptions.Center, FontAttributes = FontAttributes.Bold });
-        VerticalStackLayoutPersonas.Add(generarLinea());
 
-        foreach (Alumno alumnos in _listaAlumnos)
+        if(_listaAlumnos.Count >= 1)
         {
+            foreach (Alumno alumnos in _listaAlumnos)
+            {
 
 
-            VerticalStackLayoutPersonas.Children.Add(GeneracionUI.CrearCartaAlumnoGestor(alumnos, CartaClickeadaAlumnos, controladorBotonesAlumno, controladorBotonesAlumno, true));
+                VerticalStackLayoutPersonas.Children.Add(GeneracionUI.CrearCartaAlumnoGestor(alumnos, CartaClickeadaAlumnos, controladorBotonesAlumno, controladorBotonesAlumno, true));
+            }
         }
+        else
+        {
+            VerticalStackLayoutPersonas.Children.Add(new Label() { Text = "No hay Alumnos Disponibles", TextColor = Colors.Gray });
+        }
+
+
     }
 
     protected void recargarUI()

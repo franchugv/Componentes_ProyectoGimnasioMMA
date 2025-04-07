@@ -54,14 +54,23 @@ public partial class GestionProfesores : ContentPage
         // Generar Cards de Profesores
         VerticalStackLayoutProfesores.Add(new Label() { Text = "Profesores", HorizontalOptions = LayoutOptions.Center, FontAttributes = FontAttributes.Bold });
 
-        foreach (Profesores profesores in _listaProfesores)
+        if(_listaProfesores.Count >= 1)
         {
+            foreach (Profesores profesores in _listaProfesores)
+            {
 
 
-            VerticalStackLayoutProfesores.Children.Add(GeneracionUI.CrearCartaProfesorGestor(profesores, CartaClickeadaProfesores, controladorBotonesProfesor, controladorBotonesProfesor, true));
+                VerticalStackLayoutProfesores.Children.Add(GeneracionUI.CrearCartaProfesorGestor(profesores, CartaClickeadaProfesores, controladorBotonesProfesor, controladorBotonesProfesor, true));
+            }
+        }
+        else
+        {
+            VerticalStackLayoutProfesores.Children.Add(new Label() { Text = "No hay Profesores Disponibles", TextColor = Colors.Gray });
         }
 
-       
+
+
+
     }
 
     protected void recargarUI()

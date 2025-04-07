@@ -19,16 +19,22 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
         protected const string SIN_DEPORTE = "No hay Deportes disponibles";
         // RECURSOS
         protected EntryValidacion _eNivel;
+
+        // COMPONENTES
         protected Picker _pDeporte;
         protected Picker _pCorreoProfesor;
         protected Picker _pSelectorUsuario;
+
         protected Button _botonInsertar;
 
+        // Lista de escuelas a agregar
         protected List<string> _listaNombreEscuelas;
 
+        // Lista de deportes a agregar
         protected List<Deporte> _listaDeportes;
         protected List<string> _listaNombreDeportes;
 
+        // Lista de usuarios a agreagar
         protected List<Usuario> _listaUsuariosDisponibles;
         protected List<string> _listaNombresUsuariosDisponibles;
 
@@ -151,7 +157,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
                 // Insertar Profesor
 
                 Usuario usuarioElegido = null;
-                if (_selectorEscuela.SelectedItem != null)
+                if (_selectorEscuela.SelectedItem != null && _listaUsuariosDisponibles.Count >= 1)
                 {
                     foreach (Usuario usuario in _listaUsuariosDisponibles)
                     {

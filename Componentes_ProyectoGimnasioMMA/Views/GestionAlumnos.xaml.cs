@@ -55,12 +55,21 @@ public partial class GestionAlumnos : ContentPage
         // Generar Cards de Alumnos
         VerticalStackLayoutAlumnos.Add(new Label() { Text = "Alumnos", HorizontalOptions = LayoutOptions.Center, FontAttributes = FontAttributes.Bold });
 
-        foreach (Alumno alumnos in _listaAlumnos)
+
+        if(_listaAlumnos.Count >= 1)
         {
+            foreach (Alumno alumnos in _listaAlumnos)
+            {
 
 
-            VerticalStackLayoutAlumnos.Children.Add(GeneracionUI.CrearCartaAlumnoGestor(alumnos, CartaClickeadaAlumnos, controladorBotonesAlumno, controladorBotonesAlumno, true));
+                VerticalStackLayoutAlumnos.Children.Add(GeneracionUI.CrearCartaAlumnoGestor(alumnos, CartaClickeadaAlumnos, controladorBotonesAlumno, controladorBotonesAlumno, true));
+            }
         }
+        else
+        {
+            VerticalStackLayoutAlumnos.Children.Add(new Label() { Text = "No hay Alumnos Disponibles", TextColor = Colors.Gray });
+        }
+
     }
 
     protected void recargarUI()
