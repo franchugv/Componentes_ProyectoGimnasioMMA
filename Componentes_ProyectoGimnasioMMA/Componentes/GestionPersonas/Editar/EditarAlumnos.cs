@@ -59,8 +59,17 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
 
             _pickerCategoriaEdad = GeneracionUI.CrearPickerConfirmacion("pCategoriaEdad", "Seleccione su categoría de Edad", Alumno.ObtenerCategoriasEdad, pickerFocusChanged);
             _pickerNuevaEscuela = GeneracionUI.CrearPickerConfirmacion("sEscuela", "Seleccione una Escuela a Agregar", listaNombresEscuelasAgregar, pickerFocusChanged);
+            if(listaNombresEscuelasAgregar.Count > 0)
+            {
+                _pickerNuevaEscuela.PickerEditar.IsEnabled = false;
+                _pickerNuevaEscuela.CheckBoxP.IsEnabled = false;
+            }
             _pickerEliminarEscuela = GeneracionUI.CrearPickerConfirmacion("sEscuela", "Seleccione una Escuela a Eliminar", listaNombresEscuelasEliminar, pickerFocusChanged);
-
+            if (listaNombresEscuelasEliminar.Count > 0)
+            {
+                _pickerEliminarEscuela.PickerEditar.IsEnabled = false;
+                _pickerEliminarEscuela.CheckBoxP.IsEnabled = false;
+            }
             _botonEditar = GeneracionUI.CrearBoton("Editar Alumno", "bEditar", controladorBotones);
 
             // Añadir interfaz al vsl

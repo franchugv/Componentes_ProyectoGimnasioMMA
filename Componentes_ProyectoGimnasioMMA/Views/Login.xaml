@@ -4,26 +4,35 @@
              x:Class="Componentes_ProyectoGimnasioMMA.Views.Login"
              Title="Login">
 
-    <Grid RowDefinitions="Auto,*"
+        <Grid RowDefinitions="Auto, Auto,*"
           ColumnDefinitions="*"
           VerticalOptions="Center"
           HorizontalOptions="Center">
 
-        <!-- Título del login -->
-        <Label Text="Iniciar Sesión"
-               HorizontalOptions="Center"
-               FontSize="24"
+
+            <Image 
+                HeightRequest="200"
+                Grid.Column="0"
+                Grid.Row="0"
+                x:Name="imagenPortada"/>
+            
+            <!-- Título del login -->
+            <Label Text=""
+               HorizontalOptions="CenterAndExpand"
+               FontSize="30"
+               FontAttributes="Bold"
                x:Name="Titulo"
-               Grid.Row="0"
+               Grid.Row="1"
                Grid.Column="0"/>
 
-        <!-- Contenedor para controles de login -->
-        <VerticalStackLayout x:Name="mainVSL"
-                             Grid.Row="1"
+            <!-- Contenedor para controles de login -->
+            <VerticalStackLayout x:Name="mainVSL"
+                             Grid.Row="2"
                              Grid.Column="0"
                              VerticalOptions="Center"
                              HorizontalOptions="Center">
-        </VerticalStackLayout>
+            </VerticalStackLayout>
 
-    </Grid>
+        </Grid>
+
 </ContentPage>

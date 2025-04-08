@@ -68,7 +68,10 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
                         }
                     }
                 }
-
+                else
+                {
+                    throw new Exception("Debe seleccionar una Escuela");
+                }
 
 
                 if (_eTipoUsuario.SelectedItem == null) throw new Exception("Seleccione un tipo de usuario");
@@ -78,7 +81,6 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
 
                 // Insercciones en la Base de datos
                 _api_bd.InsertarUsuario(usuario);
-                Application.Current.MainPage.DisplayAlert("¡Usuario insertado correctamente!", $"Usted a agregado al usuario {usuario.Nombre}.", "Ok");
 
                 // Exactamente lo mismo que al principio
                 if (_selectorEscuela.SelectedItem != null)

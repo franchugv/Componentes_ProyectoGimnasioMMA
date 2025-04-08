@@ -1,6 +1,8 @@
 using BibliotecaClases_ProyectoGimnasioMMA.APIs;
 using BibliotecaClases_ProyectoGimnasioMMA.Deportes;
 using BibliotecaClases_ProyectoGimnasioMMA.Escuelas;
+using BibliotecaClases_ProyectoGimnasioMMA.Persona;
+using BibliotecaClases_ProyectoGimnasioMMA.Personas;
 using BibliotecaClases_ProyectoGimnasioMMA.Usuarios;
 using Componentes_ProyectoGimnasioMMA.Componentes.Funciones;
 
@@ -16,17 +18,13 @@ public class EditarDeportes : ContentView
     Escuela _escuela;
     Deporte _deporte;
 
-    List<Escuela> _listaEscuelas;
-    List<string> _listaNombreEscuelas;
-    Escuela _escuelaElegida;
+
     // COMPONENTES
 
     VerticalStackLayout _mainVSL;
 
     EntryConfirmacion _eNombre;
     EntryConfirmacion _eFederacion;
-
-    PickerConfirmacion _selectorEscuela;
     
     Button _botonInsertar;
 
@@ -48,26 +46,17 @@ public class EditarDeportes : ContentView
         _mainVSL = new VerticalStackLayout();
         _api_BD = new API_BD();
 
-        _listaEscuelas = new List<Escuela>();
-        _listaNombreEscuelas = new List<string>();
-        _listaEscuelas = _api_BD.ObtenerEscuelasDeUsuario(_usuarioApp.Correo);
 
-        foreach (Escuela escuela in _listaEscuelas)
-        {
-            _listaNombreEscuelas.Add(escuela.Nombre);
-        }
         GenerarUI();
     }
     protected void GenerarUI()
     {
-        _eNombre = GeneracionUI.CrearEntryConfirmacion("Ingrese el Nombre del deporte a agregar", "eDeporte", unfocusedEntry);
+        _eNombre = GeneracionUI.CrearEntryConfirmacion("Ingrese el Nombre del deporte a agregar", "eNombre", unfocusedEntry);
         _eFederacion = GeneracionUI.CrearEntryConfirmacion("Ingrese la Federación del deporte a agregar", "eFederacion", unfocusedEntry);
-        _selectorEscuela = GeneracionUI.CrearPickerConfirmacion("pEscuela", "Seleccione una Escuela para a Cambiar", _listaNombreEscuelas, unfocusedPicker);
         _botonInsertar = GeneracionUI.CrearBoton("Insertar Deporte", "bIDeporte", controladorBotones);
 
         _mainVSL.Children.Add(_eNombre);
         _mainVSL.Children.Add(_eFederacion);
-        _mainVSL.Children.Add(_selectorEscuela);
         _mainVSL.Children.Add(_botonInsertar);
     }
 
@@ -80,7 +69,6 @@ public class EditarDeportes : ContentView
 
             string nombre = null;
             string federación = null;
-            int nuevaEscuelaID = -1;
 
 
             if (_eNombre.EstaSeleccionado)
@@ -95,19 +83,9 @@ public class EditarDeportes : ContentView
                 federación = deporteF.Federacion;
             }
 
-            if (_selectorEscuela.EstaSeleccionado)
-            {
-                if (_selectorEscuela.PickerEditar.SelectedItem == null) throw new Exception("Debe seleccionar una Escuela");
+           
 
-                for (int indice = 0; indice < _listaEscuelas.Count; indice++)
-                {
-                    if (_selectorEscuela.PickerEditar.SelectedItem.ToString() == _listaEscuelas[indice].Nombre) _escuelaElegida = _listaEscuelas[indice];
-                }
-
-                nuevaEscuelaID = _escuelaElegida.Id;
-            }
-
-            _api_BD.EditarDeporte(_deporte.Id, nombre, federación, nuevaEscuelaID);
+            _api_BD.EditarDeporte(_deporte.Id, nombre, federación);
             
 
 
@@ -121,6 +99,7 @@ public class EditarDeportes : ContentView
         }
     }
 
+
     private void unfocusedPicker(object sender, EventArgs e)
     {
 
@@ -128,6 +107,43 @@ public class EditarDeportes : ContentView
 
     private void unfocusedEntry(object sender, FocusEventArgs e)
     {
+        Entry entry = (Entry)sender;
+        Deporte deporteValidar = null;
 
+        try
+        {
+            switch (entry.StyleId)
+            {
+                case "eNombre":
+                    _eNombre.limpiarError();
+                    deporteValidar = new Deporte(_eNombre.Texto, TipoValorDeporte.Nombre);
+                    break;
+
+                case "eFederacion":
+                    _eFederacion.limpiarError();
+                    deporteValidar = new Deporte(_eFederacion.Texto, TipoValorDeporte.Federacion);
+                    break;
+
+
+
+
+
+            }
+
+        }
+        catch (Exception error)
+        {
+            switch (entry.StyleId)
+            {
+                case "eNombre":
+                    _eNombre.mostrarError(error.Message);
+                    break;
+                case "eFederacion":
+                    _eFederacion.mostrarError(error.Message);
+                    break;
+
+
+            }
+        }
     }
 }

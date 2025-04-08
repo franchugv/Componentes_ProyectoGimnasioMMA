@@ -128,17 +128,12 @@ public partial class GestionUsuarios : ContentPage
         {
             _listaUsuarios = api_bd.ObtenerListaUsuariosSinEscuela();
         }
-        bool generarBotones = true;
 
         foreach (Usuario usuario in _listaUsuarios)
         {
-            if (_tipoUsuario == TipoUsuario.GestorGimnasios && usuario.TipoDeUsuario == TipoUsuario.GestorGimnasios)
-            {
-                generarBotones = false;
-            }
-            else generarBotones = true;
+          
 
-            VerticalStackLayoutUsuarios.Children.Add(GeneracionUI.CrearCartaUsuarioGestor(usuario, CartaClickeada, ControladorBotones, ControladorBotones, generarBotones));
+            VerticalStackLayoutUsuarios.Children.Add(GeneracionUI.CrearCartaUsuarioGestor(usuario, CartaClickeada, ControladorBotones, ControladorBotones, true, true));
         }
 
     }
@@ -146,7 +141,7 @@ public partial class GestionUsuarios : ContentPage
     protected virtual void GenerarInterfaz()
     {
 
-        bool generarBotones = true;
+        bool generarBotonEliminar = true;
 
         if(_listaUsuarios.Count >= 1)
         {
@@ -154,11 +149,11 @@ public partial class GestionUsuarios : ContentPage
             {
                 if (_tipoUsuario == TipoUsuario.GestorGimnasios && usuario.TipoDeUsuario == TipoUsuario.GestorGimnasios)
                 {
-                    generarBotones = false;
+                    generarBotonEliminar = false;
                 }
-                else generarBotones = true;
+                else generarBotonEliminar = true;
 
-                VerticalStackLayoutUsuarios.Children.Add(GeneracionUI.CrearCartaUsuarioGestor(usuario, CartaClickeada, ControladorBotones, ControladorBotones, generarBotones));
+                VerticalStackLayoutUsuarios.Children.Add(GeneracionUI.CrearCartaUsuarioGestor(usuario, CartaClickeada, ControladorBotones, ControladorBotones, true, generarBotonEliminar));
             }
         }
         else

@@ -21,6 +21,18 @@ public partial class PickerConfirmacion : ContentView
             pickerDato = value;
         }
     }
+
+    public CheckBox CheckBoxP
+    {
+        get
+        {
+            return checkBox;
+        }
+        set
+        {
+            checkBox = value;
+        }
+    }
     public bool EstaSeleccionado
     {
         get

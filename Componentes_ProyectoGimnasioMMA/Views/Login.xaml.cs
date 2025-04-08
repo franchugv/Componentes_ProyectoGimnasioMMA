@@ -15,9 +15,13 @@ public partial class Login : ContentPage
     protected API_BD _api_bd;
     protected Usuario _usuario;
 
-    public Login()
+    public Login(string imgPortada ,string titulo)
     {
         InitializeComponent();
+
+        Titulo.Text = titulo;
+        imagenPortada.Source = imgPortada;
+
         Shell.SetNavBarIsVisible(this, false);
 
         _api_bd = new API_BD();
@@ -153,18 +157,55 @@ public partial class Login : ContentPage
     // FUNCIONES
     private void GenerarInterfaz()
     {
-        // Instanciar
-        _entryCorreo = GeneracionUI.CrearEntryError("Correo", "eCorreo", entryUnfocus);
-        _entryContrasenia = GeneracionUI.CrearEntryError("Contraseña", "eContrasenia", entryUnfocus);
-        _botonLogin = GeneracionUI.CrearBoton("Login", "bLogin", controladorBoton);
+        // Estilo del Frame contenedor
+        Frame frameLogin = new Frame
+        {
+            CornerRadius = 16,
+            Padding = new Thickness(20),
+            Margin = new Thickness(20),
+            BackgroundColor = Color.FromArgb("#ffffff"),
+            HasShadow = true,
+            HorizontalOptions = LayoutOptions.Center,
+            VerticalOptions = LayoutOptions.Center,
+            WidthRequest = 320
+        };
 
+        // Layout interno del formulario
+        VerticalStackLayout layoutInterno = new VerticalStackLayout
+        {
+            Spacing = 16,
+            HorizontalOptions = LayoutOptions.Fill,
+            VerticalOptions = LayoutOptions.Center
+        };
+
+        // Crear los Entries
+        _entryCorreo = GeneracionUI.CrearEntryError("Correo electrónico", "eCorreo", entryUnfocus);
+        _entryContrasenia = GeneracionUI.CrearEntryError("Contraseña", "eContrasenia", entryUnfocus);
         _entryContrasenia.EntryEditar.IsPassword = true;
 
-        // Añadir al StackLayout
-        mainVSL.Add(_entryCorreo);
-        mainVSL.Add(_entryContrasenia);
-        mainVSL.Add(_botonLogin);
+        // Crear el botón con un diseño moderno
+        _botonLogin = GeneracionUI.CrearBoton("Iniciar sesión", "bLogin", controladorBoton);
+        _botonLogin.BackgroundColor = Color.FromArgb("#4CAF50"); // Verde 
+        _botonLogin.TextColor = Colors.White;
+        _botonLogin.CornerRadius = 10;
+        _botonLogin.HeightRequest = 40;
+        _botonLogin.FontAttributes = FontAttributes.Bold;
+
+        // Agregar al layout
+        layoutInterno.Add(_entryCorreo);
+        layoutInterno.Add(_entryContrasenia);
+        layoutInterno.Add(_botonLogin);
+
+        // Meter el layout al frame
+        frameLogin.Content = layoutInterno;
+
+        // Ajustar el Stack principal
+        mainVSL.Clear(); // Limpia si hay contenido previo
+        mainVSL.HorizontalOptions = LayoutOptions.Center;
+        mainVSL.VerticalOptions = LayoutOptions.Center;
+        mainVSL.Add(frameLogin);
     }
+
 
     protected virtual void llamadaLogin()
     {

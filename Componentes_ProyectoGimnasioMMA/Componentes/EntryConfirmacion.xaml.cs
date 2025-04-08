@@ -22,6 +22,10 @@ public partial class EntryConfirmacion : ContentView
         {
             return entryDato.Text;
         }
+        set
+        {
+            entryDato.Text = value;
+        }
     }
 
     public Entry EntryEditar

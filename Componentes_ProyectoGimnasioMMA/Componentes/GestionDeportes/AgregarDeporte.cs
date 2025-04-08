@@ -57,7 +57,7 @@ public class AgregarDeporte : ContentView
     }
 	protected void GenerarUI()
 	{
-		_eNombre = GeneracionUI.CrearEntryError("Ingrese el Nombre del deporte a agregar", "eDeporte", unfocusedEntry);
+		_eNombre = GeneracionUI.CrearEntryError("Ingrese el Nombre del deporte a agregar", "eNombre", unfocusedEntry);
 		_eFederacion = GeneracionUI.CrearEntryError("Ingrese la Federación del deporte a agregar", "eFederacion", unfocusedEntry);
 		_selectorEscuela = GeneracionUI.CrearPicker("pEscuela", "Seleccione una Escuela para el Deporte", _listaNombreEscuelas, unfocusedPicker);
 		_botonInsertar = GeneracionUI.CrearBoton("Insertar Deporte", "bIDeporte", controladorBotones);
@@ -100,6 +100,43 @@ public class AgregarDeporte : ContentView
 
     private void unfocusedEntry(object sender, FocusEventArgs e)
     {
+        Entry entry = (Entry)sender;
+        Deporte deporteValidar = null;
 
+        try
+        {
+            switch (entry.StyleId)
+            {
+                case "eNombre":
+                    _eNombre.limpiarError();
+                    deporteValidar = new Deporte(_eNombre.Texto, TipoValorDeporte.Nombre);
+                    break;
+
+                case "eFederacion":
+                    _eFederacion.limpiarError();
+                    deporteValidar = new Deporte(_eFederacion.Texto, TipoValorDeporte.Federacion);
+                    break;
+
+
+
+
+
+            }
+
+        }
+        catch (Exception error)
+        {
+            switch (entry.StyleId)
+            {
+                case "eNombre":
+                    _eNombre.mostrarError(error.Message);
+                    break;
+                case "eFederacion":
+                    _eFederacion.mostrarError(error.Message);
+                    break;
+
+
+            }
+        }
     }
 }

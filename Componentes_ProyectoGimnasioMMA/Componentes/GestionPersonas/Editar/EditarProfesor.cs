@@ -17,10 +17,6 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
 {
     public class EditarProfesor : FormularioPersona
     {
-        // TODO: Terminar Editar Profesor
-        protected const string SIN_USUARIOS = "No hay Usuarios disponibles";
-
-        protected const string SIN_DEPORTE = "No hay Deportes disponibles";
         // RECURSOS
 
         protected EntryConfirmacion _eCDNI;
@@ -59,7 +55,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
         protected List<string> _listaNombresEscuelasAgregar;
 
         // Listas para el picker de eliminar escuelas
-        protected List<Escuela> _listaEscuelasElimiminar;
+        protected List<Escuela> _listaEscuelasEliminar;
         protected List<string> _listaNombresEscuelasElimiminar;
 
 
@@ -86,22 +82,58 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
             _eCNombre = GeneracionUI.CrearEntryConfirmacion("Nombre", "eCNombre", entryUnfocus);
             _eCApellidos = GeneracionUI.CrearEntryConfirmacion("Apellidos", "eCApellidos", entryUnfocus);
 
+
+            
             _selectorEscuelaNuevaAgregar = GeneracionUI.CrearPickerConfirmacion("sEscuelaAgregar", "Seleccione una Escuela a Agregar", _listaNombresEscuelasAgregar, pickerFocusChanged);
+            if (_listaNombresEscuelasAgregar.Count < 1)
+            {
+                _selectorEscuelaNuevaAgregar.PickerEditar.IsEnabled = false;
+                _selectorEscuelaNuevaAgregar.CheckBoxP.IsEnabled = false;
+
+            }
+
             _selectorEscuelaViejaEliminar = GeneracionUI.CrearPickerConfirmacion("sEscuelaEliminar", "Seleccione una Escuela a Eliminar", _listaNombresEscuelasElimiminar, pickerFocusChanged);
+            if (_listaNombresEscuelasElimiminar.Count < 1)
+            {
+                _selectorEscuelaViejaEliminar.PickerEditar.IsEnabled = false;
+                _selectorEscuelaViejaEliminar.CheckBoxP.IsEnabled = false;
+            }
 
             _pSelectorUsuarioNuevo = GeneracionUI.CrearPickerConfirmacion("sUsuario", "Seleccione un Usuario a Cambiar", _listaNombresUsuariosDisponibles, pickerFocusChanged);
+            if (_listaNombresUsuariosDisponibles.Count < 1)
+            {
+                _pSelectorUsuarioNuevo.PickerEditar.IsEnabled = false;
+                _pSelectorUsuarioNuevo.CheckBoxP.IsEnabled = false;
+            }
 
-            _eNivel = GeneracionUI.CrearEntryConfirmacion("Inserte el nivel del Profesor", "eNivel", entryUnfocus);
+            _eNivel = GeneracionUI.CrearEntryConfirmacion("Inserte el nivel del Profesor", "eCNivel", entryUnfocus);
             
             _pDeporteNuevoAgregar = GeneracionUI.CrearPickerConfirmacion("pDeporteAgregar", "Seleccione un deporte nuevo para el Profesorado", _listaNombreDeportesAgregar, selectedIndexChanged);
-            _pDeporteViejoBorrar = GeneracionUI.CrearPickerConfirmacion("pDeporteEliminar", "Seleccione un deporte a Eliminar para el Profesorado", _listaNombreDeportesEliminar, selectedIndexChanged);
+            if (_listaNombreDeportesAgregar.Count < 1)
+            {
+                _pDeporteNuevoAgregar.PickerEditar.IsEnabled = false;
+                _pDeporteNuevoAgregar.CheckBoxP.IsEnabled = false;
 
-            _botonInsertar = GeneracionUI.CrearBoton("Insertar Profesor", "bInsertar", controladorBoton);
+            }
+
+            _pDeporteViejoBorrar = GeneracionUI.CrearPickerConfirmacion("pDeporteEliminar", "Seleccione un deporte a Eliminar para el Profesorado", _listaNombreDeportesEliminar, selectedIndexChanged);
+            if (_listaNombreDeportesEliminar.Count < 1) 
+            {
+                _pDeporteViejoBorrar.PickerEditar.IsEnabled = false;
+                _pDeporteViejoBorrar.CheckBoxP.IsEnabled =false;
+
+            }
+
+            _botonInsertar = GeneracionUI.CrearBoton("Actualizar Profesor", "bInsertar", controladorBoton);
 
             // Añadir interfaz al vsl
+            MAIN_VSL.Children.Add(new Label() { Text = "Ingrese el DNI:"});
             MAIN_VSL.Children.Add(_eCDNI);
+            MAIN_VSL.Children.Add(new Label() { Text = "Ingrese el Nombre:" });
             MAIN_VSL.Children.Add(_eCNombre);
+            MAIN_VSL.Children.Add(new Label() { Text = "Ingrese los Apellidos:" });
             MAIN_VSL.Children.Add(_eCApellidos);
+            MAIN_VSL.Children.Add(new Label() { Text = "Ingrese el Nivel:" });
             MAIN_VSL.Children.Add(_eNivel);
 
             MAIN_VSL.Children.Add(_selectorEscuelaNuevaAgregar);
@@ -113,12 +145,18 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
             MAIN_VSL.Children.Add(_pSelectorUsuarioNuevo);
             MAIN_VSL.Children.Add(_botonInsertar);
 
-
+            AsignarDatos();
 
         }
 
 
-
+        private void AsignarDatos()
+        {
+            _eCDNI.Texto = _profesorEditar.DNI;
+            _eCNombre.Texto = _profesorEditar.Nombre;
+            _eCApellidos.Texto = _profesorEditar.Apellidos;
+            _eNivel.Texto = _profesorEditar.Nivel;
+        }
         private void CargarDatosConstructor()
         {
             try
@@ -138,10 +176,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
                         _listaNombreDeportesAgregar.Add(deporte.Nombre);
                     }
                 }
-                else
-                {
-                    _listaNombreDeportesAgregar.Add(SIN_DEPORTE);
-                }
+
 
                 _listaDeportesEliminar = new List<Deporte>();
                 _listaNombreDeportesEliminar = new List<string>();
@@ -158,10 +193,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
                         _listaNombreDeportesEliminar.Add(deporte.Nombre);
                     }
                 }
-                else
-                {
-                    _listaNombreDeportesEliminar.Add(SIN_DEPORTE);
-                }
+
 
                 // Asignar Usuarios Disponibles CAMBIAR
                 _listaUsuariosDisponibles = new List<Usuario>();
@@ -177,28 +209,22 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
                         _listaNombresUsuariosDisponibles.Add(usuario.Correo);
                     }
                 }
-                else
-                {
-                    _listaNombresUsuariosDisponibles.Add(SIN_USUARIOS);
-                }
+
 
                 // Asignar Lista de escuelas con el profesor asignado ELIMINAR
-                _listaEscuelasElimiminar = new List<Escuela>();
-                _listaEscuelasElimiminar = _api_bd.ObtenerEscuelasAsignadasAProfesorYUsuario(_profesorEditar.DNI, _usuario.Correo);
+                _listaEscuelasEliminar = new List<Escuela>();
+                _listaEscuelasEliminar = _api_bd.ObtenerEscuelasAsignadasAProfesorYUsuario(_profesorEditar.DNI, _usuario.Correo);
                 _listaNombreEscuelas = new List<string>();
 
-                if (_listaEscuelasElimiminar.Count > 0)
+                if (_listaEscuelasEliminar.Count > 0)
                 {
                     _listaNombresEscuelasElimiminar = new List<string>();
-                    foreach (Escuela escuela in _listaEscuelasElimiminar)
+                    foreach (Escuela escuela in _listaEscuelasEliminar)
                     {
                         _listaNombresEscuelasElimiminar.Add(escuela.Nombre);
                     }
                 }
-                else
-                {
-                    _listaNombresEscuelasElimiminar.Add("No hay escuelas disponibles");
-                }
+
 
 
                 // Asignar Lista de escuelas Sin asignar AGREGAR
@@ -215,10 +241,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
                         _listaNombresEscuelasAgregar.Add(escuela.Nombre);
                     }
                 }
-                else
-                {
-                    _listaNombresEscuelasAgregar.Add("No hay escuelas disponibles");
-                }
+
 
 
 
@@ -268,16 +291,16 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
             {
                 switch (entry.StyleId)
                 {
-                    case "eDNI":
+                    case "eCDNI":
                         _eCDNI.mostrarError(error.Message);
                         break;
-                    case "eNombre":
+                    case "eCNombre":
                         _eCNombre.mostrarError(error.Message);
                         break;
-                    case "eApellidos":
+                    case "eCApellidos":
                         _eCApellidos.mostrarError(error.Message);
                         break;
-                    case "_eNivel":
+                    case "_eCNivel":
                         _eNivel.mostrarError(error.Message);
                         break;
 
@@ -311,17 +334,17 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
 
                 if (_eCDNI.EstaSeleccionado)
                 {
-                    PersonaValidacion profesor = new PersonaValidacion(_eDNI.Texto, TipoMiembro.DNI);
+                    PersonaValidacion profesor = new PersonaValidacion(_eCDNI.Texto, TipoMiembro.DNI);
                     dni = profesor.DNI;
                 }
                 if (_eCNombre.EstaSeleccionado)
                 {
-                    PersonaValidacion profesor = new PersonaValidacion(_eNombre.Texto, TipoMiembro.Nombre);
+                    PersonaValidacion profesor = new PersonaValidacion(_eCNombre.Texto, TipoMiembro.Nombre);
                     nombre = profesor.Nombre;
                 }
                 if (_eCApellidos.EstaSeleccionado)
                 {
-                    PersonaValidacion profesor = new PersonaValidacion(_eApellidos.Texto, TipoMiembro.Apellidos);
+                    PersonaValidacion profesor = new PersonaValidacion(_eCApellidos.Texto, TipoMiembro.Apellidos);
                     apellidos = profesor.Apellidos;
                 }
                 if (_eNivel.EstaSeleccionado)
@@ -341,25 +364,40 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
                 {
                     foreach (Escuela escuela in _listaEscuelasAgregar)
                     {
-                        if (escuela.Id == Convert.ToInt32(_selectorEscuelaNuevaAgregar.PickerEditar.SelectedItem.ToString())) nuevaEscuela = escuela;
+                        if (escuela.Nombre == _selectorEscuelaNuevaAgregar.PickerEditar.SelectedItem.ToString()) nuevaEscuela = escuela;
                     }
                     _api_bd.AsignarEscuelaAProfesor(_profesorEditar.DNI, nuevaEscuela.Id);
                 }
-                // TODO: Hacer todo eso
+
                 if (_selectorEscuelaViejaEliminar.EstaSeleccionado)
                 {
-
+                    foreach (Escuela escuela in _listaEscuelasEliminar)
+                    {
+                        if (escuela.Nombre ==_selectorEscuelaViejaEliminar.PickerEditar.SelectedItem.ToString()) escuelaVieja = escuela;
+                    }
+                    _api_bd.EliminarProfesorDeEscuela(_profesorEditar.DNI, escuelaVieja.Id);
                 }
                 if (_pDeporteNuevoAgregar.EstaSeleccionado)
                 {
-
+                    foreach (Deporte deporte in _listaDeportesAgregar)
+                    {
+                        if (deporte.Nombre == _pDeporteNuevoAgregar.PickerEditar.SelectedItem.ToString()) deporteNuevo = deporte;
+                    }
+                    _api_bd.AsignarDeporteAProfesor(_profesorEditar.DNI, deporteNuevo.Id);
                 }
                 if (_pDeporteViejoBorrar.EstaSeleccionado)
-                { 
-                
+                {
+                    foreach (Deporte deporte in _listaDeportesEliminar)
+                    {
+                        if (deporte.Nombre == _pDeporteViejoBorrar.PickerEditar.SelectedItem.ToString()) deporteViejo = deporte;
+                    }
+                    _api_bd.AsignarDeporteAProfesor(_profesorEditar.DNI, deporteViejo.Id);
                 }
 
-                _api_bd.ActualizarProfesor(_profesorEditar.DNI, nombre, apellidos, nivel, correoUsuario);
+                if(nombre != null || apellidos != null || nivel != null || correoUsuario != null)
+                {
+                    _api_bd.ActualizarProfesor(_profesorEditar.DNI, nombre, apellidos, nivel, correoUsuario);
+                }
 
                 EventoVolverPaginaPrincipal?.Invoke();
 

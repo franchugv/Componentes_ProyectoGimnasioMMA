@@ -8,7 +8,7 @@
            VerticalOptions="Center"
            HorizontalOptions="Center"/>
 
-        <Grid ColumnDefinitions="*, *">
+        <Grid ColumnDefinitions="*, *" ColumnSpacing="15">
             <Button Text="Alumnos" Grid.Column="0" x:Name="bAlumnos" Clicked="controladorBotones" BackgroundColor="Green"/>
             <Button Text="Profesores" Grid.Column="1" x:Name="bProfesores" Clicked="controladorBotones" BackgroundColor="Green"/>
         </Grid>
