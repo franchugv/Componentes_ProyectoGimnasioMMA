@@ -77,75 +77,82 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
         {
 
 
-            // Inctanciar Componentes de la interfaz
+            // === Instanciar componentes ===
             _eCDNI = GeneracionUI.CrearEntryConfirmacion("DNI", "eCDNI", entryUnfocus);
             _eCNombre = GeneracionUI.CrearEntryConfirmacion("Nombre", "eCNombre", entryUnfocus);
             _eCApellidos = GeneracionUI.CrearEntryConfirmacion("Apellidos", "eCApellidos", entryUnfocus);
+            _eNivel = GeneracionUI.CrearEntryConfirmacion("Inserte el nivel del Profesor", "eCNivel", entryUnfocus);
 
-
-            
             _selectorEscuelaNuevaAgregar = GeneracionUI.CrearPickerConfirmacion("sEscuelaAgregar", "Seleccione una Escuela a Agregar", _listaNombresEscuelasAgregar, pickerFocusChanged);
-            if (_listaNombresEscuelasAgregar.Count < 1)
-            {
-                _selectorEscuelaNuevaAgregar.PickerEditar.IsEnabled = false;
-                _selectorEscuelaNuevaAgregar.CheckBoxP.IsEnabled = false;
-
-            }
+            if (_listaNombresEscuelasAgregar.Count < 1) _selectorEscuelaNuevaAgregar.PickerEditar.IsEnabled = false;
 
             _selectorEscuelaViejaEliminar = GeneracionUI.CrearPickerConfirmacion("sEscuelaEliminar", "Seleccione una Escuela a Eliminar", _listaNombresEscuelasElimiminar, pickerFocusChanged);
-            if (_listaNombresEscuelasElimiminar.Count < 1)
-            {
-                _selectorEscuelaViejaEliminar.PickerEditar.IsEnabled = false;
-                _selectorEscuelaViejaEliminar.CheckBoxP.IsEnabled = false;
-            }
+            if (_listaNombresEscuelasElimiminar.Count < 1) _selectorEscuelaViejaEliminar.PickerEditar.IsEnabled = false;
 
             _pSelectorUsuarioNuevo = GeneracionUI.CrearPickerConfirmacion("sUsuario", "Seleccione un Usuario a Cambiar", _listaNombresUsuariosDisponibles, pickerFocusChanged);
-            if (_listaNombresUsuariosDisponibles.Count < 1)
-            {
-                _pSelectorUsuarioNuevo.PickerEditar.IsEnabled = false;
-                _pSelectorUsuarioNuevo.CheckBoxP.IsEnabled = false;
-            }
+            if (_listaNombresUsuariosDisponibles.Count < 1) _pSelectorUsuarioNuevo.PickerEditar.IsEnabled = false;
 
-            _eNivel = GeneracionUI.CrearEntryConfirmacion("Inserte el nivel del Profesor", "eCNivel", entryUnfocus);
-            
             _pDeporteNuevoAgregar = GeneracionUI.CrearPickerConfirmacion("pDeporteAgregar", "Seleccione un deporte nuevo para el Profesorado", _listaNombreDeportesAgregar, selectedIndexChanged);
-            if (_listaNombreDeportesAgregar.Count < 1)
-            {
-                _pDeporteNuevoAgregar.PickerEditar.IsEnabled = false;
-                _pDeporteNuevoAgregar.CheckBoxP.IsEnabled = false;
-
-            }
+            if (_listaNombreDeportesAgregar.Count < 1) _pDeporteNuevoAgregar.PickerEditar.IsEnabled = false;
 
             _pDeporteViejoBorrar = GeneracionUI.CrearPickerConfirmacion("pDeporteEliminar", "Seleccione un deporte a Eliminar para el Profesorado", _listaNombreDeportesEliminar, selectedIndexChanged);
-            if (_listaNombreDeportesEliminar.Count < 1) 
-            {
-                _pDeporteViejoBorrar.PickerEditar.IsEnabled = false;
-                _pDeporteViejoBorrar.CheckBoxP.IsEnabled =false;
-
-            }
+            if (_listaNombreDeportesEliminar.Count < 1) _pDeporteViejoBorrar.PickerEditar.IsEnabled = false;
 
             _botonInsertar = GeneracionUI.CrearBoton("Actualizar Profesor", "bInsertar", controladorBoton);
 
-            // Añadir interfaz al vsl
-            MAIN_VSL.Children.Add(new Label() { Text = "Ingrese el DNI:"});
-            MAIN_VSL.Children.Add(_eCDNI);
-            MAIN_VSL.Children.Add(new Label() { Text = "Ingrese el Nombre:" });
-            MAIN_VSL.Children.Add(_eCNombre);
-            MAIN_VSL.Children.Add(new Label() { Text = "Ingrese los Apellidos:" });
-            MAIN_VSL.Children.Add(_eCApellidos);
-            MAIN_VSL.Children.Add(new Label() { Text = "Ingrese el Nivel:" });
-            MAIN_VSL.Children.Add(_eNivel);
+            // === Layout compacto ===
+            VerticalStackLayout layout = new VerticalStackLayout
+            {
+                Padding = new Thickness(25, 0),
+                Spacing = 8, // Separación vertical más ajustada
+                Children =
+    {
+        new Label { Text = "Gestión del Profesorado", FontSize = 20, FontAttributes = FontAttributes.Bold, HorizontalOptions = LayoutOptions.Center },
 
-            MAIN_VSL.Children.Add(_selectorEscuelaNuevaAgregar);
-            MAIN_VSL.Children.Add(_selectorEscuelaViejaEliminar);
+        // === Datos personales ===
+        new Label { Text = "DNI:" },
+        _eCDNI,
+        new Label { Text = "Nombre:" },
+        _eCNombre,
+        new Label { Text = "Apellidos:" },
+        _eCApellidos,
+        new Label { Text = "Nivel del Profesor:" },
+        _eNivel,
 
-            MAIN_VSL.Children.Add(_pDeporteNuevoAgregar);
-            MAIN_VSL.Children.Add(_pDeporteViejoBorrar);
+        new BoxView { HeightRequest = 1, Color = Colors.LightGray },
 
-            MAIN_VSL.Children.Add(_pSelectorUsuarioNuevo);
-            MAIN_VSL.Children.Add(_botonInsertar);
+        // === Escuelas ===
+        new Label { Text = "Agregar Escuela:" },
+        _selectorEscuelaNuevaAgregar,
+        new Label { Text = "Eliminar Escuela:" },
+        _selectorEscuelaViejaEliminar,
 
+        new BoxView { HeightRequest = 1, Color = Colors.LightGray },
+
+        // === Deportes ===
+        new Label { Text = "Agregar Deporte:" },
+        _pDeporteNuevoAgregar,
+        new Label { Text = "Eliminar Deporte:" },
+        _pDeporteViejoBorrar,
+
+        new BoxView { HeightRequest = 1, Color = Colors.LightGray },
+
+        // === Usuario ===
+        new Label { Text = "Cambiar Usuario Vinculado:" },
+        _pSelectorUsuarioNuevo,
+
+        new BoxView { HeightRequest = 1, Color = Colors.LightGray },
+
+        _botonInsertar
+    }
+            };
+
+            // Agregar al layout principal
+            MAIN_VSL.Children.Add(layout);
+
+            // Asignar datos
             AsignarDatos();
+
 
         }
 

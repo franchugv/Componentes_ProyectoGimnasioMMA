@@ -1,4 +1,5 @@
-﻿using BibliotecaClases_ProyectoGimnasioMMA.Deportes;
+﻿using BibliotecaClases_ProyectoGimnasioMMA.APIs;
+using BibliotecaClases_ProyectoGimnasioMMA.Deportes;
 using BibliotecaClases_ProyectoGimnasioMMA.Escuelas;
 using BibliotecaClases_ProyectoGimnasioMMA.Personas;
 using BibliotecaClases_ProyectoGimnasioMMA.Usuarios;
@@ -763,6 +764,133 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
 
             return carta;
         }
+
+        public static Frame CrearCartaClases(Horario horario, EventHandler<TappedEventArgs> evento, EventHandler editar, EventHandler eliminar, EventHandler gestionarAlumnos)
+        {
+            API_BD api_bd = new API_BD();
+            // Crear el gesto de toque (tap)
+            TapGestureRecognizer tapGesture = new TapGestureRecognizer();
+            tapGesture.Tapped += evento;
+
+            // Crear la lista de elementos
+            List <View> elementos = new List<View>
+    {
+        new Label
+        {
+            Text = api_bd.ObtenerDeportePorId(horario.DeporteId).Nombre,
+            FontAttributes = FontAttributes.Bold,
+            FontSize = 16,
+            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
+        },
+        new Label
+        {
+            Text = api_bd.ObtenerProfesorPorDni(horario.ProfesorDni).Nombre,
+            FontAttributes = FontAttributes.Bold,
+            FontSize = 16,
+            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.DarkGray : Colors.Gray
+        },
+        new Label
+        {
+            Text = "Día: " + horario.Dia.ToString(),
+            FontAttributes = FontAttributes.Bold,
+            FontSize = 16,
+            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
+        },
+        new Label
+        {
+            Text = "Hora Inicio: " + horario.HoraInicio.ToString(),
+            FontAttributes = FontAttributes.Bold,
+            FontSize = 16,
+            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.OrangeRed : Colors.Red
+        },
+        new Label
+        {
+            Text = "Hora Fin: " +horario.HoraFin.ToString(),
+            FontAttributes = FontAttributes.Bold,
+            FontSize = 16,
+            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.OrangeRed : Colors.Red
+        }
+
+    };
+
+            Button btnEditar = new Button
+            {
+                Text = "Editar",
+                BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.MidnightBlue : Colors.Blue,
+                TextColor = Colors.White,
+                FontSize = 16,
+                StyleId = "btnEditar"
+            };
+            btnEditar.Clicked += (sender, args) =>
+            {
+                evento.Invoke(sender, new TappedEventArgs(null));
+                editar.Invoke(sender, args);
+            };
+
+            Button btnEliminar = new Button
+            {
+                Text = "Eliminar",
+                BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.DarkRed : Colors.Red,
+                TextColor = Colors.White,
+                FontSize = 16,
+                StyleId = "btnEliminar"
+            };
+            btnEliminar.Clicked += (sender, args) =>
+            {
+                evento.Invoke(sender, new TappedEventArgs(null));
+                eliminar.Invoke(sender, args);
+            };
+            Button btnGestionarAlumno = new Button
+            {
+                Text = "Gestionar Alumnos",
+                BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.Purple : Colors.Purple,
+                TextColor = Colors.White,
+                FontSize = 16,
+                StyleId = "btnGestionarAlumno"
+            };
+            btnGestionarAlumno.Clicked += (sender, args) =>
+            {
+                evento.Invoke(sender, new TappedEventArgs(null));
+                eliminar.Invoke(sender, args);
+            };
+
+
+            elementos.Add(btnEditar);
+            elementos.Add(btnGestionarAlumno);
+            elementos.Add(btnEliminar);
+
+            // Crear el Frame
+            Frame carta = new Frame
+            {
+                CornerRadius = 20,
+                BorderColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.DarkGray : Colors.LightGray,
+                BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.Black : Color.FromArgb("#F5F5F5"),
+                Margin = new Thickness(16),
+                Padding = new Thickness(24),
+                Shadow = new Shadow
+                {
+                    Brush = new SolidColorBrush(Application.Current.RequestedTheme == AppTheme.Dark ? Colors.White : Colors.Black),
+                    Offset = new Point(2, 2),
+                    Opacity = Application.Current.RequestedTheme == AppTheme.Dark ? 0.3f : 0.15f,
+                    Radius = 6
+                },
+                Content = new VerticalStackLayout
+                {
+                    Spacing = 10
+                }
+            };
+
+            // Agregar cada elemento a Children individualmente
+            foreach (var elemento in elementos)
+            {
+                ((VerticalStackLayout)carta.Content).Children.Add(elemento);
+            }
+
+            carta.GestureRecognizers.Add(tapGesture);
+
+            return carta;
+        }
+
 
         public static Frame CrearCartaProfesorGestor(Profesores profesor, EventHandler<TappedEventArgs> evento, EventHandler editar, EventHandler eliminar, bool generarBotones)
         {

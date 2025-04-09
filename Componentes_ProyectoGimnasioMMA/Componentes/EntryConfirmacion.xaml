@@ -5,7 +5,6 @@
     <VerticalStackLayout>
         <HorizontalStackLayout>
 
-            <CheckBox x:Name="checkBox" />
             <Entry x:Name="entryDato" />
             
         </HorizontalStackLayout>

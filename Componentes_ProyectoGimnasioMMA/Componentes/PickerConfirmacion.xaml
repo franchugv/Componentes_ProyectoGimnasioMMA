@@ -4,7 +4,6 @@
              x:Class="Componentes_ProyectoGimnasioMMA.Componentes.PickerConfirmacion">
     <HorizontalStackLayout>
 
-        <CheckBox x:Name="checkBox" />
         <Picker x:Name="pickerDato"/>
     </HorizontalStackLayout>
 </ContentView>

@@ -62,13 +62,11 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
             if(listaNombresEscuelasAgregar.Count > 0)
             {
                 _pickerNuevaEscuela.PickerEditar.IsEnabled = false;
-                _pickerNuevaEscuela.CheckBoxP.IsEnabled = false;
             }
             _pickerEliminarEscuela = GeneracionUI.CrearPickerConfirmacion("sEscuela", "Seleccione una Escuela a Eliminar", listaNombresEscuelasEliminar, pickerFocusChanged);
             if (listaNombresEscuelasEliminar.Count > 0)
             {
                 _pickerEliminarEscuela.PickerEditar.IsEnabled = false;
-                _pickerEliminarEscuela.CheckBoxP.IsEnabled = false;
             }
             _botonEditar = GeneracionUI.CrearBoton("Editar Alumno", "bEditar", controladorBotones);
 

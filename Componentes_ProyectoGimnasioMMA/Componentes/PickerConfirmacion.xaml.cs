@@ -22,22 +22,18 @@ public partial class PickerConfirmacion : ContentView
         }
     }
 
-    public CheckBox CheckBoxP
-    {
-        get
-        {
-            return checkBox;
-        }
-        set
-        {
-            checkBox = value;
-        }
-    }
+
     public bool EstaSeleccionado
     {
         get
         {
-            return checkBox.IsChecked;
+            bool esValido = true;
+
+            if(pickerDato.SelectedItem == null)
+            {
+                esValido = false;
+            }
+            return esValido;
         }
     }
 

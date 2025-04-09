@@ -44,7 +44,13 @@ public partial class EntryConfirmacion : ContentView
     {
         get
         {
-            return checkBox.IsChecked;
+            bool esValido = true;
+            if (string.IsNullOrEmpty(entryDato.Text))
+            {
+                esValido = false;
+            }
+
+            return esValido;
         }
     }
 

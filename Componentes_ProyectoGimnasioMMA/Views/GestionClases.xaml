@@ -4,4 +4,35 @@
              x:Class="Componentes_ProyectoGimnasioMMA.Views.GestionClases"
              Title="GestionClases">
 
+    <Grid Padding="20" RowDefinitions="Auto, Auto, *" ColumnDefinitions="*, *">
+        <Label
+            Text="Gestión Clases"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" 
+            Grid.Row="0"
+            Grid.ColumnSpan="2"
+            FontAttributes="Bold"
+        />
+
+        <Button Text="Agregar Clase"
+                x:Name="bagregar"
+                Clicked="ControladorBotones"
+                BackgroundColor="Green"
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                />
+
+        <ScrollView x:Name="ScrollViewClases" 
+                    VerticalOptions="FillAndExpand" 
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2">
+
+            <StackLayout x:Name="VerticalStackLayoutClases" 
+                         VerticalOptions="Start"/>
+        </ScrollView>
+
+
+    </Grid>
 </ContentPage>
