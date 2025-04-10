@@ -108,6 +108,26 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
         }
         #endregion
 
+        #region Crear Time Pickers Personalizados
+
+        public static TimePicker CrearTimePicker(string styleId, EventHandler<FocusEventArgs> eventoUnfocused)
+        {
+            TimePicker timePicker = new TimePicker
+            {
+                StyleId = styleId,
+                BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.Black : Colors.White,
+                TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.White : Colors.Black,
+                Margin = new Thickness(10),
+                Format = "HH:mm" // Formato de 24 horas
+            };
+
+            timePicker.Unfocused += eventoUnfocused;
+
+            return timePicker;
+        }
+
+
+        #endregion
         #region Crear Cards Personalizados
 
 
