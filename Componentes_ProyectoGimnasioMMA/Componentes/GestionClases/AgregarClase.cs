@@ -98,70 +98,66 @@ public class AgregarClase : ContentView
 
     private void GenerarUI()
     {
+        ScrollView scroll = new ScrollView();
         _tpHoraInicio = GeneracionUI.CrearTimePicker("tpHoraInicio", tpUnfocused);
         _tpHoraFin = GeneracionUI.CrearTimePicker("tpHoraFin", tpUnfocused);
 
         _selectorDia = GeneracionUI.CrearPicker("selectorDia", "Seleccione un Día de la Semana", Horario.DiasSemanaString, pUnfocused);
         _selectorEscuela = GeneracionUI.CrearPicker("selectorEscuela", "Seleccione una Escuela", _listaNombreEscuelas, pUnfocused);
-        _selectorDeporte = GeneracionUI.CrearPicker("selectorDeporte", "Seleccione un Deporte para la Clase", _listaNombreDeportes, pUnfocused);
+        _selectorDeporte = GeneracionUI.CrearPicker("selectorDia", "Seleccione un Deporte para la Clase", _listaNombreDeportes, pUnfocused);
         _selectorProfesor = GeneracionUI.CrearPicker("selectorProfesor", "Seleccione un Profesor para el Deporte", _listaNombreProfesores, pUnfocused);
 
         _botonInsertar = GeneracionUI.CrearBoton("Insertar Clase", "bInsertar", controladorBotones);
+        _botonInsertar.BackgroundColor = Colors.Green;
+        _botonInsertar.FontAttributes = FontAttributes.Bold;
 
-        // Contenido del ScrollView
-        VerticalStackLayout contenidoScroll = new VerticalStackLayout
-        {
-            Padding = new Thickness(10),
-            Spacing = 8,
-            Children =
-        {
-            new Label { Text = "Hora de Inicio", Margin = new Thickness(10, 2, 0, 2) },
-            _tpHoraInicio,
-
-            new Label { Text = "Hora de Fin", Margin = new Thickness(10, 2, 0, 2) },
-            _tpHoraFin,
-
-            _selectorDia,
-            _selectorEscuela,
-            _selectorDeporte,
-            _selectorProfesor
-        }
-        };
-
-        // Crear el ScrollView
-        ScrollView scroll = new ScrollView
-        {
-            Content = contenidoScroll
-        };
-
-        // Crear Grid
-        Grid grid = new Grid
-        {
-            RowDefinitions =
-        {
-            new RowDefinition { Height = new GridLength(1, GridUnitType.Star) }, // Para el ScrollView
-            new RowDefinition { Height = GridLength.Auto } // Para el botón
-        }
-        };
-
-        // Añadir el ScrollView en la primera fila
-        grid.Children.Add(scroll);
-        Grid.SetRow(scroll, 0);
-
-        // Añadir el botón en la segunda fila
-        grid.Children.Add(_botonInsertar);
-        Grid.SetRow(_botonInsertar, 1);
-
-        // Asignar el Grid al MainVSL
-        MainVSL = new VerticalStackLayout
+        VerticalStackLayout contenidoScroll = new VerticalStackLayout()
         {
             Children =
-        {
-            grid
-        }
+            {
+                new Label(){Text = "Hora de Inicio", Margin = new Thickness(10, 2, 2, 2)},
+                _tpHoraInicio,
+
+                 new Label(){Text = "Hora de Fin", Margin = new Thickness(10, 2, 2, 2)},
+                _tpHoraFin,
+                _selectorDia,
+                _selectorEscuela,
+                _selectorDeporte,
+                _selectorProfesor
+            }
         };
+
+        scroll.Content = contenidoScroll;
+
+        MainVSL = new VerticalStackLayout()
+        {
+            Children =
+            {
+                contenidoScroll,
+                _botonInsertar
+            }
+        };
+
+
     }
 
+    private void validarTimePickers()
+    {
+        if (_tpHoraInicio == null || _tpHoraFin == null)
+            throw new Exception("Los selesctores de hora deben estar inicializados");
+
+        DateTime inicio = DateTime.Today.Add(_tpHoraInicio.Time);
+        DateTime fin = DateTime.Today.Add(_tpHoraFin.Time);
+
+        if (fin <= inicio)
+            fin = fin.AddDays(1); // Sumamos un día si la hora de fin es técnicamente después de medianoche
+
+        TimeSpan duracion = fin - inicio;
+
+        if (duracion.TotalMinutes <= 0 || duracion.TotalHours > 12)
+            throw new Exception("Duración inválida. La clase no puede durar más de 12 horas.");
+
+    }
 
     // EVENTOS
 
@@ -169,10 +165,33 @@ public class AgregarClase : ContentView
     {
 		try
 		{
+           // validarTimePickers();
+
+            // Asinar el profesor
+            if (_selectorProfesor == null || _selectorProfesor.SelectedItem == null) throw new Exception("Debe seleccionar un Profesor");
+
             string dni = _selectorProfesor.SelectedItem.ToString().Split(", ")[0];
             for (int indice = 0; indice < _listaProfesores.Count; indice++)
             {
                 if (_listaProfesores[indice].DNI == dni) _profesorElegido = _listaProfesores[indice];
+            }
+
+            // Asignar el deporte
+            if (_selectorDeporte == null || _selectorDeporte.SelectedItem == null) throw new Exception("Debe seleccionar un Deporte");
+
+            string nombreDeporte = _selectorDeporte.SelectedItem.ToString();
+            for (int indice = 0; indice < _listaDeportes.Count; indice++)
+            {
+                if (_listaDeportes[indice].Nombre == nombreDeporte) _deporteElegido = _listaDeportes[indice];
+            }
+
+            // Asignar la escuela
+            if (_selectorEscuela == null || _selectorEscuela.SelectedItem == null) throw new Exception("Debe seleccionar una Escuela");
+
+            string escuelaNombre = _selectorEscuela.SelectedItem.ToString();
+            for (int indice = 0; indice < _listaEscuelas.Count; indice++)
+            {
+                if (_listaDeportes[indice].Nombre == nombreDeporte) _escuelaElegida = _listaEscuelas[indice];
             }
 
             Horario horario = new Horario
@@ -191,7 +210,27 @@ public class AgregarClase : ContentView
 
     private void tpUnfocused(object sender, FocusEventArgs e)
     {
+        TimePicker timePicker = (TimePicker)sender;
+        try
+        {
+            switch (timePicker.StyleId)
+            {
+                case "tpHoraInicio":
 
+                    break;
+                case "tpHoraFin":
+                    // Se genera un bucle infinito, colocar en el evento del botón
+                    //validarTimePickers();
+
+                    break;
+
+
+            }
+        }
+        catch(Exception error)
+        {
+            Application.Current.MainPage.DisplayAlert("ERROR", error.Message, "Ok");
+        }
     }
     private void pUnfocused(object sender, EventArgs e)
     {
