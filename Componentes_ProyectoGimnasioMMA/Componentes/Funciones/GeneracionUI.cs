@@ -583,6 +583,75 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
 
             return carta;
         }
+        public static Frame CrearCartaAlumnoBotonIndividual(Alumno alumno, EventHandler<TappedEventArgs> evento, Action<Alumno, bool> seleccionCambioCallback, Color colorNormal, Color colorSeleccionado, string texto, string textoAlternativo)
+        {
+            TapGestureRecognizer tapGesture = new TapGestureRecognizer();
+            tapGesture.Tapped += evento;
+
+            var elementos = new List<View>
+    {
+        new Label
+        {
+            Text = alumno.DNI,
+            FontAttributes = FontAttributes.Bold,
+            FontSize = 16,
+            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
+        },
+        new Label
+        {
+            Text = alumno.Nombre,
+            FontAttributes = FontAttributes.Bold,
+            FontSize = 16,
+            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
+        },
+        new Label
+        {
+            Text = alumno.Apellidos,
+            FontAttributes = FontAttributes.Bold,
+            FontSize = 16,
+            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
+        }
+    };
+
+            var botonSelector = new BotonSelector(texto, textoAlternativo, colorNormal, colorSeleccionado);
+            botonSelector.EstadoCambiado += (s, estaSeleccionado) =>
+            {
+                seleccionCambioCallback?.Invoke(alumno, estaSeleccionado);
+            };
+
+            elementos.Add(botonSelector);
+
+            Frame carta = new Frame
+            {
+                CornerRadius = 20,
+                BorderColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.DarkGray : Colors.LightGray,
+                BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.Black : Color.FromArgb("#F5F5F5"),
+                Margin = new Thickness(16),
+                Padding = new Thickness(24),
+                Shadow = new Shadow
+                {
+                    Brush = new SolidColorBrush(Application.Current.RequestedTheme == AppTheme.Dark ? Colors.White : Colors.Black),
+                    Offset = new Point(2, 2),
+                    Opacity = Application.Current.RequestedTheme == AppTheme.Dark ? 0.3f : 0.15f,
+                    Radius = 6
+                },
+                Content = new VerticalStackLayout
+                {
+                    Spacing = 10,
+                    Children = { }
+                }
+            };
+
+            foreach (var elemento in elementos)
+            {
+                ((VerticalStackLayout)carta.Content).Children.Add(elemento);
+            }
+
+            carta.GestureRecognizers.Add(tapGesture);
+
+            return carta;
+        }
+
 
 
         public static Frame CrearCartaAlumno(Alumno alumno, EventHandler<TappedEventArgs> evento)

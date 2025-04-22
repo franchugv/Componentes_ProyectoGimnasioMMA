@@ -161,6 +161,7 @@ public class AgregarClase : ContentView
 
     // EVENTOS
 
+
     private void controladorBotones(object sender, EventArgs e)
     {
 		try
