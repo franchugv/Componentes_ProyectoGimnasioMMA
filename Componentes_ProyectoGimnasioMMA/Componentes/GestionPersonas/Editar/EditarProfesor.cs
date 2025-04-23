@@ -78,10 +78,10 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
 
 
             // === Instanciar componentes ===
-            _eCDNI = GeneracionUI.CrearEntryConfirmacion("DNI", "eCDNI", entryUnfocus);
-            _eCNombre = GeneracionUI.CrearEntryConfirmacion("Nombre", "eCNombre", entryUnfocus);
-            _eCApellidos = GeneracionUI.CrearEntryConfirmacion("Apellidos", "eCApellidos", entryUnfocus);
-            _eNivel = GeneracionUI.CrearEntryConfirmacion("Inserte el nivel del Profesor", "eCNivel", entryUnfocus);
+            _eCDNI = GeneracionUI.CrearEntryConfirmacion("Ingrese un nuevo DNI", "eCDNI", entryUnfocus);
+            _eCNombre = GeneracionUI.CrearEntryConfirmacion("Ingrese un nuevo Nombre", "eCNombre", entryUnfocus);
+            _eCApellidos = GeneracionUI.CrearEntryConfirmacion("Ingrese nuevos Apellidos", "eCApellidos", entryUnfocus);
+            _eNivel = GeneracionUI.CrearEntryConfirmacion("Ingrese un nuevo nivel del Profesor", "eCNivel", entryUnfocus);
 
             _selectorEscuelaNuevaAgregar = GeneracionUI.CrearPickerConfirmacion("sEscuelaAgregar", "Seleccione una Escuela a Agregar", _listaNombresEscuelasAgregar, pickerFocusChanged);
             if (_listaNombresEscuelasAgregar.Count < 1) _selectorEscuelaNuevaAgregar.PickerEditar.IsEnabled = false;
@@ -163,6 +163,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
             _eCNombre.Texto = _profesorEditar.Nombre;
             _eCApellidos.Texto = _profesorEditar.Apellidos;
             _eNivel.Texto = _profesorEditar.Nivel;
+            _pSelectorUsuarioNuevo.PickerEditar.SelectedItem = _profesorEditar.CorreoProfesor;
         }
         private void CargarDatosConstructor()
         {
@@ -324,11 +325,6 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
             {
                 // Recursos
 
-                string dni = null;
-                string nombre = null;
-                string apellidos = null;
-                string nivel = null;
-                string correoUsuario = null;
 
                 // Tablas Intermedias
                 Escuela escuelaVieja = null;
@@ -336,54 +332,13 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
 
                 Deporte deporteViejo = null;
                 Deporte deporteNuevo = null;
+                 
+                // VALIDACIÓN
+                if (_pSelectorUsuarioNuevo.PickerEditar.SelectedItem == null) throw new Exception("Para poder cambiar de usuario debe seleccionar uno");
+                //if (_pDeporteNuevoAgregar.EstaSeleccionado && _pDeporteViejoBorrar.EstaSeleccionado) throw new Exception("Solo podemos seleccionar o un deporte a Agregar o un deporte a Eliminar, no Ambos");
 
+                // Asignar Deporte a un profesor
 
-
-                if (_eCDNI.EstaSeleccionado)
-                {
-                    PersonaValidacion profesor = new PersonaValidacion(_eCDNI.Texto, TipoMiembro.DNI);
-                    dni = profesor.DNI;
-                }
-                if (_eCNombre.EstaSeleccionado)
-                {
-                    PersonaValidacion profesor = new PersonaValidacion(_eCNombre.Texto, TipoMiembro.Nombre);
-                    nombre = profesor.Nombre;
-                }
-                if (_eCApellidos.EstaSeleccionado)
-                {
-                    PersonaValidacion profesor = new PersonaValidacion(_eCApellidos.Texto, TipoMiembro.Apellidos);
-                    apellidos = profesor.Apellidos;
-                }
-                if (_eNivel.EstaSeleccionado)
-                {
-                    Profesores profesor = new Profesores(_eNivel.Texto, TipoValorProfesor.Nivel);
-                    nivel = profesor.Nivel;
-                }
-                if (_pSelectorUsuarioNuevo.EstaSeleccionado)
-                {
-                    if (_pSelectorUsuarioNuevo.PickerEditar.SelectedItem == null) throw new Exception("Para poder cambiar de usuario debe seleccionar uno");
-                    Profesores profesor = new Profesores(_pSelectorUsuarioNuevo.PickerEditar.SelectedItem.ToString(), TipoValorProfesor.CorreoProfesor);
-                    nivel = profesor.Nivel;
-                }
-
-
-                if (_selectorEscuelaNuevaAgregar.EstaSeleccionado)
-                {
-                    foreach (Escuela escuela in _listaEscuelasAgregar)
-                    {
-                        if (escuela.Nombre == _selectorEscuelaNuevaAgregar.PickerEditar.SelectedItem.ToString()) nuevaEscuela = escuela;
-                    }
-                    _api_bd.AsignarEscuelaAProfesor(_profesorEditar.DNI, nuevaEscuela.Id);
-                }
-
-                if (_selectorEscuelaViejaEliminar.EstaSeleccionado)
-                {
-                    foreach (Escuela escuela in _listaEscuelasEliminar)
-                    {
-                        if (escuela.Nombre ==_selectorEscuelaViejaEliminar.PickerEditar.SelectedItem.ToString()) escuelaVieja = escuela;
-                    }
-                    _api_bd.EliminarProfesorDeEscuela(_profesorEditar.DNI, escuelaVieja.Id);
-                }
                 if (_pDeporteNuevoAgregar.EstaSeleccionado)
                 {
                     foreach (Deporte deporte in _listaDeportesAgregar)
@@ -392,6 +347,8 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
                     }
                     _api_bd.AsignarDeporteAProfesor(_profesorEditar.DNI, deporteNuevo.Id);
                 }
+
+                // Eliminar Deporte de un profesor
                 if (_pDeporteViejoBorrar.EstaSeleccionado)
                 {
                     foreach (Deporte deporte in _listaDeportesEliminar)
@@ -401,11 +358,33 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
                     _api_bd.AsignarDeporteAProfesor(_profesorEditar.DNI, deporteViejo.Id);
                 }
 
-                if(nombre != null || apellidos != null || nivel != null || correoUsuario != null)
+
+                // Agregar Profesor a Escuela
+                if (_selectorEscuelaNuevaAgregar.EstaSeleccionado)
                 {
-                    _api_bd.ActualizarProfesor(_profesorEditar.DNI, nombre, apellidos, nivel, correoUsuario);
+                    foreach (Escuela escuela in _listaEscuelasAgregar)
+                    {
+                        if (escuela.Nombre == _selectorEscuelaNuevaAgregar.PickerEditar.SelectedItem.ToString()) nuevaEscuela = escuela;
+                    }
+                    _api_bd.AsignarEscuelaAProfesor(_profesorEditar.DNI, nuevaEscuela.Id);
                 }
 
+                // Eliminar Profesor de Escuela
+                if (_selectorEscuelaViejaEliminar.EstaSeleccionado)
+                {
+                    foreach (Escuela escuela in _listaEscuelasEliminar)
+                    {
+                        if (escuela.Nombre == _selectorEscuelaViejaEliminar.PickerEditar.SelectedItem.ToString()) escuelaVieja = escuela;
+                    }
+                    _api_bd.EliminarProfesorDeEscuela(_profesorEditar.DNI, escuelaVieja.Id);
+                }
+
+
+            
+                Profesores profesor = new Profesores(_eCNombre.Texto, _eCApellidos.Texto, _eCDNI.Texto, _eNivel.Texto, _pSelectorUsuarioNuevo.PickerEditar.SelectedItem.ToString());
+
+                _api_bd.ActualizarProfesor(_profesorEditar.DNI, profesor.Nombre, profesor.Apellidos, profesor.Nivel, profesor.CorreoProfesor);
+                
                 EventoVolverPaginaPrincipal?.Invoke();
 
             }

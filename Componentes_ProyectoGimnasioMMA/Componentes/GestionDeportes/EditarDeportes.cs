@@ -51,13 +51,20 @@ public class EditarDeportes : ContentView
     }
     protected void GenerarUI()
     {
-        _eNombre = GeneracionUI.CrearEntryConfirmacion("Ingrese el Nombre del deporte a agregar", "eNombre", unfocusedEntry);
-        _eFederacion = GeneracionUI.CrearEntryConfirmacion("Ingrese la Federación del deporte a agregar", "eFederacion", unfocusedEntry);
-        _botonInsertar = GeneracionUI.CrearBoton("Insertar Deporte", "bIDeporte", controladorBotones);
+        _eNombre = GeneracionUI.CrearEntryConfirmacion("Ingrese el Nombre del deporte a Actualizar", "eNombre", unfocusedEntry);
+        _eFederacion = GeneracionUI.CrearEntryConfirmacion("Ingrese la Federación del deporte a Actualizar", "eFederacion", unfocusedEntry);
+        _botonInsertar = GeneracionUI.CrearBoton("Actualizar Deporte", "bIDeporte", controladorBotones);
 
         _mainVSL.Children.Add(_eNombre);
         _mainVSL.Children.Add(_eFederacion);
         _mainVSL.Children.Add(_botonInsertar);
+    }
+
+    private void AsignarDatos()
+    {
+        _eNombre.Texto = _deporte.Nombre;
+        _eFederacion.Texto = _deporte.Federacion;
+       
     }
 
     private void controladorBotones(object sender, EventArgs e)

@@ -53,18 +53,18 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
                 listaNombresEscuelasEliminar.Add(escuela.Nombre);
             }
             // Inctanciar Componentes de la interfaz
-            _eDNI = GeneracionUI.CrearEntryConfirmacion("DNI", "eDNI", entryUnfocus);
-            _eNombre = GeneracionUI.CrearEntryConfirmacion("Nombre", "eNombre", entryUnfocus);
-            _eApellidos = GeneracionUI.CrearEntryConfirmacion("Apellidos", "eApellidos", entryUnfocus);
+            _eDNI = GeneracionUI.CrearEntryConfirmacion("Ingrese un nuevo DNI", "eDNI", entryUnfocus);
+            _eNombre = GeneracionUI.CrearEntryConfirmacion("Ingrese un nuevo Nombre", "eNombre", entryUnfocus);
+            _eApellidos = GeneracionUI.CrearEntryConfirmacion("Ingrese unos nuevos Apellidos", "eApellidos", entryUnfocus);
 
             _pickerCategoriaEdad = GeneracionUI.CrearPickerConfirmacion("pCategoriaEdad", "Seleccione su categoría de Edad", Alumno.ObtenerCategoriasEdad, pickerFocusChanged);
             _pickerNuevaEscuela = GeneracionUI.CrearPickerConfirmacion("sEscuela", "Seleccione una Escuela a Agregar", listaNombresEscuelasAgregar, pickerFocusChanged);
-            if(listaNombresEscuelasAgregar.Count > 0)
+            if(listaNombresEscuelasAgregar.Count <= 0)
             {
                 _pickerNuevaEscuela.PickerEditar.IsEnabled = false;
             }
             _pickerEliminarEscuela = GeneracionUI.CrearPickerConfirmacion("sEscuela", "Seleccione una Escuela a Eliminar", listaNombresEscuelasEliminar, pickerFocusChanged);
-            if (listaNombresEscuelasEliminar.Count > 0)
+            if (listaNombresEscuelasEliminar.Count <= 0)
             {
                 _pickerEliminarEscuela.PickerEditar.IsEnabled = false;
             }
@@ -87,8 +87,16 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
             MAIN_VSL.Children.Add(
                 _botonEditar
             );
+
+            AsignarDatos();
         }
 
+        private void AsignarDatos()
+        {
+            _eNombre.Texto = _alumnoAntiguo.Nombre;
+            _eApellidos.Texto = _alumnoAntiguo.Apellidos;
+            _pickerCategoriaEdad.PickerEditar.SelectedItem = _alumnoAntiguo.CategoriaEdadAlumno;           
+        }
         protected override void entryUnfocus(object sender, FocusEventArgs e)
         {
             Entry entry = (Entry)sender;
@@ -143,36 +151,13 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
             try
             {
                 // Variables locales
-                string dni = null;
-                string nombre = null;
-                string apellidos = null;
-                string categoriaEdad = null;
-
                 Escuela escuelaAgregar = null;
                 Escuela escuelaEliminar = null;
 
-                if (_eDNI.EstaSeleccionado)
-                {
-                    Alumno alumno = new Alumno(_eDNI.Texto, TipoMiembro.DNI);
-                    dni = _eDNI.Texto;
-                }
-                if (_eNombre.EstaSeleccionado)
-                {
-                    Alumno alumno = new Alumno(_eNombre.Texto, TipoMiembro.Nombre);
-                    nombre = _eNombre.Texto;
-                }
-                if (_eApellidos.EstaSeleccionado)
-                {
-                    Alumno alumno = new Alumno(_eApellidos.Texto, TipoMiembro.Apellidos);
-                    apellidos = _eApellidos.Texto;
-                }
+                // Validación
+                if ((_pickerCategoriaEdad.EstaSeleccionado) && (_pickerCategoriaEdad.PickerEditar.SelectedItem == null)) throw new Exception("Seleccione una Categoría de Edad");
 
-                if (_pickerCategoriaEdad.EstaSeleccionado)
-                {
-                    if (_pickerCategoriaEdad.PickerEditar.SelectedItem == null) throw new Exception("Seleccione una Categoría de Edad");
-                    categoriaEdad = _pickerCategoriaEdad.PickerEditar.SelectedItem.ToString();
-                }
-
+                // Asignar Escuela a Agregar
                 if (_pickerNuevaEscuela.EstaSeleccionado)
                 {
                     if (_pickerNuevaEscuela.PickerEditar.SelectedItem == null) throw new Exception("Seleccione una Escuela a Agregar");
@@ -182,6 +167,8 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
                     }
 
                 }
+
+                // Asignar Escuela a Eliminar
                 if (_pickerEliminarEscuela.EstaSeleccionado)
                 {
                     if (_pickerEliminarEscuela.PickerEditar.SelectedItem == null) throw new Exception("Seleccione una Escuela a Eliminar");
@@ -191,10 +178,12 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
                     }
                 }
 
-                // TODO: Hacer update con la base de datos
+
+                // Crear relación Escuela/Alumno
                 if (_pickerNuevaEscuela.EstaSeleccionado && escuelaAgregar != null)
                     _api_bd.CrearRelacionEscuelaAlumno(_alumnoAntiguo, escuelaAgregar.Id);
 
+                // Eliminar Relación Escuela/Alumno
                 if (_pickerEliminarEscuela.EstaSeleccionado && escuelaEliminar != null)
                 {
                     // Controlar que no podamos dejar a un alumno sin escuelas
@@ -203,9 +192,10 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
                 }
 
 
+                Alumno alumno = new Alumno(_eDNI.Texto, _eNombre.Texto, _eApellidos.Texto, Alumno.StringToCategoriaEdad(_pickerCategoriaEdad.PickerEditar.SelectedItem.ToString()));
 
-                if (nombre != null || apellidos != null || categoriaEdad != null)
-                    _api_bd.ActualizarAlumno(_alumnoAntiguo.DNI, nombre, apellidos, categoriaEdad);
+                // Actualizar Alumno
+                _api_bd.ActualizarAlumno(_alumnoAntiguo.DNI, alumno.Nombre, alumno.Apellidos, _pickerCategoriaEdad.PickerEditar.SelectedItem.ToString());
 
                 EventoVolverPaginaPrincipal?.Invoke();
 

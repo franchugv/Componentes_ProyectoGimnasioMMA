@@ -134,8 +134,13 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
             _eCContrasenia.EntryEditar.IsPassword = true;
             
             _selectorTipoUsuario = GeneracionUI.CrearPickerConfirmacion("eTipoUsuario", "Seleccione un nuevo Tipo de Usuario", _tiposUsuariosPicker, SelectedIndexChanged);
+            if (_tiposUsuariosPicker.Count <= 0) _selectorTipoUsuario.IsEnabled = false;
+
             _selectorEscuelaAgregar = GeneracionUI.CrearPickerConfirmacion("eEscuela", "Selecciona la nueva Escuela", listaNombreEscuelas, SelectedIndexChanged);
+            if (listaNombreEscuelas.Count <= 0) _selectorEscuelaAgregar.IsEnabled = false;
+
             _selectorEscuelaEliminar = GeneracionUI.CrearPickerConfirmacion("eEscuela", "Selecciona una Escuela a Eliminar", listaNombreEscuelasSinUsuario, SelectedIndexChanged);
+            if(listaNombreEscuelasSinUsuario.Count <= 0) _selectorEscuelaEliminar.IsEnabled = false;
 
             // Añadir interfaz al vsl
             MAIN_VSL.Children.Add(
@@ -161,22 +166,22 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
                     MAIN_VSL.Children.Add(
                     _selectorEscuelaEliminar
                     );
-                }
-               
-
-                
-
-
+                }             
             }
-
-
-            
-
-
 
             _botonEditar = GeneracionUI.CrearBoton("Editar Usuario", "_botonInsertar", ControladorBoton);
 
             MAIN_VSL.Add(_botonEditar);
+
+            AsignarDatos();
+        }
+
+
+        private void AsignarDatos()
+        {
+            _eCCorreo.Texto = _usuarioEditar.Correo;
+            _eCNombre.Texto = _usuarioEditar.Nombre;
+            //_eCContrasenia.Texto = _usuarioEditar.Contrasenia;
         }
 
         // Evento a sobreescribir
@@ -221,8 +226,6 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
                     case "_eContrasenia":
                         _eCContrasenia.mostrarError(error.Message);
                         break;
-
-
                 }
             }
 
@@ -233,45 +236,11 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
             try
             {
                 // Recursos
-                string correo = null;
-                string nombre = null;
-                string contrasenia = null;
-                string tipoUsuario = null;
 
                 Escuela nuevaEscuela = null;
                 Escuela escuelaEliminar = null;
 
-                // En caso de estar seleccionado el checkbox, editaremos el valor
-
-                if (_eCNombre.EstaSeleccionado)
-                {
-                    // Validar
-                    Usuario usuario = new Usuario(_eCNombre.Texto, TipoDato.Nombre);
-                    nombre = usuario.Nombre;
-                }
-                if (_eCCorreo.EstaSeleccionado)
-                {
-                    // Validar
-                    Usuario usuario = new Usuario(_eCCorreo.Texto, TipoDato.Correo);
-                    correo = usuario.Correo;
-                }
-                if (_eCContrasenia.EstaSeleccionado)
-                {
-                    // Validar
-                    Usuario usuario = new Usuario(_eCContrasenia.Texto, TipoDato.Contrasenia);
-                    contrasenia = usuario.Contrasenia;
-                }
-
-
-
-                if (_selectorTipoUsuario.EstaSeleccionado)
-                {
-                    // Evitar que enviemos un dato null
-                    if (_selectorTipoUsuario.PickerEditar.SelectedItem == null) throw new Exception("Seleccione un tipo de usuario");
-
-                    // Asignar a la variable el dato elegido
-                    tipoUsuario = _selectorTipoUsuario.PickerEditar.SelectedItem.ToString();
-                }
+                if ((_selectorTipoUsuario.EstaSeleccionado) && (_selectorTipoUsuario.PickerEditar.SelectedItem == null)) throw new Exception("Seleccione un tipo de usuario");
 
                 // Escuelas a Agregar
                 if (_selectorEscuelaAgregar.EstaSeleccionado)
@@ -305,19 +274,17 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
                     if (_listaEscuelasEliminar.Count <= 1) throw new Exception("No puedes dejar un usuario sin Escuelas");
                     _api_bd.EliminarRelacionUsuariosEscuelas(_usuarioEditar, escuelaEliminar.Id);
                 }
-                   
 
 
 
-                // En caso de dejar solo un valor a editar, este se actualizará
-                if (correo != null || contrasenia != null || tipoUsuario != null || nombre != null)
+                Usuario usuario = new Usuario(_eCCorreo.Texto, _eCNombre.Texto, _eCContrasenia.Texto, _selectorTipoUsuario.PickerEditar.SelectedItem.ToString());
+
                 {
-                    _api_bd.ActualizarUsuario(_usuarioEditar.Correo, correo, nombre, contrasenia, tipoUsuario);
-                    Application.Current.MainPage.DisplayAlert("Actualización Correcta!!", $"El Usuario {_usuarioEditar.Nombre} ha sido actualizado con exito", "Aceptar");
+                    _api_bd.ActualizarUsuario(_usuarioEditar.Correo, usuario.Correo, usuario.Nombre, usuario.Contrasenia, _selectorTipoUsuario.PickerEditar.SelectedItem.ToString());
 
                     // En caso de actualizar el correo del usuario actual, se reiniciará la aplicación
 
-                    if(_usuario != null)
+                    if (_usuario != null)
                     {
                         if (_usuario.Correo == _usuarioEditar.Correo)
                         {
@@ -332,13 +299,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
                     {
                         EventoVolverPaginaPrincipal?.Invoke();
                     }
-
                 }
-                    
-
-
-
-
             }
             catch (Exception error)
             {
