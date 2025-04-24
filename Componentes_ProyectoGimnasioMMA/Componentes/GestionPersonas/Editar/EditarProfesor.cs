@@ -334,7 +334,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
                 Deporte deporteNuevo = null;
                  
                 // VALIDACIÓN
-                if (_pSelectorUsuarioNuevo.PickerEditar.SelectedItem == null) throw new Exception("Para poder cambiar de usuario debe seleccionar uno");
+                //if (_pSelectorUsuarioNuevo.PickerEditar.SelectedItem == null) throw new Exception("Para poder cambiar de usuario debe seleccionar uno");
                 //if (_pDeporteNuevoAgregar.EstaSeleccionado && _pDeporteViejoBorrar.EstaSeleccionado) throw new Exception("Solo podemos seleccionar o un deporte a Agregar o un deporte a Eliminar, no Ambos");
 
                 // Asignar Deporte a un profesor

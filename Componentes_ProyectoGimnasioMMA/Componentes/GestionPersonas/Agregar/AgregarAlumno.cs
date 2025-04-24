@@ -89,7 +89,6 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
                 // Validar Alumno
                 Alumno alumno = new Alumno(_eDNI.Texto, _eNombre.Texto, _eApellidos.Texto, Alumno.StringToCategoriaEdad(_pickerCategoriaEdad.SelectedItem.ToString()));
 
-                // TODO: Conexión con la base de datos, insertar alumno e hacer relación con escuela
                 _api_bd.InsertarAlumno(alumno);
                 _api_bd.CrearRelacionEscuelaAlumno(alumno, nuevaEscuela.Id);
 

@@ -166,7 +166,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
                     _api_bd.AgregarProfesor(profesor, usuarioElegido.Correo);
 
                 }
-                // TODO: Hacer que se pueda añadir un profesor sun usuario
+                // TODO: Hacer que se pueda añadir un profesor sin usuario
 
 
                 // Asignar a un profesor una escuela

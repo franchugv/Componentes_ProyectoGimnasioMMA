@@ -58,6 +58,8 @@ public class EditarDeportes : ContentView
         _mainVSL.Children.Add(_eNombre);
         _mainVSL.Children.Add(_eFederacion);
         _mainVSL.Children.Add(_botonInsertar);
+
+        AsignarDatos();
     }
 
     private void AsignarDatos()

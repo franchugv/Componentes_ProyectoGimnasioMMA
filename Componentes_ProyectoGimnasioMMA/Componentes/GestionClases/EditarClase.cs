@@ -10,28 +10,23 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionClases;
 public class EditarClase : ContentView
 {
     // RECURSOS
+
+
+    protected Horario _claseEditar;
     protected VerticalStackLayout MainVSL;
 
+
+
+    // Selectores para la fecha
     protected TimePicker _tpHoraInicio;
     protected TimePicker _tpHoraFin;
+    protected PickerConfirmacion _selectorDia;
 
-    protected Picker _selectorDia;
-    protected Picker _selectorEscuela;
-    protected Picker _selectorDeporte;
-    protected Picker _selectorProfesor;
+    protected PickerConfirmacion _selectorNuevoProfesor;
 
     protected Button _botonInsertar;
+
     // Listas
-    List<Escuela> _listaEscuelas;
-    List<string> _listaNombreEscuelas;
-    Escuela _escuelaElegida;
-
-
-    List<Deporte> _listaDeportes;
-    List<string> _listaNombreDeportes;
-    Deporte _deporteElegido;
-
-
     List<Profesores> _listaProfesores;
     List<string> _listaNombreProfesores;
     Profesores _profesorElegido;
@@ -45,6 +40,7 @@ public class EditarClase : ContentView
     public event Action EventoVolverPaginaPrincipal;
     public EditarClase(Horario clase ,Escuela escuela, Usuario usuario)
 	{
+        _claseEditar = clase;
         _escuela = escuela;
         _usuario = usuario;
 
@@ -58,26 +54,7 @@ public class EditarClase : ContentView
         _api_bd = new API_BD();
 
 
-        // Asignar Lista Escuelas
-        _listaEscuelas = new List<Escuela>();
-        _listaEscuelas = _api_bd.ObtenerEscuelasDeUsuario(_usuario.Correo);
-        _listaNombreEscuelas = new List<string>();
-
-        foreach (Escuela escuela in _listaEscuelas)
-        {
-            _listaNombreEscuelas.Add(escuela.Nombre);
-        }
-
-        // Asignar Lista Deportes
-        _listaDeportes = new List<Deporte>();
-        _listaDeportes = _api_bd.DevolverListaDeportes(_escuela.Id);
-        _listaNombreDeportes = new List<string>();
-
-        foreach (Deporte deporte in _listaDeportes)
-        {
-            _listaNombreDeportes.Add(deporte.Nombre);
-        }
-
+    
         // Asignar Lista Profesores
 
         _listaProfesores = new List<Profesores>();
@@ -100,12 +77,10 @@ public class EditarClase : ContentView
         _tpHoraInicio = GeneracionUI.CrearTimePicker("tpHoraInicio", tpUnfocused);
         _tpHoraFin = GeneracionUI.CrearTimePicker("tpHoraFin", tpUnfocused);
 
-        _selectorDia = GeneracionUI.CrearPicker("selectorDia", "Seleccione un Día de la Semana", Horario.DiasSemanaString, pUnfocused);
-        _selectorEscuela = GeneracionUI.CrearPicker("selectorEscuela", "Seleccione una Escuela", _listaNombreEscuelas, pUnfocused);
-        _selectorDeporte = GeneracionUI.CrearPicker("selectorDia", "Seleccione un Deporte para la Clase", _listaNombreDeportes, pUnfocused);
-        _selectorProfesor = GeneracionUI.CrearPicker("selectorProfesor", "Seleccione un Profesor para el Deporte", _listaNombreProfesores, pUnfocused);
+        _selectorDia = GeneracionUI.CrearPickerConfirmacion("selectorDia", "Seleccione un nuevo Día de la Semana", Horario.DiasSemanaString, pUnfocused);
+        _selectorNuevoProfesor = GeneracionUI.CrearPickerConfirmacion("selectorProfesor", "Seleccione un nuevo Profesor", _listaNombreProfesores, pUnfocused);
 
-        _botonInsertar = GeneracionUI.CrearBoton("Insertar Clase", "bInsertar", controladorBotones);
+        _botonInsertar = GeneracionUI.CrearBoton("Actualizar Clase", "bInsertar", controladorBotones);
         _botonInsertar.BackgroundColor = Colors.Green;
         _botonInsertar.FontAttributes = FontAttributes.Bold;
 
@@ -119,9 +94,7 @@ public class EditarClase : ContentView
                  new Label(){Text = "Hora de Fin", Margin = new Thickness(10, 2, 2, 2)},
                 _tpHoraFin,
                 _selectorDia,
-                _selectorEscuela,
-                _selectorDeporte,
-                _selectorProfesor
+                _selectorNuevoProfesor
             }
         };
 
@@ -136,7 +109,16 @@ public class EditarClase : ContentView
             }
         };
 
+        AsignarDatos();
+    }
 
+    private void AsignarDatos()
+    {
+
+        _tpHoraInicio.Time = _claseEditar.HoraInicio;
+        _tpHoraFin.Time = _claseEditar.HoraFin;
+        _selectorDia.PickerEditar.SelectedItem = _claseEditar.Dia.ToString();
+        _selectorNuevoProfesor.PickerEditar.SelectedItem = _claseEditar.ProfesorDni.ToString();
     }
 
 
@@ -168,36 +150,22 @@ public class EditarClase : ContentView
             // validarTimePickers();
 
             // Asinar el profesor
-            if (_selectorProfesor == null || _selectorProfesor.SelectedItem == null) throw new Exception("Debe seleccionar un Profesor");
+            if (_selectorNuevoProfesor == null || _selectorNuevoProfesor.PickerEditar.SelectedItem == null) throw new Exception("Debe seleccionar un Profesor");
 
-            string dni = _selectorProfesor.SelectedItem.ToString().Split(", ")[0];
+            string dni = _selectorNuevoProfesor.PickerEditar.SelectedItem.ToString().Split(", ")[0];
             for (int indice = 0; indice < _listaProfesores.Count; indice++)
             {
                 if (_listaProfesores[indice].DNI == dni) _profesorElegido = _listaProfesores[indice];
             }
 
-            // Asignar el deporte
-            if (_selectorDeporte == null || _selectorDeporte.SelectedItem == null) throw new Exception("Debe seleccionar un Deporte");
-
-            string nombreDeporte = _selectorDeporte.SelectedItem.ToString();
-            for (int indice = 0; indice < _listaDeportes.Count; indice++)
-            {
-                if (_listaDeportes[indice].Nombre == nombreDeporte) _deporteElegido = _listaDeportes[indice];
-            }
-
-            // Asignar la escuela
-            if (_selectorEscuela == null || _selectorEscuela.SelectedItem == null) throw new Exception("Debe seleccionar una Escuela");
-
-            string escuelaNombre = _selectorEscuela.SelectedItem.ToString();
-            for (int indice = 0; indice < _listaEscuelas.Count; indice++)
-            {
-                if (_listaDeportes[indice].Nombre == nombreDeporte) _escuelaElegida = _listaEscuelas[indice];
-            }
+         
 
             Horario horario = new Horario
-                (_tpHoraInicio.Time, _tpHoraFin.Time, Horario.ConvertirStringADiaSemana(_selectorDia.SelectedItem.ToString()), _profesorElegido.DNI, _deporteElegido.Id, _escuelaElegida.Id);
+                (_tpHoraInicio.Time, _tpHoraFin.Time, Horario.ConvertirStringADiaSemana(_selectorDia.PickerEditar.SelectedItem.ToString()), _profesorElegido.DNI, _claseEditar.DeporteId, _claseEditar.IdEscuela);
 
-            _api_bd.InsertarHorario(horario);
+            // Hacer Update
+            _api_bd.ActualizarClase(_claseEditar ,horario);
+            
 
             EventoVolverPaginaPrincipal?.Invoke();
 

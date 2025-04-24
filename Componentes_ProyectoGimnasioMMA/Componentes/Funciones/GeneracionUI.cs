@@ -24,6 +24,10 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             entry.EntryEditar.PlaceholderColor = Colors.Gray;
             entry.EntryEditar.Margin = new Thickness(10);
 
+            // Tamaño fijo
+            entry.EntryEditar.WidthRequest = 300;
+            entry.EntryEditar.HeightRequest = 50;
+
             entry.EntryEditar.Unfocused += evento;
 
             return entry;
@@ -39,10 +43,15 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             entry.EntryEditar.PlaceholderColor = Colors.Gray;
             entry.EntryEditar.Margin = new Thickness(10);
 
+            // Tamaño fijo
+            entry.EntryEditar.WidthRequest = 300;
+            entry.EntryEditar.HeightRequest = 50;
+
             entry.EntryEditar.Unfocused += evento;
 
             return entry;
         }
+
         #endregion
 
         #region Crear Botones Personalizados
@@ -74,7 +83,10 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
                 BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.Black : Colors.White,
                 TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.White : Colors.Black,
                 Title = titulo,
-                Margin = new Thickness(10)
+                Margin = new Thickness(10),
+
+                // Tamaño fijo
+                WidthRequest = 300,
             };
 
             foreach (var item in items)
@@ -97,6 +109,9 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             picker.PickerEditar.Title = titulo;
             picker.PickerEditar.Margin = new Thickness(10);
 
+            // Tamaño fijo
+            picker.PickerEditar.WidthRequest = 300;
+
             foreach (var item in items)
             {
                 picker.PickerEditar.Items.Add(item);
@@ -106,6 +121,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
 
             return picker;
         }
+
         #endregion
 
         #region Crear Time Pickers Personalizados
