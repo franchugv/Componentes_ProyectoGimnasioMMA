@@ -113,6 +113,7 @@ public class AgregarClase : ContentView
 
         VerticalStackLayout contenidoScroll = new VerticalStackLayout()
         {
+            HorizontalOptions = LayoutOptions.Start,
             Children =
             {
                 new Label(){Text = "Hora de Inicio", Margin = new Thickness(10, 2, 2, 2)},
@@ -125,6 +126,7 @@ public class AgregarClase : ContentView
                 _selectorDeporte,
                 _selectorProfesor
             }
+            
         };
 
         scroll.Content = contenidoScroll;
@@ -193,7 +195,7 @@ public class AgregarClase : ContentView
             string escuelaNombre = _selectorEscuela.SelectedItem.ToString();
             for (int indice = 0; indice < _listaEscuelas.Count; indice++)
             {
-                if (_listaDeportes[indice].Nombre == nombreDeporte) _escuelaElegida = _listaEscuelas[indice];
+                if (_listaEscuelas[indice].Nombre == escuelaNombre) _escuelaElegida = _listaEscuelas[indice];
             }
 
             Horario horario = new Horario

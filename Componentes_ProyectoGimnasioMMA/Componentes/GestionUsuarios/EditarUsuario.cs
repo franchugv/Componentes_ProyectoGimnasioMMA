@@ -231,79 +231,27 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
 
         }
 
-        private void ControladorBoton(object sender, EventArgs e)
+        private async void ControladorBoton(object sender, EventArgs e)
         {
             try
             {
-                // Recursos
 
-                Escuela nuevaEscuela = null;
-                Escuela escuelaEliminar = null;
+                bool confirmar = await GeneracionUI.MostrarConfirmacion(Application.Current.MainPage, "Ventana confirmación", $"¿Desea Actualizar a Usuario {_usuarioEditar.Nombre}?");
 
-                if ((_selectorTipoUsuario.EstaSeleccionado) && (_selectorTipoUsuario.PickerEditar.SelectedItem == null)) throw new Exception("Seleccione un tipo de usuario");
-
-                // Escuelas a Agregar
-                if (_selectorEscuelaAgregar.EstaSeleccionado)
+                if (confirmar)
                 {
-                    if (_selectorEscuelaAgregar.PickerEditar.SelectedItem == null) throw new Exception("Seleccione una Escuela a Agregar");
-                    for (int indice = 0; indice < _listaEscuelasAgregar.Count; indice++)
-                    {
-                        if (_selectorEscuelaAgregar.PickerEditar.SelectedItem.ToString() == _listaEscuelasAgregar[indice].Nombre) nuevaEscuela = _listaEscuelasAgregar[indice];
-                    }
-
-
-                }
-
-                // Escuelas a Eliminar
-                if (_selectorEscuelaEliminar.EstaSeleccionado)
-                {
-                    if (_selectorEscuelaEliminar.PickerEditar.SelectedItem == null) throw new Exception("Seleccione una Escuela a Eliminar");
-                    for (int indice = 0; indice < _listaEscuelasEliminar.Count; indice++)
-                    {
-                        if (_selectorEscuelaEliminar.PickerEditar.SelectedItem.ToString() == _listaEscuelasEliminar[indice].Nombre) escuelaEliminar = _listaEscuelasEliminar[indice];
-                    }
-                }
-
-                // Insercciones en la Base de datos
-                if (nuevaEscuela != null && _selectorEscuelaAgregar.EstaSeleccionado) _api_bd.
-                CrearRelacionUsuariosEscuelas(_usuarioEditar, nuevaEscuela.Id);
-
-
-                if (escuela != null && _selectorEscuelaEliminar.EstaSeleccionado)
-                {
-                    if (_listaEscuelasEliminar.Count <= 1) throw new Exception("No puedes dejar un usuario sin Escuelas");
-                    _api_bd.EliminarRelacionUsuariosEscuelas(_usuarioEditar, escuelaEliminar.Id);
-                }
+                    ActualizarUsuario();
 
 
 
-                Usuario usuario = new Usuario(_eCCorreo.Texto, _eCNombre.Texto, _eCContrasenia.Texto, _selectorTipoUsuario.PickerEditar.SelectedItem.ToString());
+                    await Application.Current.MainPage.DisplayAlert("Usuario Editado con éxito", $"El Usuario {_usuarioEditar.Nombre} ha sido editado Correctamente", "OK");
 
-                {
-                    _api_bd.ActualizarUsuario(_usuarioEditar.Correo, usuario.Correo, usuario.Nombre, usuario.Contrasenia, _selectorTipoUsuario.PickerEditar.SelectedItem.ToString());
-
-                    // En caso de actualizar el correo del usuario actual, se reiniciará la aplicación
-
-                    if (_usuario != null)
-                    {
-                        if (_usuario.Correo == _usuarioEditar.Correo)
-                        {
-                            EventoCerrarSesion?.Invoke();
-                        }
-                        else
-                        {
-                            EventoVolverPaginaPrincipal?.Invoke();
-                        }
-                    }
-                    else
-                    {
-                        EventoVolverPaginaPrincipal?.Invoke();
-                    }
+                    await Navigation.PopAsync();
                 }
             }
             catch (Exception error)
             {
-                Application.Current.MainPage.DisplayAlert("Error", error.Message, "Aceptar");
+                await Application.Current.MainPage.DisplayAlert("Error", error.Message, "Aceptar");
 
             }
             finally
@@ -312,6 +260,84 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
             }
         }
 
+        private void ActualizarUsuario()
+        {
+            // Recursos
 
+            Escuela nuevaEscuela = null;
+            Escuela escuelaEliminar = null;
+
+            //if ((_selectorTipoUsuario.EstaSeleccionado) && (_selectorTipoUsuario.PickerEditar.SelectedItem == null)) throw new Exception("Seleccione un tipo de usuario");
+
+            // Escuelas a Agregar
+            if (_selectorEscuelaAgregar.EstaSeleccionado)
+            {
+                if (_selectorEscuelaAgregar.PickerEditar.SelectedItem == null) throw new Exception("Seleccione una Escuela a Agregar");
+                for (int indice = 0; indice < _listaEscuelasAgregar.Count; indice++)
+                {
+                    if (_selectorEscuelaAgregar.PickerEditar.SelectedItem.ToString() == _listaEscuelasAgregar[indice].Nombre) nuevaEscuela = _listaEscuelasAgregar[indice];
+                }
+
+
+            }
+
+            // Escuelas a Eliminar
+            if (_selectorEscuelaEliminar.EstaSeleccionado)
+            {
+                if (_selectorEscuelaEliminar.PickerEditar.SelectedItem == null) throw new Exception("Seleccione una Escuela a Eliminar");
+                for (int indice = 0; indice < _listaEscuelasEliminar.Count; indice++)
+                {
+                    if (_selectorEscuelaEliminar.PickerEditar.SelectedItem.ToString() == _listaEscuelasEliminar[indice].Nombre) escuelaEliminar = _listaEscuelasEliminar[indice];
+                }
+            }
+
+            // Insercciones en la Base de datos
+            if (nuevaEscuela != null && _selectorEscuelaAgregar.EstaSeleccionado) _api_bd.
+            CrearRelacionUsuariosEscuelas(_usuarioEditar, nuevaEscuela.Id);
+
+
+            if (escuela != null && _selectorEscuelaEliminar.EstaSeleccionado)
+            {
+                if (_listaEscuelasEliminar.Count <= 1) throw new Exception("No puedes dejar un usuario sin Escuelas");
+                _api_bd.EliminarRelacionUsuariosEscuelas(_usuarioEditar, escuelaEliminar.Id);
+            }
+
+            // Asignar tipo de usuario, no se puede editar si eres gestor a otro gestor
+            string tipoUsuario = null;
+
+            if (_selectorTipoUsuario.EstaSeleccionado) tipoUsuario = _selectorTipoUsuario.PickerEditar.SelectedItem.ToString();
+            else tipoUsuario = _usuarioEditar.TipoDeUsuario.ToString();
+
+
+            // La contraseña lo asignamos así dado a que no se rellenará automaticamente
+            string contrasenia = null;
+
+            if (_eCContrasenia.EstaSeleccionado) contrasenia = _eCContrasenia.Texto;
+            else contrasenia = _usuarioEditar.Contrasenia;
+
+            Usuario usuario = new Usuario(_eCCorreo.Texto, _eCNombre.Texto, contrasenia, tipoUsuario);
+
+            {
+                _api_bd.ActualizarUsuario(_usuarioEditar.Correo, usuario.Correo, usuario.Nombre, usuario.Contrasenia, usuario.TipoDeUsuario.ToString());
+
+                // En caso de actualizar el correo del usuario actual, se reiniciará la aplicación
+
+                if (_usuario != null)
+                {
+                    if (_usuario.Correo == _usuarioEditar.Correo)
+                    {
+                        EventoCerrarSesion?.Invoke();
+                    }
+                    else
+                    {
+                        EventoVolverPaginaPrincipal?.Invoke();
+                    }
+                }
+                else
+                {
+                    EventoVolverPaginaPrincipal?.Invoke();
+                }
+            }
+        }
     }
 }

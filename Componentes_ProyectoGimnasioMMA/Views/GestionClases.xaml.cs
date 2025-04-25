@@ -17,7 +17,7 @@ public partial class GestionClases : ContentPage
     protected Escuela _escuela;
     protected Usuario _usuario;
 
-    API_BD _api_bd;
+    protected API_BD _api_bd;
 
     public GestionClases(Escuela escuela, Usuario usuario)
 	{

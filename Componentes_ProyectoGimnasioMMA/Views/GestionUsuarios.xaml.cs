@@ -140,29 +140,52 @@ public partial class GestionUsuarios : ContentPage
 
     protected virtual void GenerarInterfaz()
     {
-
         bool generarBotonEliminar = true;
 
-        if(_listaUsuarios.Count >= 1)
+        if (_listaUsuarios.Count >= 1)
         {
             foreach (Usuario usuario in _listaUsuarios)
             {
+                // Si el usuario actual NO es administrador y el usuario en la lista SÍ lo es, no generamos la carta
+                if (_tipoUsuario != TipoUsuario.Administrador && usuario.TipoDeUsuario == TipoUsuario.Administrador)
+                {
+                    continue; // Saltar este usuario
+                }
+
+                // Lógica para decidir si se muestra el botón eliminar
                 if (_tipoUsuario == TipoUsuario.GestorGimnasios && usuario.TipoDeUsuario == TipoUsuario.GestorGimnasios)
                 {
                     generarBotonEliminar = false;
                 }
-                else generarBotonEliminar = true;
+                else
+                {
+                    generarBotonEliminar = true;
+                }
 
-                VerticalStackLayoutUsuarios.Children.Add(GeneracionUI.CrearCartaUsuarioGestor(usuario, CartaClickeada, ControladorBotones, ControladorBotones, true, generarBotonEliminar));
+                VerticalStackLayoutUsuarios.Children.Add(
+                    GeneracionUI.CrearCartaUsuarioGestor(
+                        usuario,
+                        CartaClickeada,
+                        ControladorBotones,
+                        ControladorBotones,
+                        true,
+                        generarBotonEliminar
+                    )
+                );
             }
         }
         else
         {
-            VerticalStackLayoutUsuarios.Children.Add(new Label() { Text = "No hay Usuarios Disponibles", TextColor = Colors.Gray });
+            VerticalStackLayoutUsuarios.Children.Add(
+                new Label()
+                {
+                    Text = "No hay Usuarios Disponibles",
+                    TextColor = Colors.Gray
+                }
+            );
         }
-
-
     }
+
     public virtual void CartaClickeada(object sender, TappedEventArgs e)
     {
         try
