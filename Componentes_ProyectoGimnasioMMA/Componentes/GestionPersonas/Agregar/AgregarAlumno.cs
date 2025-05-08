@@ -37,11 +37,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
         {
             try
             {
-                GenerarUI();
-
-
-
-                
+                GenerarUI();           
             }
             catch (Exception error)
             {

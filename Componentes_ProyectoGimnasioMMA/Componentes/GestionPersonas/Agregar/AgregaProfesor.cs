@@ -65,16 +65,14 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
                         _listaNombreDeportes.Add(deporte.Nombre);
                     }
                 }
-                else
-                {
-                    _listaNombreDeportes = new List<string>();
-                    _listaNombreDeportes.Add(SIN_DEPORTE);
-                }
+
 
                 // Asignar Usuarios Disponibles ******************************
                 _listaUsuariosDisponibles = _api_bd.ObtenerUsuariosTipoProfesorSinProfesorAsignado(_escuela.Id);
 
-                if(_listaUsuariosDisponibles.Count > 0)
+ 
+
+                if (_listaUsuariosDisponibles.Count > 0)
                 {
                     _listaNombresUsuariosDisponibles = new List<string>();
 
@@ -82,11 +80,6 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
                     {
                         _listaNombresUsuariosDisponibles.Add(usuario.Correo);
                     }
-                }
-                else
-                {
-                    _listaNombresUsuariosDisponibles = new List<string>();
-                    _listaNombresUsuariosDisponibles.Add(SIN_USUARIOS);
                 }
 
                 // Obtener Lista de escuelas ******************************
@@ -114,10 +107,15 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
             _eNombre = GeneracionUI.CrearEntryError("Nombre", "eNombre", entryUnfocus);
             _eApellidos = GeneracionUI.CrearEntryError("Apellidos", "eApellidos", entryUnfocus);
             _selectorEscuela = GeneracionUI.CrearPicker("sEscuela", "Seleccione una Escuela", _listaNombreEscuelas, pickerFocusChanged);
+            if (_listaNombreEscuelas.Count <= 0) _selectorEscuela.IsEnabled = false;
 
             _pSelectorUsuario = GeneracionUI.CrearPicker("sUsuario", "Seleccione un Usuario", _listaNombresUsuariosDisponibles, pickerFocusChanged);
+            if (_listaUsuariosDisponibles.Count <= 0) _pSelectorUsuario.IsEnabled = false;
+
             _eNivel = GeneracionUI.CrearEntryError("Inserte el nivel del Profesor", "eNivel", entryUnfocus);
             _pDeporte = GeneracionUI.CrearPicker("pDeporte", "Seleccione un deporte para el Profesorado", _listaNombreDeportes, selectedIndexChanged);
+            if (_listaNombreDeportes.Count <= 0) _pDeporte.IsEnabled = false;
+
             _botonInsertar = GeneracionUI.CrearBoton("Insertar Profesor", "bInsertar", controladorBoton);
 
             // Añadir interfaz al vsl
@@ -140,7 +138,11 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
             {
                 // El deporte puede ser null
                 Deporte deporteElegido = null;
-
+                string usuarioElegidoCadena = null;
+                if(_pSelectorUsuario.SelectedItem != null)
+                {
+                    usuarioElegidoCadena = _pSelectorUsuario.SelectedItem.ToString();
+                }
 
 
                 if(_pDeporte.SelectedItem != null && _pDeporte.SelectedItem.ToString() != SIN_DEPORTE)
@@ -152,7 +154,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
                 }
 
 
-                Profesores profesor = new Profesores(_eNombre.Texto, _eApellidos.Texto, _eDNI.Texto, _eNivel.Texto, deporteElegido, _pSelectorUsuario.SelectedItem.ToString());
+                Profesores profesor = new Profesores(_eNombre.Texto, _eApellidos.Texto, _eDNI.Texto, _eNivel.Texto, deporteElegido, usuarioElegidoCadena);
 
                 // Insertar Profesor
 
@@ -161,7 +163,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
                 {
                     foreach (Usuario usuario in _listaUsuariosDisponibles)
                     {
-                        if (usuario.Correo == _pSelectorUsuario.SelectedItem.ToString()) usuarioElegido = usuario;
+                        if (usuario.Correo == usuarioElegidoCadena) usuarioElegido = usuario;
                     }
                     _api_bd.AgregarProfesor(profesor, usuarioElegido.Correo);
 
