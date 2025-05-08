@@ -146,9 +146,19 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
         #endregion
         #region Crear Cards Personalizados
 
-
-        public static Frame CrearCartaEscuela(Escuela escuela, EventHandler<TappedEventArgs> evento)
+        public static Label CrearLabel(string texto, int size, Color colorClaro, Color colorOscuro)
         {
+            return new Label
+            {
+                Text = texto,
+                FontAttributes = FontAttributes.Bold,
+                FontSize = size,
+                TextColor = Application.Current.RequestedTheme == AppTheme.Dark ?  colorClaro : colorOscuro
+            };
+        }
+        public static Frame CrearCarta()
+        {
+
             Frame carta = new Frame
             {
                 CornerRadius = 20,
@@ -165,64 +175,20 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
                 },
                 Content = new VerticalStackLayout
                 {
-                    Spacing = 10,
-                    Children =
-            {
-                new Label
-                {
-                    Text = escuela.Id.ToString(),
-                    FontAttributes = FontAttributes.Bold,
-                    FontSize = 16,
-                    TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-                },
-                new Label
-                {
-                    Text = escuela.Nombre,
-                    FontAttributes = FontAttributes.Bold,
-                    FontSize = 16,
-                    TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-                },
-                new Label
-                {
-                    Text = escuela.Ubicacion,
-                    FontAttributes = FontAttributes.Bold,
-                    FontSize = 22,
-                    TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightBlue : Color.FromArgb("#1E88E5")
-                }
-            }
+                    Spacing = 10
                 }
             };
 
-            // Agregar el gesto de toque (tap)
-            TapGestureRecognizer tapGesture = new TapGestureRecognizer();
-            tapGesture.Tapped += evento; // Se asigna el evento recibido como parámetro
-
-            carta.GestureRecognizers.Add(tapGesture);
-
             return carta;
         }
-
-
         public static Frame CrearCartaMensaje(string mensaje)
         {
-            Frame carta = new Frame
+            Frame carta = CrearCarta();
+
+            carta.Content = new VerticalStackLayout
             {
-                CornerRadius = 20,
-                BorderColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.DarkGray : Colors.LightGray,
-                BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.Black : Color.FromArgb("#F5F5F5"),
-                Margin = new Thickness(16),
-                Padding = new Thickness(24),
-                Shadow = new Shadow
-                {
-                    Brush = new SolidColorBrush(Application.Current.RequestedTheme == AppTheme.Dark ? Colors.White : Colors.Black),
-                    Offset = new Point(2, 2),
-                    Opacity = Application.Current.RequestedTheme == AppTheme.Dark ? 0.3f : 0.15f,
-                    Radius = 6
-                },
-                Content = new VerticalStackLayout
-                {
-                    Spacing = 10,
-                    Children =
+                Spacing = 10,
+                Children =
             {
                 new Label
                 {
@@ -231,58 +197,23 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
                     FontSize = 22,
                     TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightBlue : Color.FromArgb("#1E88E5")
                 }
-            }
                 }
             };
+
 
             return carta;
         }
 
-
-        public static Frame CrearCartaUsuario(Usuario usuario, EventHandler<TappedEventArgs> evento)
+        // ESCUELAS
+        public static Frame CrearCartaEscuela(Escuela escuela, EventHandler<TappedEventArgs> evento)
         {
-            Frame carta = new Frame
+            Frame carta = CrearCarta();
+
+            carta.Content = new VerticalStackLayout
             {
-                CornerRadius = 20,
-                BorderColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.DarkGray : Colors.LightGray,
-                BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.Black : Color.FromArgb("#F5F5F5"),
-                Margin = new Thickness(16),
-                Padding = new Thickness(24),
-                Shadow = new Shadow
-                {
-                    Brush = new SolidColorBrush(Application.Current.RequestedTheme == AppTheme.Dark ? Colors.White : Colors.Black),
-                    Offset = new Point(2, 2),
-                    Opacity = Application.Current.RequestedTheme == AppTheme.Dark ? 0.3f : 0.15f,
-                    Radius = 6
-                },
-                Content = new VerticalStackLayout
-                {
-                    Spacing = 10,
-                    Children =
-            {
-                new Label
-                {
-                    Text = usuario.Correo,
-                    FontAttributes = FontAttributes.Bold,
-                    FontSize = 16,
-                    TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-                },
-                new Label
-                {
-                    Text = usuario.Nombre,
-                    FontAttributes = FontAttributes.Bold,
-                    FontSize = 16,
-                    TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-                },
-                new Label
-                {
-                    Text = usuario.OntenerTipoUsuario,
-                    FontAttributes = FontAttributes.Bold,
-                    FontSize = 16,
-                    TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.OrangeRed : Colors.Red
-                }
-            }
-                }
+                CrearLabel(escuela.Id.ToString(), 16,  Colors.LightGray, Colors.Gray),
+                CrearLabel(escuela.Nombre, 16, Colors.LightGray, Colors.Gray),
+                CrearLabel(escuela.Ubicacion, 22, Colors.LightBlue, Color.FromArgb("#1E88E5")),
             };
 
             // Agregar el gesto de toque (tap)
@@ -293,7 +224,96 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
 
             return carta;
         }
+        public static Frame CrearCartaEscuelaGestor(Escuela escuela, EventHandler<TappedEventArgs> evento, EventHandler editar, EventHandler eliminar, bool generarBotones)
+        {
+            // Crear el gesto de toque (tap)
+            TapGestureRecognizer tapGesture = new TapGestureRecognizer();
+            tapGesture.Tapped += evento; // Se asigna el evento recibido como parámetro
 
+            // Crear la lista de elementos de la carta
+            var elementos = new List<View>
+    {
+        CrearLabel(escuela.Id.ToString(), 16,  Colors.LightGray, Colors.Gray),
+        CrearLabel(escuela.Nombre, 16, Colors.LightGray, Colors.Gray),
+        CrearLabel(escuela.Ubicacion, 22, Colors.LightBlue, Color.FromArgb("#1E88E5")),
+
+    };
+
+            // Si se deben generar los botones, los agregamos a la lista
+            if (generarBotones)
+            {
+                Button btnEditar = new Button
+                {
+                    Text = "Editar",
+                    BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.MidnightBlue : Colors.Blue,
+                    TextColor = Colors.White,
+                    FontSize = 16,
+                    StyleId = "btnEditar"
+                };
+                btnEditar.Clicked += (sender, args) =>
+                {
+                    evento.Invoke(sender, new TappedEventArgs(null)); // Disparar evento Tapped
+                    editar.Invoke(sender, args); // Luego ejecutar el evento de edición
+                };
+
+                Button btnEliminar = new Button
+                {
+                    Text = "Eliminar",
+                    BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.DarkRed : Colors.Red,
+                    TextColor = Colors.White,
+                    FontSize = 16,
+                    StyleId = "btnEliminar"
+                };
+                btnEliminar.Clicked += (sender, args) =>
+                {
+                    evento.Invoke(sender, new TappedEventArgs(null)); // Disparar evento Tapped
+                    eliminar.Invoke(sender, args); // Luego ejecutar el evento de eliminación
+                };
+
+                elementos.Add(btnEditar);
+                elementos.Add(btnEliminar);
+            }
+
+            // Crear el Frame (carta)
+            Frame carta = CrearCarta();
+
+            // Agregar los elementos a la carta
+            foreach (var elemento in elementos)
+            {
+                ((VerticalStackLayout)carta.Content).Children.Add(elemento);
+            }
+
+            // Agregar el gesto de toque (tap)
+            carta.GestureRecognizers.Add(tapGesture);
+
+            return carta;
+        }
+
+        // USUARIOS
+        public static Frame CrearCartaUsuario(Usuario usuario, EventHandler<TappedEventArgs> evento)
+        {
+            Frame carta = CrearCarta();
+
+            carta.Content = new VerticalStackLayout
+            {
+                Spacing = 10,
+                Children =
+            {
+
+                CrearLabel(usuario.Correo, 16, Colors.LightGray, Colors.Gray),
+                CrearLabel(usuario.Nombre, 16, Colors.LightGray, Colors.Gray),
+                CrearLabel(usuario.OntenerTipoUsuario, 16, Colors.OrangeRed, Colors.Red),
+            }
+            };
+
+            // Agregar el gesto de toque (tap)
+            TapGestureRecognizer tapGesture = new TapGestureRecognizer();
+            tapGesture.Tapped += evento; // Se asigna el evento recibido como parámetro
+
+            carta.GestureRecognizers.Add(tapGesture);
+
+            return carta;
+        }
         public static Frame CrearCartaUsuarioGestor(Usuario usuario, EventHandler<TappedEventArgs> evento, EventHandler editar, EventHandler eliminar, bool mostrarEditar, bool mostrarEliminar)
         {
             // Crear el gesto de toque (tap)
@@ -303,27 +323,9 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             // Crear la lista de elementos de la carta
             var elementos = new List<View>
     {
-        new Label
-        {
-            Text = usuario.Correo,
-            FontAttributes = FontAttributes.Bold,
-            FontSize = 16,
-            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-        },
-        new Label
-        {
-            Text = usuario.Nombre,
-            FontAttributes = FontAttributes.Bold,
-            FontSize = 16,
-            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-        },
-        new Label
-        {
-            Text = usuario.OntenerTipoUsuario,
-            FontAttributes = FontAttributes.Bold,
-            FontSize = 16,
-            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.OrangeRed : Colors.Red
-        }
+                CrearLabel(usuario.Correo, 16, Colors.LightGray, Colors.Gray),
+                CrearLabel(usuario.Nombre, 16, Colors.LightGray, Colors.Gray),
+                CrearLabel(usuario.OntenerTipoUsuario, 16, Colors.OrangeRed, Colors.Red),
     };
 
             // Botón Editar si se indica
@@ -365,26 +367,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             }
 
             // Crear el Frame
-            Frame carta = new Frame
-            {
-                CornerRadius = 20,
-                BorderColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.DarkGray : Colors.LightGray,
-                BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.Black : Color.FromArgb("#F5F5F5"),
-                Margin = new Thickness(16),
-                Padding = new Thickness(24),
-                Shadow = new Shadow
-                {
-                    Brush = new SolidColorBrush(Application.Current.RequestedTheme == AppTheme.Dark ? Colors.White : Colors.Black),
-                    Offset = new Point(2, 2),
-                    Opacity = Application.Current.RequestedTheme == AppTheme.Dark ? 0.3f : 0.15f,
-                    Radius = 6
-                },
-                Content = new VerticalStackLayout
-                {
-                    Spacing = 10,
-                    Children = { }
-                }
-            };
+            Frame carta = CrearCarta();
 
             // Agregar los elementos al contenido
             foreach (var elemento in elementos)
@@ -398,107 +381,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             return carta;
         }
 
-        public static Frame CrearCartaEscuelaGestor(Escuela escuela, EventHandler<TappedEventArgs> evento, EventHandler editar, EventHandler eliminar, bool generarBotones)
-        {
-            // Crear el gesto de toque (tap)
-            TapGestureRecognizer tapGesture = new TapGestureRecognizer();
-            tapGesture.Tapped += evento; // Se asigna el evento recibido como parámetro
-
-            // Crear la lista de elementos de la carta
-            var elementos = new List<View>
-    {
-        new Label
-        {
-            Text = escuela.Id.ToString(),
-            FontAttributes = FontAttributes.Bold,
-            FontSize = 16,
-            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-        },
-        new Label
-        {
-            Text = escuela.Nombre,
-            FontAttributes = FontAttributes.Bold,
-            FontSize = 16,
-            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-        },
-        new Label
-        {
-            Text = escuela.Ubicacion,
-            FontAttributes = FontAttributes.Bold,
-            FontSize = 16,
-            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.OrangeRed : Colors.Red
-        }
-    };
-
-            // Si se deben generar los botones, los agregamos a la lista
-            if (generarBotones)
-            {
-                Button btnEditar = new Button
-                {
-                    Text = "Editar",
-                    BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.MidnightBlue : Colors.Blue,
-                    TextColor = Colors.White,
-                    FontSize = 16,
-                    StyleId = "btnEditar"
-                };
-                btnEditar.Clicked += (sender, args) =>
-                {
-                    evento.Invoke(sender, new TappedEventArgs(null)); // Disparar evento Tapped
-                    editar.Invoke(sender, args); // Luego ejecutar el evento de edición
-                };
-
-                Button btnEliminar = new Button
-                {
-                    Text = "Eliminar",
-                    BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.DarkRed : Colors.Red,
-                    TextColor = Colors.White,
-                    FontSize = 16,
-                    StyleId = "btnEliminar"
-                };
-                btnEliminar.Clicked += (sender, args) =>
-                {
-                    evento.Invoke(sender, new TappedEventArgs(null)); // Disparar evento Tapped
-                    eliminar.Invoke(sender, args); // Luego ejecutar el evento de eliminación
-                };
-
-                elementos.Add(btnEditar);
-                elementos.Add(btnEliminar);
-            }
-
-            // Crear el Frame (carta)
-            Frame carta = new Frame
-            {
-                CornerRadius = 20,
-                BorderColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.DarkGray : Colors.LightGray,
-                BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.Black : Color.FromArgb("#F5F5F5"),
-                Margin = new Thickness(16),
-                Padding = new Thickness(24),
-                Shadow = new Shadow
-                {
-                    Brush = new SolidColorBrush(Application.Current.RequestedTheme == AppTheme.Dark ? Colors.White : Colors.Black),
-                    Offset = new Point(2, 2),
-                    Opacity = Application.Current.RequestedTheme == AppTheme.Dark ? 0.3f : 0.15f,
-                    Radius = 6
-                },
-                Content = new VerticalStackLayout
-                {
-                    Spacing = 10,
-                    Children = { } // Se inicializa vacío
-                }
-            };
-
-            // Agregar los elementos a la carta
-            foreach (var elemento in elementos)
-            {
-                ((VerticalStackLayout)carta.Content).Children.Add(elemento);
-            }
-
-            // Agregar el gesto de toque (tap)
-            carta.GestureRecognizers.Add(tapGesture);
-
-            return carta;
-        }
-
+        // ALUMNOS
         public static Frame CrearCartaAlumnoGestor(Alumno alumno, EventHandler<TappedEventArgs> evento, EventHandler editar, EventHandler eliminar, bool generarBotones)
         {
             // Crear el gesto de toque (tap)
@@ -508,27 +391,10 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             // Crear la lista de elementos de la carta
             var elementos = new List<View>
     {
-        new Label
-        {
-            Text = alumno.DNI,
-            FontAttributes = FontAttributes.Bold,
-            FontSize = 16,
-            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-        },
-        new Label
-        {
-            Text = alumno.Nombre,
-            FontAttributes = FontAttributes.Bold,
-            FontSize = 16,
-            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-        },
-        new Label
-        {
-            Text = alumno.Apellidos,
-            FontAttributes = FontAttributes.Bold,
-            FontSize = 16,
-            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-        }
+        CrearLabel(alumno.DNI, 16, Colors.LightGray,  Colors.Gray),
+        CrearLabel(alumno.Nombre, 16, Colors.LightGray,  Colors.Gray),
+        CrearLabel(alumno.Apellidos, 16, Colors.LightGray,  Colors.Gray),
+
     };
 
             // Si se deben generar los botones, los agregamos a la lista
@@ -567,26 +433,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             }
 
             // Crear el Frame (carta)
-            Frame carta = new Frame
-            {
-                CornerRadius = 20,
-                BorderColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.DarkGray : Colors.LightGray,
-                BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.Black : Color.FromArgb("#F5F5F5"),
-                Margin = new Thickness(16),
-                Padding = new Thickness(24),
-                Shadow = new Shadow
-                {
-                    Brush = new SolidColorBrush(Application.Current.RequestedTheme == AppTheme.Dark ? Colors.White : Colors.Black),
-                    Offset = new Point(2, 2),
-                    Opacity = Application.Current.RequestedTheme == AppTheme.Dark ? 0.3f : 0.15f,
-                    Radius = 6
-                },
-                Content = new VerticalStackLayout
-                {
-                    Spacing = 10,
-                    Children = { } // Se inicializa vacío
-                }
-            };
+            Frame carta = CrearCarta();
 
             // Agregar los elementos a la carta
             foreach (var elemento in elementos)
@@ -605,29 +452,11 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             tapGesture.Tapped += evento;
 
             var elementos = new List<View>
-    {
-        new Label
-        {
-            Text = alumno.DNI,
-            FontAttributes = FontAttributes.Bold,
-            FontSize = 16,
-            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-        },
-        new Label
-        {
-            Text = alumno.Nombre,
-            FontAttributes = FontAttributes.Bold,
-            FontSize = 16,
-            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-        },
-        new Label
-        {
-            Text = alumno.Apellidos,
-            FontAttributes = FontAttributes.Bold,
-            FontSize = 16,
-            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-        }
-    };
+            {
+                CrearLabel(alumno.DNI, 16, Colors.LightGray,  Colors.Gray),
+                CrearLabel(alumno.Nombre, 16, Colors.LightGray,  Colors.Gray),
+                CrearLabel(alumno.Apellidos, 16, Colors.LightGray,  Colors.Gray),
+            };
 
             var botonSelector = new BotonSelector(texto, textoAlternativo, colorNormal, colorSeleccionado);
             botonSelector.EstadoCambiado += (s, estaSeleccionado) =>
@@ -637,26 +466,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
 
             elementos.Add(botonSelector);
 
-            Frame carta = new Frame
-            {
-                CornerRadius = 20,
-                BorderColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.DarkGray : Colors.LightGray,
-                BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.Black : Color.FromArgb("#F5F5F5"),
-                Margin = new Thickness(16),
-                Padding = new Thickness(24),
-                Shadow = new Shadow
-                {
-                    Brush = new SolidColorBrush(Application.Current.RequestedTheme == AppTheme.Dark ? Colors.White : Colors.Black),
-                    Offset = new Point(2, 2),
-                    Opacity = Application.Current.RequestedTheme == AppTheme.Dark ? 0.3f : 0.15f,
-                    Radius = 6
-                },
-                Content = new VerticalStackLayout
-                {
-                    Spacing = 10,
-                    Children = { }
-                }
-            };
+            Frame carta = CrearCarta();
 
             foreach (var elemento in elementos)
             {
@@ -667,53 +477,15 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
 
             return carta;
         }
-
-
-
         public static Frame CrearCartaAlumno(Alumno alumno, EventHandler<TappedEventArgs> evento)
         {
-            Frame carta = new Frame
+            Frame carta = CrearCarta();
+
+            carta.Content = new VerticalStackLayout()
             {
-                CornerRadius = 20,
-                BorderColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.DarkGray : Colors.LightGray,
-                BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.Black : Color.FromArgb("#F5F5F5"),
-                Margin = new Thickness(16),
-                Padding = new Thickness(24),
-                Shadow = new Shadow
-                {
-                    Brush = new SolidColorBrush(Application.Current.RequestedTheme == AppTheme.Dark ? Colors.White : Colors.Black),
-                    Offset = new Point(2, 2),
-                    Opacity = Application.Current.RequestedTheme == AppTheme.Dark ? 0.3f : 0.15f,
-                    Radius = 6
-                },
-                Content = new VerticalStackLayout
-                {
-                    Spacing = 10,
-                    Children =
-            {
-                new Label
-                {
-                    Text = alumno.DNI,
-                    FontAttributes = FontAttributes.Bold,
-                    FontSize = 16,
-                    TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-                },
-                new Label
-                {
-                    Text = alumno.Nombre,
-                    FontAttributes = FontAttributes.Bold,
-                    FontSize = 16,
-                    TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-                },
-                new Label
-                {
-                    Text = alumno.Apellidos,
-                    FontAttributes = FontAttributes.Bold,
-                    FontSize = 16,
-                    TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-                }
-            }
-                }
+                CrearLabel(alumno.DNI, 16, Colors.LightGray,  Colors.Gray),
+                CrearLabel(alumno.Nombre, 16, Colors.LightGray,  Colors.Gray),
+                CrearLabel(alumno.Apellidos, 16, Colors.LightGray,  Colors.Gray),
             };
 
             TapGestureRecognizer tapGesture = new TapGestureRecognizer();
@@ -722,50 +494,18 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
 
             return carta;
         }
+
+        // PROFESORES
         public static Frame CrearCartaProfesor(Profesores profesor, EventHandler<TappedEventArgs> evento)
         {
-            Frame carta = new Frame
+            Frame carta = CrearCarta();
+
+            carta.Content = new VerticalStackLayout()
             {
-                CornerRadius = 20,
-                BorderColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.DarkGray : Colors.LightGray,
-                BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.Black : Color.FromArgb("#F5F5F5"),
-                Margin = new Thickness(16),
-                Padding = new Thickness(24),
-                Shadow = new Shadow
-                {
-                    Brush = new SolidColorBrush(Application.Current.RequestedTheme == AppTheme.Dark ? Colors.White : Colors.Black),
-                    Offset = new Point(2, 2),
-                    Opacity = Application.Current.RequestedTheme == AppTheme.Dark ? 0.3f : 0.15f,
-                    Radius = 6
-                },
-                Content = new VerticalStackLayout
-                {
-                    Spacing = 10,
-                    Children =
-            {
-                new Label
-                {
-                    Text = profesor.DNI,
-                    FontAttributes = FontAttributes.Bold,
-                    FontSize = 16,
-                    TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-                },
-                new Label
-                {
-                    Text = profesor.Nombre,
-                    FontAttributes = FontAttributes.Bold,
-                    FontSize = 16,
-                    TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-                },
-                new Label
-                {
-                    Text = profesor.Apellidos,
-                    FontAttributes = FontAttributes.Bold,
-                    FontSize = 16,
-                    TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-                }
-            }
-                }
+                CrearLabel(profesor.DNI, 16, Colors.LightGray, Colors.Gray),
+                CrearLabel(profesor.Nombre, 16, Colors.LightGray, Colors.Gray),
+                CrearLabel(profesor.Apellidos, 16, Colors.LightGray, Colors.Gray),
+
             };
 
             TapGestureRecognizer tapGesture = new TapGestureRecognizer();
@@ -774,7 +514,71 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
 
             return carta;
         }
+        public static Frame CrearCartaProfesorGestor(Profesores profesor, EventHandler<TappedEventArgs> evento, EventHandler editar, EventHandler eliminar, bool generarBotones)
+        {
+            // Crear el gesto de toque (tap)
+            TapGestureRecognizer tapGesture = new TapGestureRecognizer();
+            tapGesture.Tapped += evento;
 
+            // Crear la lista de elementos de la carta
+            var elementos = new List<View>
+            {
+                CrearLabel(profesor.DNI, 16, Colors.LightGray, Colors.Gray),
+                CrearLabel(profesor.Nombre, 16, Colors.LightGray, Colors.Gray),
+                CrearLabel(profesor.Apellidos, 16, Colors.LightGray, Colors.Gray),
+            };
+
+            // Si se deben generar los botones, los agregamos a la lista
+            if (generarBotones)
+            {
+                Button btnEditar = new Button
+                {
+                    Text = "Editar",
+                    BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.MidnightBlue : Colors.Blue,
+                    TextColor = Colors.White,
+                    FontSize = 16,
+                    StyleId = "btnEditar"
+                };
+                btnEditar.Clicked += (sender, args) =>
+                {
+                    evento.Invoke(sender, new TappedEventArgs(null)); // Disparar evento Tapped
+                    editar.Invoke(sender, args); // Ejecutar el evento de edición
+                };
+
+                Button btnEliminar = new Button
+                {
+                    Text = "Eliminar",
+                    BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.DarkRed : Colors.Red,
+                    TextColor = Colors.White,
+                    FontSize = 16,
+                    StyleId = "btnEliminar"
+                };
+                btnEliminar.Clicked += (sender, args) =>
+                {
+                    evento.Invoke(sender, new TappedEventArgs(null)); // Disparar evento Tapped
+                    eliminar.Invoke(sender, args); // Ejecutar el evento de eliminación
+                };
+
+                elementos.Add(btnEditar);
+                elementos.Add(btnEliminar);
+            }
+
+            // Crear el Frame (carta)
+            Frame carta = CrearCarta();
+
+            // Agregar cada elemento a Children individualmente
+            foreach (var elemento in elementos)
+            {
+                ((VerticalStackLayout)carta.Content).Children.Add(elemento);
+            }
+
+            // Agregar el gesto de toque (tap)
+            carta.GestureRecognizers.Add(tapGesture);
+
+            return carta;
+        }
+
+        // DEPORTE
         public static Frame CrearCartaDeporteGestor(Deporte deporte, EventHandler<TappedEventArgs> evento, EventHandler editar, EventHandler eliminar)
         {
             // Crear el gesto de toque (tap)
@@ -784,27 +588,10 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             // Crear la lista de elementos
             var elementos = new List<View>
     {
-        new Label
-        {
-            Text = deporte.Id.ToString(),
-            FontAttributes = FontAttributes.Bold,
-            FontSize = 16,
-            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-        },
-        new Label
-        {
-            Text = deporte.Nombre,
-            FontAttributes = FontAttributes.Bold,
-            FontSize = 16,
-            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-        },
-        new Label
-        {
-            Text = deporte.Federacion,
-            FontAttributes = FontAttributes.Bold,
-            FontSize = 16,
-            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.OrangeRed : Colors.Red
-        }
+        CrearLabel(deporte.Id.ToString(), 16, Colors.LightGray, Colors.Gray),
+        CrearLabel(deporte.Nombre, 16, Colors.LightGray, Colors.Gray),
+        CrearLabel(deporte.Federacion, 16, Colors.OrangeRed, Colors.Red),
+
     };
 
             Button btnEditar = new Button
@@ -839,25 +626,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             elementos.Add(btnEliminar);
 
             // Crear el Frame
-            Frame carta = new Frame
-            {
-                CornerRadius = 20,
-                BorderColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.DarkGray : Colors.LightGray,
-                BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.Black : Color.FromArgb("#F5F5F5"),
-                Margin = new Thickness(16),
-                Padding = new Thickness(24),
-                Shadow = new Shadow
-                {
-                    Brush = new SolidColorBrush(Application.Current.RequestedTheme == AppTheme.Dark ? Colors.White : Colors.Black),
-                    Offset = new Point(2, 2),
-                    Opacity = Application.Current.RequestedTheme == AppTheme.Dark ? 0.3f : 0.15f,
-                    Radius = 6
-                },
-                Content = new VerticalStackLayout
-                {
-                    Spacing = 10
-                }
-            };
+            Frame carta = CrearCarta();
 
             // Agregar cada elemento a Children individualmente
             foreach (var elemento in elementos)
@@ -870,6 +639,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             return carta;
         }
 
+        // CLASES
         public static Frame CrearCartaClases(Horario horario, EventHandler<TappedEventArgs> evento, EventHandler editar, EventHandler eliminar, EventHandler gestionarAlumnos)
         {
             API_BD api_bd = new API_BD();
@@ -880,41 +650,12 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             // Crear la lista de elementos
             List <View> elementos = new List<View>
     {
-        new Label
-        {
-            Text = api_bd.ObtenerDeportePorId(horario.DeporteId).Nombre,
-            FontAttributes = FontAttributes.Bold,
-            FontSize = 16,
-            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-        },
-        new Label
-        {
-            Text = api_bd.ObtenerProfesorPorDni(horario.ProfesorDni).Nombre,
-            FontAttributes = FontAttributes.Bold,
-            FontSize = 16,
-            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.DarkGray : Colors.Gray
-        },
-        new Label
-        {
-            Text = "Día: " + horario.Dia.ToString(),
-            FontAttributes = FontAttributes.Bold,
-            FontSize = 16,
-            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-        },
-        new Label
-        {
-            Text = "Hora Inicio: " + horario.HoraInicio.ToString(),
-            FontAttributes = FontAttributes.Bold,
-            FontSize = 16,
-            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.OrangeRed : Colors.Red
-        },
-        new Label
-        {
-            Text = "Hora Fin: " +horario.HoraFin.ToString(),
-            FontAttributes = FontAttributes.Bold,
-            FontSize = 16,
-            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.OrangeRed : Colors.Red
-        }
+        CrearLabel(api_bd.ObtenerDeportePorId(horario.DeporteId).Nombre, 16, Colors.LightGray, Colors.Gray),
+        CrearLabel(api_bd.ObtenerProfesorPorDni(horario.ProfesorDni).Nombre, 16, Colors.LightGray, Colors.Gray),
+        CrearLabel("Día: " + horario.Dia.ToString(), 16, Colors.LightGray, Colors.Gray),
+        CrearLabel("Hora Inicio: " + horario.HoraInicio.ToString(), 16, Colors.OrangeRed, Colors.Red),
+        CrearLabel("Hora Fin: " +horario.HoraFin.ToString(), 16, Colors.OrangeRed, Colors.Red),
+
 
     };
 
@@ -965,25 +706,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             elementos.Add(btnEliminar);
 
             // Crear el Frame
-            Frame carta = new Frame
-            {
-                CornerRadius = 20,
-                BorderColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.DarkGray : Colors.LightGray,
-                BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.Black : Color.FromArgb("#F5F5F5"),
-                Margin = new Thickness(16),
-                Padding = new Thickness(24),
-                Shadow = new Shadow
-                {
-                    Brush = new SolidColorBrush(Application.Current.RequestedTheme == AppTheme.Dark ? Colors.White : Colors.Black),
-                    Offset = new Point(2, 2),
-                    Opacity = Application.Current.RequestedTheme == AppTheme.Dark ? 0.3f : 0.15f,
-                    Radius = 6
-                },
-                Content = new VerticalStackLayout
-                {
-                    Spacing = 10
-                }
-            };
+            Frame carta = CrearCarta();
 
             // Agregar cada elemento a Children individualmente
             foreach (var elemento in elementos)
@@ -995,95 +718,46 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
 
             return carta;
         }
-
-
-        public static Frame CrearCartaProfesorGestor(Profesores profesor, EventHandler<TappedEventArgs> evento, EventHandler editar, EventHandler eliminar, bool generarBotones)
+        public static Frame CrearCartaClasesProfesor(Horario horario, EventHandler<TappedEventArgs> evento, EventHandler eventoBoton, string textoBoton, Color colorBoton)
         {
+            API_BD api_bd = new API_BD();
             // Crear el gesto de toque (tap)
             TapGestureRecognizer tapGesture = new TapGestureRecognizer();
             tapGesture.Tapped += evento;
 
-            // Crear la lista de elementos de la carta
-            var elementos = new List<View>
+            // Crear la lista de elementos
+            List<View> elementos = new List<View>
     {
-        new Label
-        {
-            Text = profesor.DNI,
-            FontAttributes = FontAttributes.Bold,
-            FontSize = 16,
-            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-        },
-        new Label
-        {
-            Text = profesor.Nombre,
-            FontAttributes = FontAttributes.Bold,
-            FontSize = 16,
-            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-        },
-        new Label
-        {
-            Text = profesor.Apellidos,
-            FontAttributes = FontAttributes.Bold,
-            FontSize = 16,
-            TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.LightGray : Colors.Gray
-        }
+        CrearLabel(api_bd.ObtenerDeportePorId(horario.DeporteId).Nombre, 16, Colors.LightGray, Colors.Gray),
+        CrearLabel(api_bd.ObtenerProfesorPorDni(horario.ProfesorDni).Nombre, 16, Colors.LightGray, Colors.Gray),
+        CrearLabel("Día: " + horario.Dia.ToString(), 16, Colors.LightGray, Colors.Gray),
+        CrearLabel("Hora Inicio: " + horario.HoraInicio.ToString(), 16, Colors.OrangeRed, Colors.Red),
+        CrearLabel("Hora Fin: " +horario.HoraFin.ToString(), 16, Colors.OrangeRed, Colors.Red),
+
+
     };
 
-            // Si se deben generar los botones, los agregamos a la lista
-            if (generarBotones)
+            Button Boton = new Button
             {
-                Button btnEditar = new Button
-                {
-                    Text = "Editar",
-                    BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.MidnightBlue : Colors.Blue,
-                    TextColor = Colors.White,
-                    FontSize = 16,
-                    StyleId = "btnEditar"
-                };
-                btnEditar.Clicked += (sender, args) =>
-                {
-                    evento.Invoke(sender, new TappedEventArgs(null)); // Disparar evento Tapped
-                    editar.Invoke(sender, args); // Ejecutar el evento de edición
-                };
-
-                Button btnEliminar = new Button
-                {
-                    Text = "Eliminar",
-                    BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.DarkRed : Colors.Red,
-                    TextColor = Colors.White,
-                    FontSize = 16,
-                    StyleId = "btnEliminar"
-                };
-                btnEliminar.Clicked += (sender, args) =>
-                {
-                    evento.Invoke(sender, new TappedEventArgs(null)); // Disparar evento Tapped
-                    eliminar.Invoke(sender, args); // Ejecutar el evento de eliminación
-                };
-
-                elementos.Add(btnEditar);
-                elementos.Add(btnEliminar);
-            }
-
-            // Crear el Frame (carta)
-            Frame carta = new Frame
-            {
-                CornerRadius = 20,
-                BorderColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.DarkGray : Colors.LightGray,
-                BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.Black : Color.FromArgb("#F5F5F5"),
-                Margin = new Thickness(16),
-                Padding = new Thickness(24),
-                Shadow = new Shadow
-                {
-                    Brush = new SolidColorBrush(Application.Current.RequestedTheme == AppTheme.Dark ? Colors.White : Colors.Black),
-                    Offset = new Point(2, 2),
-                    Opacity = Application.Current.RequestedTheme == AppTheme.Dark ? 0.3f : 0.15f,
-                    Radius = 6
-                },
-                Content = new VerticalStackLayout
-                {
-                    Spacing = 10
-                }
+                Text = textoBoton,
+                BackgroundColor = colorBoton,
+                TextColor = Colors.White,
+                FontSize = 16,
+                StyleId = "Boton"
             };
+            Boton.Clicked += (sender, args) =>
+            {
+                evento.Invoke(sender, new TappedEventArgs(null));
+                eventoBoton.Invoke(sender, args);
+            };
+
+          
+
+
+            elementos.Add(Boton);
+
+            // Crear el Frame
+            Frame carta = CrearCarta();
 
             // Agregar cada elemento a Children individualmente
             foreach (var elemento in elementos)
@@ -1091,7 +765,6 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
                 ((VerticalStackLayout)carta.Content).Children.Add(elemento);
             }
 
-            // Agregar el gesto de toque (tap)
             carta.GestureRecognizers.Add(tapGesture);
 
             return carta;
@@ -1105,11 +778,6 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
         {
             bool respuesta = await page.DisplayAlert(titulo, mensaje, "Sí", "No");
             return respuesta;
-        }
-
-        internal static Picker CrearPicker(string v1, string v2, object unfocusedPicker)
-        {
-            throw new NotImplementedException();
         }
     }
 }
