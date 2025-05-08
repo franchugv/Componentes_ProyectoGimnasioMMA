@@ -382,6 +382,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
 
             
                 Profesores profesor = new Profesores(_eCNombre.Texto, _eCApellidos.Texto, _eCDNI.Texto, _eNivel.Texto, _pSelectorUsuarioNuevo.PickerEditar.SelectedItem.ToString());
+                _api_bd.ValidarRepeticionDNIAlumno(profesor.DNI, _escuela.Id);
 
                 _api_bd.ActualizarProfesor(_profesorEditar.DNI, profesor.Nombre, profesor.Apellidos, profesor.Nivel, profesor.CorreoProfesor);
                 

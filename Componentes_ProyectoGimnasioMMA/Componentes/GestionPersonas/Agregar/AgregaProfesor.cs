@@ -65,6 +65,10 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
                         _listaNombreDeportes.Add(deporte.Nombre);
                     }
                 }
+                else
+                {
+                    _listaNombreDeportes= new List<string>();
+                }
 
 
                 // Asignar Usuarios Disponibles ******************************
@@ -80,6 +84,10 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
                     {
                         _listaNombresUsuariosDisponibles.Add(usuario.Correo);
                     }
+                }
+                else
+                {
+                    _listaNombresUsuariosDisponibles = new List<string>();
                 }
 
                 // Obtener Lista de escuelas ******************************
@@ -136,6 +144,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
         {
             try
             {
+
                 // El deporte puede ser null
                 Deporte deporteElegido = null;
                 string usuarioElegidoCadena = null;
@@ -155,6 +164,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
 
 
                 Profesores profesor = new Profesores(_eNombre.Texto, _eApellidos.Texto, _eDNI.Texto, _eNivel.Texto, deporteElegido, usuarioElegidoCadena);
+                _api_bd.ValidarRepeticionDNIAlumno(profesor.DNI, _escuela.Id);
 
                 // Insertar Profesor
 

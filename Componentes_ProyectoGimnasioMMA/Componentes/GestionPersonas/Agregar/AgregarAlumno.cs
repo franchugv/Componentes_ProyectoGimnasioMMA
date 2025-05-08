@@ -84,6 +84,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
 
                 // Validar Alumno
                 Alumno alumno = new Alumno(_eDNI.Texto, _eNombre.Texto, _eApellidos.Texto, Alumno.StringToCategoriaEdad(_pickerCategoriaEdad.SelectedItem.ToString()));
+                _api_bd.ValidarRepeticionDNIProfesor(alumno.DNI, _escuela.Id);
 
                 _api_bd.InsertarAlumno(alumno);
                 _api_bd.CrearRelacionEscuelaAlumno(alumno, nuevaEscuela.Id);

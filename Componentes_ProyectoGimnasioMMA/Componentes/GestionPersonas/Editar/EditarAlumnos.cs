@@ -193,6 +193,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
 
 
                 Alumno alumno = new Alumno(_eDNI.Texto, _eNombre.Texto, _eApellidos.Texto, Alumno.StringToCategoriaEdad(_pickerCategoriaEdad.PickerEditar.SelectedItem.ToString()));
+                _api_bd.ValidarRepeticionDNIProfesor(alumno.DNI, _escuela.Id);
 
                 // Actualizar Alumno
                 _api_bd.ActualizarAlumno(_alumnoAntiguo.DNI, alumno.Nombre, alumno.Apellidos, _pickerCategoriaEdad.PickerEditar.SelectedItem.ToString());

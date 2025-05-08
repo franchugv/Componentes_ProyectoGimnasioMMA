@@ -77,6 +77,8 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
         #region Crear Pickers Personalizados
         public static Picker CrearPicker(string styleId, string titulo, List<string> items, EventHandler evento)
         {
+            if(items == null) items = new List<string>();
+
             Picker picker = new Picker
             {
                 StyleId = styleId,
