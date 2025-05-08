@@ -105,6 +105,8 @@ public class AgregarClase : ContentView
         _selectorDia = GeneracionUI.CrearPicker("selectorDia", "Seleccione un Día de la Semana", Horario.DiasSemanaString, pUnfocused);
         _selectorEscuela = GeneracionUI.CrearPicker("selectorEscuela", "Seleccione una Escuela", _listaNombreEscuelas, pUnfocused);
         _selectorDeporte = GeneracionUI.CrearPicker("selectorDia", "Seleccione un Deporte para la Clase", _listaNombreDeportes, pUnfocused);
+        if (_listaNombreDeportes.Count <= 0) _selectorDeporte.IsEnabled = false;
+
         _selectorProfesor = GeneracionUI.CrearPicker("selectorProfesor", "Seleccione un Profesor para el Deporte", _listaNombreProfesores, pUnfocused);
 
         _botonInsertar = GeneracionUI.CrearBoton("Insertar Clase", "bInsertar", controladorBotones);
