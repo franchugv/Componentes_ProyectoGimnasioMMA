@@ -78,15 +78,14 @@ public partial class GestionClases : ContentPage
         // Generar Cards de Profesores
         VerticalStackLayoutClases.Add(new Label() { Text = "Clases", HorizontalOptions = LayoutOptions.Center, FontAttributes = FontAttributes.Bold });
 
+        // Ordenamos la lista según los día de la semana
+        List<Horario> listaOrdenada = _listaHorarios.OrderBy(x => x.Dia).ToList();
 
         if (_listaHorarios.Count >= 1)
         {
-            foreach (Horario horario in _listaHorarios)
+            foreach (Horario horario in listaOrdenada)
             {
-
-
                 VerticalStackLayoutClases.Children.Add(GeneracionUI.CrearCartaClases(horario, CartaClickeada, ControladorBotones, ControladorBotones, ControladorBotones));
-
             }
         }
         else
@@ -121,15 +120,16 @@ public partial class GestionClases : ContentPage
             {
                 string deporteIdTexto = _api_bd.ObtenerIdDeportePorNombre(((Label)layout.Children[0]).Text).ToString();
                 string profesorDni = _api_bd.ObtenerDniPorNombreProfesor(((Label)layout.Children[1]).Text);
+                string dia = ((Label)layout.Children[2]).Text.Replace("Día: ", "");
                 string horaInicioTexto = ((Label)layout.Children[3]).Text.Replace("Hora Inicio: ", "");
-
                 if (int.TryParse(deporteIdTexto, out int deporteId) && TimeSpan.TryParse(horaInicioTexto, out TimeSpan horaInicio))
                 {
                     foreach (Horario horario in _listaHorarios)
                     {
                         if (horario.ProfesorDni == profesorDni &&
                             horario.DeporteId == deporteId &&
-                            horario.HoraInicio == horaInicio)
+                            horario.HoraInicio == horaInicio &&
+                            horario.Dia.ToString() == dia)
                         {
                             _horarioElegido = horario;
                             break;

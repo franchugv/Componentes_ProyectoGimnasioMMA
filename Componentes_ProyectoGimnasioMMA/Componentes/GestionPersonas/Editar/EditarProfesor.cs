@@ -77,7 +77,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
         {
 
 
-            // === Instanciar componentes ===
+            //  Instanciar componentes 
             _eCDNI = GeneracionUI.CrearEntryConfirmacion("Ingrese un nuevo DNI", "eCDNI", entryUnfocus);
             _eCNombre = GeneracionUI.CrearEntryConfirmacion("Ingrese un nuevo Nombre", "eCNombre", entryUnfocus);
             _eCApellidos = GeneracionUI.CrearEntryConfirmacion("Ingrese nuevos Apellidos", "eCApellidos", entryUnfocus);

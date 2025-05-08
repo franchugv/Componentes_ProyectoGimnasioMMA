@@ -12,16 +12,16 @@ public partial class GestionUsuarios : ContentPage
 {
     // Recursos
 
+    protected TipoUsuario _tipoUsuario;
+    protected ModoFiltroUsuarios _modoFiltro = new ModoFiltroUsuarios();
+
     List<Usuario> _listaUsuarios;
     protected Usuario _usuarioElegido;
 
-
-    protected TipoUsuario _tipoUsuario;
-
-    protected ModoFiltroUsuarios _modoFiltro = new ModoFiltroUsuarios();
     protected Escuela _escuela;
     protected API_BD api_bd;
     protected Usuario _usuario;
+
     // Controles
     protected SelectorEscuelaCV _selectorEscuela;
     protected SelectorUsuario _selectorUsuario;
@@ -99,6 +99,7 @@ public partial class GestionUsuarios : ContentPage
     {
         try
         {
+            // Varia en finción de si es un admin o no
             if(_tipoUsuario == TipoUsuario.Administrador)
             {
                 _listaUsuarios = api_bd.ObtenerListaTotalUsuarios();
@@ -129,10 +130,11 @@ public partial class GestionUsuarios : ContentPage
             _listaUsuarios = api_bd.ObtenerListaUsuariosSinEscuela();
         }
 
-        foreach (Usuario usuario in _listaUsuarios)
-        {
-          
+        // Lista ordenada en función del tipo de usuario
+        List<Usuario> listaOrdenada = _listaUsuarios.OrderBy(x => x.TipoDeUsuario).ToList();
 
+        foreach (Usuario usuario in listaOrdenada)
+        {
             VerticalStackLayoutUsuarios.Children.Add(GeneracionUI.CrearCartaUsuarioGestor(usuario, CartaClickeada, ControladorBotones, ControladorBotones, true, true));
         }
 
@@ -143,13 +145,16 @@ public partial class GestionUsuarios : ContentPage
         bool generarBotonEliminar = true;
 
         if (_listaUsuarios.Count >= 1)
-        {
-            foreach (Usuario usuario in _listaUsuarios)
+        {   
+            // Lista ordenada en función del tipo de usuario
+            List<Usuario> listaOrdenada = _listaUsuarios.OrderBy(x => x.TipoDeUsuario).ToList();
+
+            foreach (Usuario usuario in listaOrdenada)
             {
                 // Si el usuario actual NO es administrador y el usuario en la lista SÍ lo es, no generamos la carta
                 if (_tipoUsuario != TipoUsuario.Administrador && usuario.TipoDeUsuario == TipoUsuario.Administrador)
                 {
-                    continue; // Saltar este usuario
+                    continue; // Saltar este usuario, se que se ve brusco pero debo asegurarme de que no ocurra
                 }
 
                 // Lógica para decidir si se muestra el botón eliminar
