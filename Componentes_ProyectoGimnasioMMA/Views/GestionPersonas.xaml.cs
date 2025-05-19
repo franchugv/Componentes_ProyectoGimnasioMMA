@@ -14,20 +14,20 @@ public partial class GestionPersonas : ContentPage
     protected List<Profesores> _listaProfesores;
     protected Profesores _profesorElegido;
 
-
+    // LIST
     protected List<Alumno> _listaAlumnos;
     protected Alumno _alumnoElegido;
 
     TipoUsuario _tipoUsuario;
 
+    // Modelos de datos
     protected Escuela _escuela;
     protected Usuario _usuario;
+
+    // Api BD
     API_BD _api_bd;
 
-
-
-
-
+    // CONSTRUCTOR
     public GestionPersonas(Usuario usuario, Escuela escuela)
 	{
 		InitializeComponent();
@@ -40,7 +40,6 @@ public partial class GestionPersonas : ContentPage
 
 
     // PROPIEDADES
-
     public StackLayout MAUINSL
     {
         get
@@ -53,8 +52,8 @@ public partial class GestionPersonas : ContentPage
         }
     }
 
+    // INICIALIZACIÓN
 
-    // EVENTOS
     private void CargarDatosConstructor()
     {
         try
@@ -74,28 +73,16 @@ public partial class GestionPersonas : ContentPage
         }
     }
 
-
-
-
-    protected virtual void controladorBotonesProfesor(object sender, EventArgs e)
-    {
-
-    }
-    protected virtual void controladorBotonesAlumno(object sender, EventArgs e)
-    {
-
-    }
-
     protected virtual void generarUI()
     {
 
 
 
         // Generar Cards de Profesores
-        VerticalStackLayoutPersonas.Add(new Label() { Text = "Profesores" , HorizontalOptions = LayoutOptions.Center, FontAttributes = FontAttributes.Bold });
+        VerticalStackLayoutPersonas.Add(new Label() { Text = "Profesores", HorizontalOptions = LayoutOptions.Center, FontAttributes = FontAttributes.Bold });
 
 
-        if(_listaProfesores.Count >= 1)
+        if (_listaProfesores.Count >= 1)
         {
             foreach (Profesores profesores in _listaProfesores)
             {
@@ -113,7 +100,7 @@ public partial class GestionPersonas : ContentPage
         // Generar Cards de Alumnos
         VerticalStackLayoutPersonas.Add(new Label() { Text = "Alumnos", HorizontalOptions = LayoutOptions.Center, FontAttributes = FontAttributes.Bold });
 
-        if(_listaAlumnos.Count >= 1)
+        if (_listaAlumnos.Count >= 1)
         {
             foreach (Alumno alumnos in _listaAlumnos)
             {
@@ -130,6 +117,7 @@ public partial class GestionPersonas : ContentPage
 
     }
 
+    // EVENTOS
     protected void recargarUI()
     {
 
@@ -141,7 +129,7 @@ public partial class GestionPersonas : ContentPage
             VerticalStackLayoutPersonas.Clear();
             generarUI();
         }
-        catch(Exception error)
+        catch (Exception error)
         {
             DisplayAlert("ERROR", error.Message, "OK");
         }
@@ -190,7 +178,6 @@ public partial class GestionPersonas : ContentPage
         }
     }
 
-
     protected virtual void CartaClickeadaProfesores(object sender, TappedEventArgs e)
     {
         try
@@ -230,6 +217,17 @@ public partial class GestionPersonas : ContentPage
         {
             Application.Current.MainPage.DisplayAlert("Error", error.Message, "Aceptar");
         }
+    }
+
+    // EVENTOS SIN USAR
+    protected virtual void controladorBotonesProfesor(object sender, EventArgs e)
+    {
+
+    }
+
+    protected virtual void controladorBotonesAlumno(object sender, EventArgs e)
+    {
+
     }
 
     protected virtual void controladorBotones(object sender, EventArgs e)

@@ -42,21 +42,23 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
             _api_bd = new API_BD();
         }
 
+        // INICIALIZACIÓN
         public override void GenerarUI()
         {
             base.GenerarUI();
 
             _botonAgregar = GeneracionUI.CrearBoton("Agregar Usuario", "_botonUpdate", ControladorBoton);
-
+            _botonAgregar.BackgroundColor = Colors.Green;
 
             MAIN_VSL.Add(_botonAgregar);
         }
 
+        // EVENTOS
         protected virtual void ControladorBoton(object sender, EventArgs e)
         {
             try
             {
-
+                // Obnener la escuela en caso de haber una seleccionada
                 if (_selectorEscuela.SelectedItem != null)
                 {
                     foreach (Escuela escuela in _listaEscuelasAgregar)
@@ -73,7 +75,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
                     throw new Exception("Debe seleccionar una Escuela");
                 }
 
-
+                // En caso de que no haya un tipo seleccionado dará error
                 if (_eTipoUsuario.SelectedItem == null) throw new Exception("Seleccione un tipo de usuario");
                 Usuario usuario = new Usuario(_eCorreo.Texto, _eNombre.Texto, _eContrasenia.Texto, _eTipoUsuario.SelectedItem.ToString());
 
@@ -94,11 +96,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
                 Application.Current.MainPage.DisplayAlert("Error", error.Message, "Aceptar");
 
             }
-            finally
-            {
-                LimpiarDatos();
 
-            }
         }
     }
 }

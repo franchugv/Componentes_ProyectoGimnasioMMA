@@ -23,7 +23,6 @@ public partial class SelectorAlumno : ContentView
     /// Constructor de Selector de Alumno, 
     /// </summary>
     /// <param name="escuela"></param>
-    /// <param name="modoFiltro"></param>
     /// <exception cref="Exception"></exception>
     public SelectorAlumno(Escuela escuela)
     {
@@ -41,6 +40,7 @@ public partial class SelectorAlumno : ContentView
         }
     }
 
+    // INICIALIZACIÓN
 
     private void CargarDatosConstructor(Escuela escuela)
     {
@@ -71,9 +71,6 @@ public partial class SelectorAlumno : ContentView
         }
 
     }
-
-
-
 
     // EVENTOS
 

@@ -14,7 +14,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
     public static class GeneracionUI
     {
         #region Crear Entry Personalizados
-        public static EntryValidacion CrearEntryError(string texto, string styleId, EventHandler<FocusEventArgs> evento)
+        public static EntryValidacion CrearEntryError(string texto, string styleId, int numCarateres, EventHandler<FocusEventArgs> evento)
         {
             EntryValidacion entry = new EntryValidacion(texto);
             entry.EntryEditar.StyleId = styleId;
@@ -28,12 +28,14 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             entry.EntryEditar.WidthRequest = 300;
             entry.EntryEditar.HeightRequest = 50;
 
+            entry.EntryEditar.MaxLength = numCarateres;
+
             entry.EntryEditar.Unfocused += evento;
 
             return entry;
         }
 
-        public static EntryConfirmacion CrearEntryConfirmacion(string texto, string styleId, EventHandler<FocusEventArgs> evento)
+        public static EntryConfirmacion CrearEntryConfirmacion(string texto, string styleId, int numCarateres, EventHandler<FocusEventArgs> evento)
         {
             EntryConfirmacion entry = new EntryConfirmacion(texto);
             entry.EntryEditar.StyleId = styleId;
@@ -46,7 +48,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             // Tamaño fijo
             entry.EntryEditar.WidthRequest = 300;
             entry.EntryEditar.HeightRequest = 50;
-
+            entry.EntryEditar.MaxLength = numCarateres;
             entry.EntryEditar.Unfocused += evento;
 
             return entry;
@@ -507,6 +509,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
                 CrearLabel(profesor.DNI, 16, Colors.LightGray, Colors.Gray),
                 CrearLabel(profesor.Nombre, 16, Colors.LightGray, Colors.Gray),
                 CrearLabel(profesor.Apellidos, 16, Colors.LightGray, Colors.Gray),
+                CrearLabel(profesor.Deporte.Nombre, 16, Colors.LightGray, Colors.Gray)
 
             };
 
@@ -528,6 +531,8 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
                 CrearLabel(profesor.DNI, 16, Colors.LightGray, Colors.Gray),
                 CrearLabel(profesor.Nombre, 16, Colors.LightGray, Colors.Gray),
                 CrearLabel(profesor.Apellidos, 16, Colors.LightGray, Colors.Gray),
+                CrearLabel(profesor.Deporte.Nombre, 16, Colors.LightGray, Colors.Gray)
+
             };
 
             // Si se deben generar los botones, los agregamos a la lista
@@ -592,7 +597,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
     {
         CrearLabel(deporte.Id.ToString(), 16, Colors.LightGray, Colors.Gray),
         CrearLabel(deporte.Nombre, 16, Colors.LightGray, Colors.Gray),
-        CrearLabel(deporte.Federacion, 16, Colors.OrangeRed, Colors.Red),
+        CrearLabel(deporte.Federacion, 16, Colors.OrangeRed, Colors.Red)
 
     };
 

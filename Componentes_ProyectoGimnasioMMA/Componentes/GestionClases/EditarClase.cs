@@ -11,11 +11,8 @@ public class EditarClase : ContentView
 {
     // RECURSOS
 
-
     protected Horario _claseEditar;
     protected VerticalStackLayout MainVSL;
-
-
 
     // Selectores para la fecha
     protected TimePicker _tpHoraInicio;
@@ -31,13 +28,14 @@ public class EditarClase : ContentView
     List<string> _listaNombreProfesores;
     Profesores _profesorElegido;
 
-
     API_BD _api_bd;
 
     Escuela _escuela;
     Usuario _usuario;
 
     public event Action EventoVolverPaginaPrincipal;
+
+    // CONSTRUCTOR
     public EditarClase(Horario clase ,Escuela escuela, Usuario usuario)
 	{
         _claseEditar = clase;
@@ -49,6 +47,7 @@ public class EditarClase : ContentView
         Content = MainVSL;
     }
 
+    // INICIALIZACIÓN
     private void CargarConstructor()
     {
         _api_bd = new API_BD();
@@ -68,8 +67,6 @@ public class EditarClase : ContentView
 
         GenerarUI();
     }
-
-
 
     private void GenerarUI()
     {
@@ -121,6 +118,7 @@ public class EditarClase : ContentView
         _selectorNuevoProfesor.PickerEditar.SelectedItem = _claseEditar.ProfesorDni.ToString();
     }
 
+    // VALIDACIÓN
 
     private void validarTimePickers()
     {
@@ -141,7 +139,6 @@ public class EditarClase : ContentView
     }
 
     // EVENTOS
-
 
     private void controladorBotones(object sender, EventArgs e)
     {

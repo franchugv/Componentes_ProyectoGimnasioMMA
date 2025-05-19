@@ -34,7 +34,7 @@ public partial class GestionClases : ContentPage
     }
 
 
-    // MÉTODOS
+    // PROPIEDADES
     public StackLayout MAUINSL
     {
         get
@@ -47,7 +47,7 @@ public partial class GestionClases : ContentPage
         }
     }
 
-
+    // INICIALIZACIÓN
     private void CargarDatosConstructor(Escuela escuela, Usuario usuario)
     {
         try
@@ -68,7 +68,6 @@ public partial class GestionClases : ContentPage
             DisplayAlert("ERROR", error.Message, "OK");
         }
     }
-
 
     protected virtual void generarUI()
     {
@@ -96,7 +95,7 @@ public partial class GestionClases : ContentPage
         
     }
 
-
+    // EVENTOS
     protected virtual void CartaClickeada(object sender, TappedEventArgs e)
     {
         try
@@ -118,8 +117,8 @@ public partial class GestionClases : ContentPage
 
             if (carta != null && carta.Content is VerticalStackLayout layout && layout.Children.Count >= 3)
             {
-                string deporteIdTexto = _api_bd.ObtenerIdDeportePorNombre(((Label)layout.Children[0]).Text).ToString();
-                string profesorDni = _api_bd.ObtenerDniPorNombreProfesor(((Label)layout.Children[1]).Text);
+                string deporteIdTexto = _api_bd.ObtenerIdDeportePorNombre(((Label)layout.Children[0]).Text, _escuela.Id).ToString();
+                string profesorDni = _api_bd.ObtenerDniPorNombreProfesor(((Label)layout.Children[1]).Text, _escuela.Id);
                 string dia = ((Label)layout.Children[2]).Text.Replace("Día: ", "");
                 string horaInicioTexto = ((Label)layout.Children[3]).Text.Replace("Hora Inicio: ", "");
                 if (int.TryParse(deporteIdTexto, out int deporteId) && TimeSpan.TryParse(horaInicioTexto, out TimeSpan horaInicio))
@@ -151,8 +150,6 @@ public partial class GestionClases : ContentPage
             Application.Current.MainPage.DisplayAlert("Error", error.Message, "Aceptar");
         }
     }
-
-
 
     protected void recargarUI()
     {

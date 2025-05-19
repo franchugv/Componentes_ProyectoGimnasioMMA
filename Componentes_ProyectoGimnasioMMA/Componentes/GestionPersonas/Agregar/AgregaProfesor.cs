@@ -48,6 +48,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
 
         }
 
+        // INICIALIZACIÓN
         private void CargarDatosConstructor()
         {
             try
@@ -111,20 +112,21 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
 
 
             // Inctanciar Componentes de la interfaz
-            _eDNI = GeneracionUI.CrearEntryError("DNI", "eDNI", entryUnfocus);
-            _eNombre = GeneracionUI.CrearEntryError("Nombre", "eNombre", entryUnfocus);
-            _eApellidos = GeneracionUI.CrearEntryError("Apellidos", "eApellidos", entryUnfocus);
+            _eDNI = GeneracionUI.CrearEntryError("DNI", "eDNI", 10, entryUnfocus);
+            _eNombre = GeneracionUI.CrearEntryError("Nombre", "eNombre", 50, entryUnfocus);
+            _eApellidos = GeneracionUI.CrearEntryError("Apellidos", "eApellidos", 100, entryUnfocus);
             _selectorEscuela = GeneracionUI.CrearPicker("sEscuela", "Seleccione una Escuela", _listaNombreEscuelas, pickerFocusChanged);
             if (_listaNombreEscuelas.Count <= 0) _selectorEscuela.IsEnabled = false;
 
             _pSelectorUsuario = GeneracionUI.CrearPicker("sUsuario", "Seleccione un Usuario", _listaNombresUsuariosDisponibles, pickerFocusChanged);
             if (_listaUsuariosDisponibles.Count <= 0) _pSelectorUsuario.IsEnabled = false;
 
-            _eNivel = GeneracionUI.CrearEntryError("Inserte el nivel del Profesor", "eNivel", entryUnfocus);
+            _eNivel = GeneracionUI.CrearEntryError("Inserte el nivel del Profesor", "eNivel", 50, entryUnfocus);
             _pDeporte = GeneracionUI.CrearPicker("pDeporte", "Seleccione un deporte para el Profesorado", _listaNombreDeportes, selectedIndexChanged);
             if (_listaNombreDeportes.Count <= 0) _pDeporte.IsEnabled = false;
 
             _botonInsertar = GeneracionUI.CrearBoton("Insertar Profesor", "bInsertar", controladorBoton);
+            _botonInsertar.BackgroundColor = Colors.Green;
 
             // Añadir interfaz al vsl
             MAIN_VSL.Children.Add(_eDNI);
@@ -140,6 +142,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
 
         }
 
+        // EVENTOS
         private void controladorBoton(object sender, EventArgs e)
         {
             try
@@ -216,7 +219,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
 
         protected override void entryUnfocus(object sender, FocusEventArgs e)
         {
-            base.entryUnfocus(sender, e);
+            base.entryUnfocus(sender, e); // Reutilizo el de la clase padre
         }
     }
 }

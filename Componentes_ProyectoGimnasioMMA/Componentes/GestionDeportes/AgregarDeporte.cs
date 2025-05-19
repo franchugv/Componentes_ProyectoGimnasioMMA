@@ -28,9 +28,9 @@ public class AgregarDeporte : ContentView
 	Picker _selectorEscuela;
 	Button _botonInsertar;
 
-
     public event Action EventoVolverPaginaPrincipal;
 
+    // CONSTRUCTOR
     public AgregarDeporte(Usuario usuarioAPP, Escuela escuela)
 	{
 
@@ -40,7 +40,9 @@ public class AgregarDeporte : ContentView
         Content = _mainVSL;
 
     }
-	protected void CargarConstructor()
+	
+    // INICIALIZACIÓN
+    protected void CargarConstructor()
 	{
         _mainVSL = new VerticalStackLayout();
         _api_BD = new API_BD();
@@ -55,19 +57,23 @@ public class AgregarDeporte : ContentView
 		}
 		GenerarUI();
     }
+
 	protected void GenerarUI()
 	{
-		_eNombre = GeneracionUI.CrearEntryError("Ingrese el Nombre del deporte a agregar", "eNombre", unfocusedEntry);
-		_eFederacion = GeneracionUI.CrearEntryError("Ingrese la Federación del deporte a agregar", "eFederacion", unfocusedEntry);
+		_eNombre = GeneracionUI.CrearEntryError("Ingrese el Nombre del deporte a agregar", "eNombre", 100, unfocusedEntry);
+		_eFederacion = GeneracionUI.CrearEntryError("Ingrese la Federación del deporte a agregar", "eFederacion",100, unfocusedEntry);
 		_selectorEscuela = GeneracionUI.CrearPicker("pEscuela", "Seleccione una Escuela para el Deporte", _listaNombreEscuelas, unfocusedPicker);
 		_botonInsertar = GeneracionUI.CrearBoton("Insertar Deporte", "bIDeporte", controladorBotones);
 
 		_mainVSL.Children.Add(_eNombre);
         _mainVSL.Children.Add(_eFederacion);
         _mainVSL.Children.Add(_selectorEscuela);
-		_mainVSL.Children.Add(_botonInsertar);
+
+        _botonInsertar.BackgroundColor = Colors.Green;
+        _mainVSL.Children.Add(_botonInsertar);
     }
 
+    // EVENTOS
     private void controladorBotones(object sender, EventArgs e)
     {
 		try

@@ -17,28 +17,16 @@ public partial class GestionDeportes : ContentPage
     protected List<Deporte> _listaDeportes;
     protected Deporte _deporteElegido;
 
-
-
-
-
-
-
-    // Constructores
+    // CONSTRUCTORES
     public GestionDeportes(Usuario usuario, Escuela escuela)
     {
         InitializeComponent();
 
-
         CargarDatosConstructor(usuario, escuela);
-
-
     }
 
-    // PROPIEDADES
-
-
-
     // EVENTOS
+
     private void CargarDatosConstructor(Usuario usuario, Escuela escuela)
     {
         try
@@ -61,8 +49,6 @@ public partial class GestionDeportes : ContentPage
         }
     }
 
-
-
     protected void recargarUI()
     {
         try
@@ -77,9 +63,6 @@ public partial class GestionDeportes : ContentPage
             DisplayAlert("ERROR", error.Message, "OK");
         }
     }
-
-
-
 
     protected virtual void GenerarInterfaz()
     {
@@ -99,6 +82,7 @@ public partial class GestionDeportes : ContentPage
 
 
     }
+
     public virtual void CartaClickeada(object sender, TappedEventArgs e)
     {
         try
@@ -144,10 +128,7 @@ public partial class GestionDeportes : ContentPage
         }
     }
 
-
-
-
-    // EVENTOS
+    // EVENTOS SIN USAR
 
     protected virtual void ControladorBotones(object sender, EventArgs e)
     {

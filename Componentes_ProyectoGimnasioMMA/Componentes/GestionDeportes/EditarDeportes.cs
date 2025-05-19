@@ -31,6 +31,7 @@ public class EditarDeportes : ContentView
 
     public event Action EventoVolverPaginaPrincipal;
 
+    // CONSTRUCTOR
     public EditarDeportes(Usuario usuarioAPP, Escuela escuela, Deporte deporte)
     {
 
@@ -41,6 +42,8 @@ public class EditarDeportes : ContentView
         Content = _mainVSL;
 
     }
+
+    // INICIALIZACIÓN
     protected void CargarConstructor()
     {
         _mainVSL = new VerticalStackLayout();
@@ -49,11 +52,13 @@ public class EditarDeportes : ContentView
 
         GenerarUI();
     }
+
     protected void GenerarUI()
     {
-        _eNombre = GeneracionUI.CrearEntryConfirmacion("Ingrese el Nombre del deporte a Actualizar", "eNombre", unfocusedEntry);
-        _eFederacion = GeneracionUI.CrearEntryConfirmacion("Ingrese la Federación del deporte a Actualizar", "eFederacion", unfocusedEntry);
+        _eNombre = GeneracionUI.CrearEntryConfirmacion("Ingrese el Nombre del deporte a Actualizar", "eNombre", 100, unfocusedEntry);
+        _eFederacion = GeneracionUI.CrearEntryConfirmacion("Ingrese la Federación del deporte a Actualizar", "eFederacion", 100, unfocusedEntry);
         _botonInsertar = GeneracionUI.CrearBoton("Actualizar Deporte", "bIDeporte", controladorBotones);
+        _botonInsertar.BackgroundColor = Colors.Green;
 
         _mainVSL.Children.Add(_eNombre);
         _mainVSL.Children.Add(_eFederacion);
@@ -69,6 +74,7 @@ public class EditarDeportes : ContentView
        
     }
 
+    // EVENTOS
     private void controladorBotones(object sender, EventArgs e)
     {
         try
@@ -107,7 +113,6 @@ public class EditarDeportes : ContentView
             Application.Current.MainPage.DisplayAlert("ERROR", error.Message, "Ok");
         }
     }
-
 
     private void unfocusedPicker(object sender, EventArgs e)
     {

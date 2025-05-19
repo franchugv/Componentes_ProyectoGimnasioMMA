@@ -52,7 +52,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
 
 
 
-        // Constructor
+        // CONSTRUCTOR
         public EditarUsuario(Usuario usuarioEditar, TipoUsuario tipoUsuario) : base(tipoUsuario)
         {
             _api_bd = new API_BD();
@@ -105,7 +105,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
         }
 
 
-        // Metodos
+        // INICIALIZACIÓN
         public override void GenerarUI()
         {
 
@@ -128,9 +128,9 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
             }
 
             // Inctanciar Componentes de la interfaz
-            _eCCorreo = GeneracionUI.CrearEntryConfirmacion("Ingrese el nuevo Correo", "_eCorreo", entryUnfocus);
-            _eCNombre = GeneracionUI.CrearEntryConfirmacion("Ingrese el nuevo Nombre", "_eNombre", entryUnfocus);
-            _eCContrasenia = GeneracionUI.CrearEntryConfirmacion("Ingrese la nueva Contraseña", "_eContrasenia", entryUnfocus);
+            _eCCorreo = GeneracionUI.CrearEntryConfirmacion("Ingrese el nuevo Correo", "_eCorreo", 100, entryUnfocus);
+            _eCNombre = GeneracionUI.CrearEntryConfirmacion("Ingrese el nuevo Nombre", "_eNombre", 50, entryUnfocus);
+            _eCContrasenia = GeneracionUI.CrearEntryConfirmacion("Ingrese la nueva Contraseña", "_eContrasenia", 64, entryUnfocus);
             _eCContrasenia.EntryEditar.IsPassword = true;
             
             _selectorTipoUsuario = GeneracionUI.CrearPickerConfirmacion("eTipoUsuario", "Seleccione un nuevo Tipo de Usuario", _tiposUsuariosPicker, SelectedIndexChanged);
@@ -170,22 +170,21 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
             }
 
             _botonEditar = GeneracionUI.CrearBoton("Editar Usuario", "_botonInsertar", ControladorBoton);
+            _botonEditar.BackgroundColor = Colors.Green;
 
             MAIN_VSL.Add(_botonEditar);
 
             AsignarDatos();
         }
 
-
         private void AsignarDatos()
         {
             _eCCorreo.Texto = _usuarioEditar.Correo;
             _eCNombre.Texto = _usuarioEditar.Nombre;
-            //_eCContrasenia.Texto = _usuarioEditar.Contrasenia;
         }
 
+        // EVENTOS
         // Evento a sobreescribir
-
         protected override void entryUnfocus(object sender, FocusEventArgs e)
         {
             Entry entry = (Entry)sender;
@@ -254,10 +253,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
                 await Application.Current.MainPage.DisplayAlert("Error", error.Message, "Aceptar");
 
             }
-            finally
-            {
-                LimpiarDatos();
-            }
+
         }
 
         private void ActualizarUsuario()
@@ -296,7 +292,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
             CrearRelacionUsuariosEscuelas(_usuarioEditar, nuevaEscuela.Id);
 
 
-            if (escuela != null && _selectorEscuelaEliminar.EstaSeleccionado)
+            if (escuelaEliminar != null && _selectorEscuelaEliminar.EstaSeleccionado)
             {
                 if (_listaEscuelasEliminar.Count <= 1) throw new Exception("No puedes dejar un usuario sin Escuelas");
                 _api_bd.EliminarRelacionUsuariosEscuelas(_usuarioEditar, escuelaEliminar.Id);
@@ -305,6 +301,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
             // Asignar tipo de usuario, no se puede editar si eres gestor a otro gestor
             string tipoUsuario = null;
 
+            // Asignar tipo de usuario, si no seleccionamos ninguno, se asignará el antiguo
             if (_selectorTipoUsuario.EstaSeleccionado) tipoUsuario = _selectorTipoUsuario.PickerEditar.SelectedItem.ToString();
             else tipoUsuario = _usuarioEditar.TipoDeUsuario.ToString();
 
@@ -312,6 +309,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionUsuarios
             // La contraseña lo asignamos así dado a que no se rellenará automaticamente
             string contrasenia = null;
 
+            // Asignar contraseña, si no seleccionamos ninguno cogerá el del antiguo
             if (_eCContrasenia.EstaSeleccionado) contrasenia = _eCContrasenia.Texto;
             else contrasenia = _usuarioEditar.Contrasenia;
 

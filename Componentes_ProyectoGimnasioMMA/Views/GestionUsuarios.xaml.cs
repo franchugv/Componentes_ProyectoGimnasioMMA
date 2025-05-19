@@ -11,13 +11,10 @@ namespace Componentes_ProyectoGimnasioMMA.Views;
 public partial class GestionUsuarios : ContentPage
 {
     // Recursos
-
     protected TipoUsuario _tipoUsuario;
     protected ModoFiltroUsuarios _modoFiltro = new ModoFiltroUsuarios();
-
     List<Usuario> _listaUsuarios;
     protected Usuario _usuarioElegido;
-
     protected Escuela _escuela;
     protected API_BD api_bd;
     protected Usuario _usuario;
@@ -30,55 +27,36 @@ public partial class GestionUsuarios : ContentPage
     protected AgregarUsuario _agregarUsuario;
     protected EditarUsuario _editarUsuario;
 
-
-
-
-
-
     public GestionUsuarios(TipoUsuario tipoUsuario)
     {
         _tipoUsuario = tipoUsuario;
-
         InitializeComponent();
-        //_usuario = usuario;
-
         CargarDatosConstructor();
         _listaUsuarios = api_bd.ObtenerListaTotalUsuarios();
-
         GenerarInterfaz();
     }
 
-    // Constructores
-   public GestionUsuarios(Usuario usuario, Escuela escuela) 
+    public GestionUsuarios(Usuario usuario, Escuela escuela)
     {
-        _tipoUsuario = usuario.TipoDeUsuario;
-
         InitializeComponent();
+        _tipoUsuario = usuario.TipoDeUsuario;
         _usuario = usuario;
 
         CargarDatosConstructor();
 
         _escuela = escuela;
         _listaUsuarios = api_bd.ObtenerListaUsuarios(_escuela.Id);
-
         GenerarInterfaz();
-
     }
 
-    // PROPIEDADES
+    // INICIALIZACIÓN
 
-
-
-    // EVENTOS
     private void CargarDatosConstructor()
     {
         try
         {
             Shell.SetNavBarIsVisible(this, false);
             api_bd = new API_BD();
-
-
-            //AsignarOpcionesPicker();
         }
         catch (Exception error)
         {
@@ -86,21 +64,11 @@ public partial class GestionUsuarios : ContentPage
         }
     }
 
-
-
-    // Controlador para los eventos que generan los botones Todos y Sin Escuela
-    protected virtual void ControladorBotonSelector(object sender, EventArgs e)
-    {
-        
-
-    }
-
     protected void recargarUI()
     {
         try
         {
-            // Varia en finción de si es un admin o no
-            if(_tipoUsuario == TipoUsuario.Administrador)
+            if (_tipoUsuario == TipoUsuario.Administrador)
             {
                 _listaUsuarios = api_bd.ObtenerListaTotalUsuarios();
             }
@@ -118,6 +86,7 @@ public partial class GestionUsuarios : ContentPage
         }
     }
 
+    // EVENTOS
 
     protected virtual void GenerarInterfazAdministrador(bool todos)
     {
@@ -130,42 +99,50 @@ public partial class GestionUsuarios : ContentPage
             _listaUsuarios = api_bd.ObtenerListaUsuariosSinEscuela();
         }
 
-        // Lista ordenada en función del tipo de usuario
         List<Usuario> listaOrdenada = _listaUsuarios.OrderBy(x => x.TipoDeUsuario).ToList();
 
         foreach (Usuario usuario in listaOrdenada)
         {
-            VerticalStackLayoutUsuarios.Children.Add(GeneracionUI.CrearCartaUsuarioGestor(usuario, CartaClickeada, ControladorBotones, ControladorBotones, true, true));
+            VerticalStackLayoutUsuarios.Children.Add(
+                GeneracionUI.CrearCartaUsuarioGestor(
+                    usuario,
+                    CartaClickeada,
+                    ControladorBotones,
+                    ControladorBotones,
+                    true,
+                    true
+                )
+            );
         }
-
     }
 
     protected virtual void GenerarInterfaz()
     {
+        VerticalStackLayoutUsuarios.Clear();
+
+        // Agregar buscador
+        SearchBar searchBar = new SearchBar
+        {
+            Placeholder = "Buscar por nombre...",
+            Margin = new Thickness(10, 10, 10, 0)
+        };
+        searchBar.SearchButtonPressed += BusquedaUsuario;
+        searchBar.TextChanged += BusquedaUsuarioReset;
+        VerticalStackLayoutUsuarios.Children.Add(searchBar);
+
         bool generarBotonEliminar = true;
 
         if (_listaUsuarios.Count >= 1)
-        {   
-            // Lista ordenada en función del tipo de usuario
+        {
             List<Usuario> listaOrdenada = _listaUsuarios.OrderBy(x => x.TipoDeUsuario).ToList();
 
             foreach (Usuario usuario in listaOrdenada)
             {
-                // Si el usuario actual NO es administrador y el usuario en la lista SÍ lo es, no generamos la carta
                 if (_tipoUsuario != TipoUsuario.Administrador && usuario.TipoDeUsuario == TipoUsuario.Administrador)
-                {
-                    continue; // Saltar este usuario, se que se ve brusco pero debo asegurarme de que no ocurra
-                }
+                    continue;
 
-                // Lógica para decidir si se muestra el botón eliminar
-                if (_tipoUsuario == TipoUsuario.GestorGimnasios && usuario.TipoDeUsuario == TipoUsuario.GestorGimnasios)
-                {
-                    generarBotonEliminar = false;
-                }
-                else
-                {
-                    generarBotonEliminar = true;
-                }
+                generarBotonEliminar = !(_tipoUsuario == TipoUsuario.GestorGimnasios &&
+                                         usuario.TipoDeUsuario == TipoUsuario.GestorGimnasios);
 
                 VerticalStackLayoutUsuarios.Children.Add(
                     GeneracionUI.CrearCartaUsuarioGestor(
@@ -182,7 +159,7 @@ public partial class GestionUsuarios : ContentPage
         else
         {
             VerticalStackLayoutUsuarios.Children.Add(
-                new Label()
+                new Label
                 {
                     Text = "No hay Usuarios Disponibles",
                     TextColor = Colors.Gray
@@ -195,15 +172,13 @@ public partial class GestionUsuarios : ContentPage
     {
         try
         {
-            // Buscar el Frame desde el sender
             Frame carta = null;
             if (sender is Frame frame)
             {
-                carta = frame; // El sender ya es la carta
+                carta = frame;
             }
             else if (sender is VisualElement elemento)
             {
-                // Buscar en la jerarquía de elementos hasta encontrar el Frame
                 while (elemento != null && !(elemento is Frame))
                 {
                     elemento = elemento.Parent as VisualElement;
@@ -220,7 +195,7 @@ public partial class GestionUsuarios : ContentPage
                         if (usuario.Correo == nombreLabel.Text)
                         {
                             _usuarioElegido = usuario;
-                            break; // Terminar el bucle cuando encontramos el usuario
+                            break;
                         }
                     }
                 }
@@ -236,25 +211,144 @@ public partial class GestionUsuarios : ContentPage
         }
     }
 
+    // MÉTODOS BUSQUEDA
 
-
-
-    // EVENTOS
-
-    // Controlador para el evento generado por las cards de Escuelas, el cual pasa al selector de usuarios
-    protected virtual void ControladorCardsSelectorEscuela(Escuela escuela)
+    private void BusquedaUsuarioReset(object sender, TextChangedEventArgs e)
     {
+        try
+        {
+            SearchBar searchBar = sender as SearchBar;
+            string textoBusqueda = searchBar?.Text?.ToLower() ?? "";
 
+
+            if (string.IsNullOrEmpty(textoBusqueda))
+            {
+                List<Usuario> listaFiltrada = _listaUsuarios
+                .Where(u => u.Nombre.ToLower().Contains(textoBusqueda))
+                .OrderBy(u => u.TipoDeUsuario)
+                .ToList();
+
+                VerticalStackLayoutUsuarios.Clear();
+
+                // Reagregar el SearchBar
+                VerticalStackLayoutUsuarios.Children.Add(searchBar);
+
+                if (listaFiltrada.Count > 0)
+                {
+                    foreach (Usuario usuario in listaFiltrada)
+                    {
+                        if (_tipoUsuario != TipoUsuario.Administrador && usuario.TipoDeUsuario == TipoUsuario.Administrador)
+                            continue;
+
+                        bool generarBotonEliminar = !(_tipoUsuario == TipoUsuario.GestorGimnasios &&
+                                                       usuario.TipoDeUsuario == TipoUsuario.GestorGimnasios);
+
+                        VerticalStackLayoutUsuarios.Children.Add(
+                            GeneracionUI.CrearCartaUsuarioGestor(
+                                usuario,
+                                CartaClickeada,
+                                ControladorBotones,
+                                ControladorBotones,
+                                true,
+                                generarBotonEliminar
+                            )
+                        );
+                    }
+                }
+                else
+                {
+                    VerticalStackLayoutUsuarios.Children.Add(
+                        new Label
+                        {
+                            Text = "No se encontraron usuarios.",
+                            TextColor = Colors.Gray,
+                            HorizontalOptions = LayoutOptions.Center
+                        }
+                    );
+                }
+            }
+
+        }
+        catch (Exception ex)
+        {
+            DisplayAlert("Error en búsqueda", ex.Message, "OK");
+        }
     }
 
-    // Controlador para el evento generado por las cards de usuarios
+    protected void BusquedaUsuario(object sender, EventArgs e)
+    {
+        try
+        {
+            SearchBar searchBar = sender as SearchBar;
+            string textoBusqueda = searchBar?.Text?.ToLower() ?? "";
+
+            List<Usuario> listaFiltrada = _listaUsuarios
+                .Where(u => u.Nombre.ToLower().Contains(textoBusqueda))
+                .OrderBy(u => u.TipoDeUsuario)
+                .ToList();
+
+            VerticalStackLayoutUsuarios.Clear();
+
+            // Reagregar el SearchBar
+            VerticalStackLayoutUsuarios.Children.Add(searchBar);
+
+            if (listaFiltrada.Count > 0)
+            {
+                foreach (Usuario usuario in listaFiltrada)
+                {
+                    if (_tipoUsuario != TipoUsuario.Administrador && usuario.TipoDeUsuario == TipoUsuario.Administrador)
+                        continue;
+
+                    bool generarBotonEliminar = !(_tipoUsuario == TipoUsuario.GestorGimnasios &&
+                                                   usuario.TipoDeUsuario == TipoUsuario.GestorGimnasios);
+
+                    VerticalStackLayoutUsuarios.Children.Add(
+                        GeneracionUI.CrearCartaUsuarioGestor(
+                            usuario,
+                            CartaClickeada,
+                            ControladorBotones,
+                            ControladorBotones,
+                            true,
+                            generarBotonEliminar
+                        )
+                    );
+                }
+            }
+            else
+            {
+                VerticalStackLayoutUsuarios.Children.Add(
+                    new Label
+                    {
+                        Text = "No se encontraron usuarios.",
+                        TextColor = Colors.Gray,
+                        HorizontalOptions = LayoutOptions.Center
+                    }
+                );
+            }
+        }
+        catch (Exception ex)
+        {
+            DisplayAlert("Error en búsqueda", ex.Message, "OK");
+        }
+    }
+
+
+    // EVENTOS SIN USAR
+
+    protected virtual void ControladorCardsSelectorEscuela(Escuela escuela)
+    {
+    }
+
     protected virtual void ControladorCardsSelectorUsuario(Usuario usuario)
     {
-
     }
 
     protected virtual void ControladorBotones(object sender, EventArgs e)
     {
-
     }
+
+    protected virtual void ControladorBotonSelector(object sender, EventArgs e)
+    {
+    }
+
 }

@@ -63,7 +63,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
 
         public event Action EventoVolverPaginaPrincipal;
 
-
+        // CONSTRUCTOR
         public EditarProfesor(Escuela escuela, Usuario usuario, Profesores profesoresEditar) : base(escuela, usuario)
         {
             _profesorEditar = profesoresEditar;  
@@ -72,16 +72,15 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
 
         }
 
-
+        // INICIALIZACIÓN
         protected override void GenerarUI()
         {
 
-
             //  Instanciar componentes 
-            _eCDNI = GeneracionUI.CrearEntryConfirmacion("Ingrese un nuevo DNI", "eCDNI", entryUnfocus);
-            _eCNombre = GeneracionUI.CrearEntryConfirmacion("Ingrese un nuevo Nombre", "eCNombre", entryUnfocus);
-            _eCApellidos = GeneracionUI.CrearEntryConfirmacion("Ingrese nuevos Apellidos", "eCApellidos", entryUnfocus);
-            _eNivel = GeneracionUI.CrearEntryConfirmacion("Ingrese un nuevo nivel del Profesor", "eCNivel", entryUnfocus);
+            _eCDNI = GeneracionUI.CrearEntryConfirmacion("Ingrese un nuevo DNI", "eCDNI", 10, entryUnfocus);
+            _eCNombre = GeneracionUI.CrearEntryConfirmacion("Ingrese un nuevo Nombre", "eCNombre", 50, entryUnfocus);
+            _eCApellidos = GeneracionUI.CrearEntryConfirmacion("Ingrese nuevos Apellidos", "eCApellidos", 100, entryUnfocus);
+            _eNivel = GeneracionUI.CrearEntryConfirmacion("Ingrese un nuevo nivel del Profesor", "eCNivel", 50, entryUnfocus);
 
             _selectorEscuelaNuevaAgregar = GeneracionUI.CrearPickerConfirmacion("sEscuelaAgregar", "Seleccione una Escuela a Agregar", _listaNombresEscuelasAgregar, pickerFocusChanged);
             if (_listaNombresEscuelasAgregar.Count < 1) _selectorEscuelaNuevaAgregar.PickerEditar.IsEnabled = false;
@@ -99,63 +98,63 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
             if (_listaNombreDeportesEliminar.Count < 1) _pDeporteViejoBorrar.PickerEditar.IsEnabled = false;
 
             _botonInsertar = GeneracionUI.CrearBoton("Actualizar Profesor", "bInsertar", controladorBoton);
+            _botonInsertar.BackgroundColor = Colors.Green;
 
-            // === Layout compacto ===
+            // Layout 
             VerticalStackLayout layout = new VerticalStackLayout
             {
                 Padding = new Thickness(25, 0),
-                Spacing = 8, // Separación vertical más ajustada
+                Spacing = 8, // Separación 
                 Children =
-    {
-        new Label { Text = "Gestión del Profesorado", FontSize = 20, FontAttributes = FontAttributes.Bold, HorizontalOptions = LayoutOptions.Center },
+                {
+                    new Label { Text = "Gestión del Profesorado", FontSize = 20, FontAttributes = FontAttributes.Bold, HorizontalOptions = LayoutOptions.Center },
 
-        // === Datos personales ===
-        new Label { Text = "DNI:" },
-        _eCDNI,
-        new Label { Text = "Nombre:" },
-        _eCNombre,
-        new Label { Text = "Apellidos:" },
-        _eCApellidos,
-        new Label { Text = "Nivel del Profesor:" },
-        _eNivel,
+                    // === Datos personales ===
+                    new Label { Text = "DNI:" },
+                    _eCDNI,
+                    new Label { Text = "Nombre:" },
+                    _eCNombre,
+                    new Label { Text = "Apellidos:" },
+                    _eCApellidos,
+                    new Label { Text = "Nivel del Profesor:" },
+                    _eNivel,
 
-        new BoxView { HeightRequest = 1, Color = Colors.LightGray },
+                    new BoxView { HeightRequest = 1, Color = Colors.LightGray },
 
-        // === Escuelas ===
-        new Label { Text = "Agregar Escuela:" },
-        _selectorEscuelaNuevaAgregar,
-        new Label { Text = "Eliminar Escuela:" },
-        _selectorEscuelaViejaEliminar,
+                    // Escuelas 
+                    new Label { Text = "Agregar Escuela:" },
+                    _selectorEscuelaNuevaAgregar,
+                    new Label { Text = "Eliminar Escuela:" },
+                    _selectorEscuelaViejaEliminar,
 
-        new BoxView { HeightRequest = 1, Color = Colors.LightGray },
+                    new BoxView { HeightRequest = 1, Color = Colors.LightGray },
 
-        // === Deportes ===
-        new Label { Text = "Agregar Deporte:" },
-        _pDeporteNuevoAgregar,
-        new Label { Text = "Eliminar Deporte:" },
-        _pDeporteViejoBorrar,
+                    // Deportes 
+                    new Label { Text = "Agregar Deporte:" },
+                    _pDeporteNuevoAgregar,
+                    new Label { Text = "Eliminar Deporte:" },
+                    _pDeporteViejoBorrar,
 
-        new BoxView { HeightRequest = 1, Color = Colors.LightGray },
+                    new BoxView { HeightRequest = 1, Color = Colors.LightGray },
 
-        // === Usuario ===
-        new Label { Text = "Cambiar Usuario Vinculado:" },
-        _pSelectorUsuarioNuevo,
+                    // Usuario 
+                    new Label { Text = "Cambiar Usuario Vinculado:" },
+                    _pSelectorUsuarioNuevo,
 
-        new BoxView { HeightRequest = 1, Color = Colors.LightGray },
+                    new BoxView { HeightRequest = 1, Color = Colors.LightGray },
 
-        _botonInsertar
-    }
-            };
+                    _botonInsertar
+                }
+                        };
 
-            // Agregar al layout principal
-            MAIN_VSL.Children.Add(layout);
+                        // Agregar al layout principal
+                        MAIN_VSL.Children.Add(layout);
 
-            // Asignar datos
-            AsignarDatos();
+                        // Asignar datos
+                        AsignarDatos();
 
 
         }
-
 
         private void AsignarDatos()
         {
@@ -165,6 +164,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
             _eNivel.Texto = _profesorEditar.Nivel;
             _pSelectorUsuarioNuevo.PickerEditar.SelectedItem = _profesorEditar.CorreoProfesor;
         }
+
         private void CargarDatosConstructor()
         {
             try
@@ -262,6 +262,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
             }
         }
 
+        // EVENTOS
         protected override void entryUnfocus(object sender, FocusEventArgs e)
         {
 
@@ -330,7 +331,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
                 Escuela escuelaVieja = null;
                 Escuela nuevaEscuela = null;
 
-                Deporte deporteViejo = null;
+                Deporte deporteViejoAEliminar = null;
                 Deporte deporteNuevo = null;
                  
                 // VALIDACIÓN
@@ -353,9 +354,9 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
                 {
                     foreach (Deporte deporte in _listaDeportesEliminar)
                     {
-                        if (deporte.Nombre == _pDeporteViejoBorrar.PickerEditar.SelectedItem.ToString()) deporteViejo = deporte;
+                        if (deporte.Nombre == _pDeporteViejoBorrar.PickerEditar.SelectedItem.ToString()) deporteViejoAEliminar = deporte;
                     }
-                    _api_bd.AsignarDeporteAProfesor(_profesorEditar.DNI, deporteViejo.Id);
+                    _api_bd.EliminarDeporteDeProfesor(deporteViejoAEliminar.Id, _profesorEditar.DNI);
                 }
 
 
@@ -384,7 +385,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
                 Profesores profesor = new Profesores(_eCNombre.Texto, _eCApellidos.Texto, _eCDNI.Texto, _eNivel.Texto, _pSelectorUsuarioNuevo.PickerEditar.SelectedItem.ToString());
                 _api_bd.ValidarRepeticionDNIAlumno(profesor.DNI, _escuela.Id);
 
-                _api_bd.ActualizarProfesor(_profesorEditar.DNI, profesor.Nombre, profesor.Apellidos, profesor.Nivel, profesor.CorreoProfesor);
+                _api_bd.ActualizarProfesor(_profesorEditar.DNI, profesor.DNI, profesor.Nombre, profesor.Apellidos, profesor.Nivel, profesor.CorreoProfesor);
                 
                 EventoVolverPaginaPrincipal?.Invoke();
 

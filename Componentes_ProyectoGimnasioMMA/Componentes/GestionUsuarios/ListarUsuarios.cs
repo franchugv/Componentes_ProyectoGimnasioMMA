@@ -11,13 +11,12 @@ public class ListarUsuarios : ContentPage
 
 
     // RECURSOS
+
     VerticalStackLayout _mailVSL;
     API_BD _api_bd;
     List<Usuario> _listaUsuarios;
     Usuario _usuarioElegido;
-    Usuario _usuarioApp;
-
-    // Usuario que ha inidiado sesión
+    Usuario _usuarioApp;     // Usuario que ha inidiado sesión
 
     // Evento que será lanzado al hacer clic en una escuela
     public event Action<Usuario> UsuarioSeleccionadaEvento;
@@ -30,11 +29,10 @@ public class ListarUsuarios : ContentPage
     /// <exception cref="Exception"></exception>
     public ListarUsuarios(Escuela escuela, ModoFiltroUsuarios modoFiltro)
     {
-
         CargarDatosConstructor(escuela, modoFiltro);
-
     }
 
+    // INICIALIZACIÓN
 
     private void CargarDatosConstructor(Escuela escuela, ModoFiltroUsuarios modoFiltro)
     {
@@ -92,9 +90,6 @@ public class ListarUsuarios : ContentPage
         }
 
     }
-
-
-
 
     // EVENTOS
 

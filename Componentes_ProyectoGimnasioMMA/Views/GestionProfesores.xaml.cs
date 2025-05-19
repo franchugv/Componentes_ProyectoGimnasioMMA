@@ -11,15 +11,13 @@ public partial class GestionProfesores : ContentPage
     // Recursos
     protected List<Profesores> _listaProfesores;
     protected Profesores _profesorElegido;
-
-
     protected Escuela _escuela;
     protected Usuario _usuario;
     protected API_BD _api_bd;
 
     public GestionProfesores(Usuario usuario, Escuela escuela)
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
 
         _escuela = escuela;
         _usuario = usuario;
@@ -27,9 +25,9 @@ public partial class GestionProfesores : ContentPage
         _api_bd = new API_BD();
 
         CargarDatosConstructor();
-
     }
-    // EVENTOS
+
+    // INICIALIZACIÓN
     private void CargarDatosConstructor()
     {
         try
@@ -37,7 +35,6 @@ public partial class GestionProfesores : ContentPage
             Shell.SetNavBarIsVisible(this, false);
             _api_bd = new API_BD();
 
-            // Asignar listas
             _listaProfesores = _api_bd.ObtenerProfesoresPorEscuela(_escuela.Id);
 
             generarUI();
@@ -47,35 +44,60 @@ public partial class GestionProfesores : ContentPage
             DisplayAlert("ERROR", error.Message, "OK");
         }
     }
+
     protected virtual void generarUI()
     {
+        VerticalStackLayoutProfesores.Clear();
 
+        // Agregar buscador
+        SearchBar searchBar = new SearchBar
+        {
+            Placeholder = "Buscar por nombre...",
+            Margin = new Thickness(10, 10, 10, 0)
+        };
+        searchBar.SearchButtonPressed += BusquedaProfesor;
+        searchBar.TextChanged += BusquedaProfesorReset;
+        VerticalStackLayoutProfesores.Children.Add(searchBar);
 
-        // Generar Cards de Profesores
-        VerticalStackLayoutProfesores.Add(new Label() { Text = "Profesores", HorizontalOptions = LayoutOptions.Center, FontAttributes = FontAttributes.Bold });
+        VerticalStackLayoutProfesores.Children.Add(
+            new Label()
+            {
+                Text = "Profesores",
+                HorizontalOptions = LayoutOptions.Center,
+                FontAttributes = FontAttributes.Bold
+            });
 
-        if(_listaProfesores.Count >= 1)
+        if (_listaProfesores.Count >= 1)
         {
             foreach (Profesores profesores in _listaProfesores)
             {
-
-
-                VerticalStackLayoutProfesores.Children.Add(GeneracionUI.CrearCartaProfesorGestor(profesores, CartaClickeadaProfesores, controladorBotonesProfesor, controladorBotonesProfesor, true));
+                VerticalStackLayoutProfesores.Children.Add(
+                    GeneracionUI.CrearCartaProfesorGestor(
+                        profesores,
+                        CartaClickeadaProfesores,
+                        controladorBotonesProfesor,
+                        controladorBotonesProfesor,
+                        true
+                    )
+                );
             }
         }
         else
         {
-            VerticalStackLayoutProfesores.Children.Add(new Label() { Text = "No hay Profesores Disponibles", TextColor = Colors.Gray });
+            VerticalStackLayoutProfesores.Children.Add(
+                new Label()
+                {
+                    Text = "No hay Profesores Disponibles",
+                    TextColor = Colors.Gray
+                }
+            );
         }
-
-
-
-
     }
+
+    // EVENTOS
 
     protected void recargarUI()
     {
-
         try
         {
             _listaProfesores = _api_bd.ObtenerProfesoresPorEscuela(_escuela.Id);
@@ -87,23 +109,19 @@ public partial class GestionProfesores : ContentPage
         {
             DisplayAlert("ERROR", error.Message, "OK");
         }
-        // Recargar listas listas
-
     }
 
     protected virtual void CartaClickeadaProfesores(object sender, TappedEventArgs e)
     {
         try
         {
-            // Buscar el Frame desde el sender
             Frame carta = null;
             if (sender is Frame frame)
             {
-                carta = frame; // El sender ya es la carta
+                carta = frame;
             }
             else if (sender is VisualElement elemento)
             {
-                // Buscar en la jerarquía de elementos hasta encontrar el Frame
                 while (elemento != null && !(elemento is Frame))
                 {
                     elemento = elemento.Parent as VisualElement;
@@ -120,7 +138,7 @@ public partial class GestionProfesores : ContentPage
                         if (profesor.DNI == nombreLabel.Text)
                         {
                             _profesorElegido = profesor;
-                            break; // Terminar el bucle cuando encontramos el usuario
+                            break;
                         }
                     }
                 }
@@ -132,16 +150,129 @@ public partial class GestionProfesores : ContentPage
         }
     }
 
-    protected virtual void controladorBotonesProfesor(object sender, EventArgs e)
-    {
+    // EVENTOS DE BUSQUEDA
 
+    private void BusquedaProfesorReset(object sender, TextChangedEventArgs e)
+    {
+        try
+        {
+            SearchBar searchBar = sender as SearchBar;
+            string textoBusqueda = searchBar?.Text?.ToLower() ?? "";
+            if (string.IsNullOrEmpty(textoBusqueda))
+            {
+
+                List<Profesores> listaFiltrada = _listaProfesores
+                .Where(p => p.Nombre.ToLower().Contains(textoBusqueda))
+                .ToList();
+
+                VerticalStackLayoutProfesores.Clear();
+
+                // Reagregar el SearchBar
+                VerticalStackLayoutProfesores.Children.Add(searchBar);
+
+                VerticalStackLayoutProfesores.Children.Add(
+                    new Label()
+                    {
+                        Text = "Profesores",
+                        HorizontalOptions = LayoutOptions.Center,
+                        FontAttributes = FontAttributes.Bold
+                    });
+
+                if (listaFiltrada.Count > 0)
+                {
+                    foreach (Profesores profesor in listaFiltrada)
+                    {
+                        VerticalStackLayoutProfesores.Children.Add(
+                            GeneracionUI.CrearCartaProfesorGestor(
+                                profesor,
+                                CartaClickeadaProfesores,
+                                controladorBotonesProfesor,
+                                controladorBotonesProfesor,
+                                true
+                            )
+                        );
+                    }
+                }
+                else
+                {
+                    VerticalStackLayoutProfesores.Children.Add(
+                        new Label()
+                        {
+                            Text = "No se encontraron profesores.",
+                            TextColor = Colors.Gray,
+                            HorizontalOptions = LayoutOptions.Center
+                        });
+                }
+            }
+
+        }
+        catch (Exception error)
+        {
+            DisplayAlert("Error en búsqueda", error.Message, "OK");
+        }
     }
+
+    protected void BusquedaProfesor(object sender, EventArgs e)
+    {
+        try
+        {
+            SearchBar searchBar = sender as SearchBar;
+            string textoBusqueda = searchBar?.Text?.ToLower() ?? "";
+
+            List<Profesores> listaFiltrada = _listaProfesores
+                .Where(p => p.Nombre.ToLower().Contains(textoBusqueda))
+                .ToList();
+
+            VerticalStackLayoutProfesores.Clear();
+
+            // Reagregar el SearchBar
+            VerticalStackLayoutProfesores.Children.Add(searchBar);
+
+            VerticalStackLayoutProfesores.Children.Add(
+                new Label()
+                {
+                    Text = "Profesores",
+                    HorizontalOptions = LayoutOptions.Center,
+                    FontAttributes = FontAttributes.Bold
+                });
+
+            if (listaFiltrada.Count > 0)
+            {
+                foreach (Profesores profesor in listaFiltrada)
+                {
+                    VerticalStackLayoutProfesores.Children.Add(
+                        GeneracionUI.CrearCartaProfesorGestor(
+                            profesor,
+                            CartaClickeadaProfesores,
+                            controladorBotonesProfesor,
+                            controladorBotonesProfesor,
+                            true
+                        )
+                    );
+                }
+            }
+            else
+            {
+                VerticalStackLayoutProfesores.Children.Add(
+                    new Label()
+                    {
+                        Text = "No se encontraron profesores.",
+                        TextColor = Colors.Gray,
+                        HorizontalOptions = LayoutOptions.Center
+                    });
+            }
+        }
+        catch (Exception error)
+        {
+            DisplayAlert("Error en búsqueda", error.Message, "OK");
+        }
+    }
+
+    // EVENTOS SIN USAR
+
+    protected virtual void controladorBotonesProfesor(object sender, EventArgs e)
+    { }
 
     protected virtual void controladorBotones(object sender, EventArgs e)
-    {
-
-    }
-
-
-
+    { }
 }

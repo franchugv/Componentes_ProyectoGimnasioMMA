@@ -21,9 +21,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
 
         protected Escuela _escuela;
         public event Action EventoVolverPaginaPrincipal;
-
-        //protected List<Deporte> _listaDeportes;
-        //protected List<string> _listaNombreDeportes;
+    
         public AgregarAlumno(Usuario usuario, Escuela escuela) : base(escuela, usuario)
         {
             _api_bd = new API_BD();
@@ -32,7 +30,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
             cargarConstructor();
         }
 
-        // EVENTOS
+        // INICIALIZACIÓN
         private void cargarConstructor()
         {
             try
@@ -45,24 +43,24 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
             }
         }
 
-
-        protected override void entryUnfocus(object sender, FocusEventArgs e)
-        {
-            base.entryUnfocus(sender, e);
-        }
-
-
         protected override void GenerarUI()
         {
             base.GenerarUI();
 
             _pickerCategoriaEdad = GeneracionUI.CrearPicker("ePicker", "Seleccione una Categoría", Alumno.ObtenerCategoriasEdad, SelectedIndexChanged);
             _botonInsertar = GeneracionUI.CrearBoton("Insertar Alumno", "eBoton", controladorBoton);
+            _botonInsertar.BackgroundColor = Colors.Green;
 
 
             MAIN_VSL.Add(_pickerCategoriaEdad);
             MAIN_VSL.Add(_botonInsertar);
 
+        }
+
+        // EVENTOS
+        protected override void entryUnfocus(object sender, FocusEventArgs e)
+        {
+            base.entryUnfocus(sender, e);
         }
 
         public async virtual void controladorBoton(object sender, EventArgs e)
@@ -99,7 +97,6 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
             }
             
         }
-
 
         private void SelectedIndexChanged(object sender, EventArgs e)
         {

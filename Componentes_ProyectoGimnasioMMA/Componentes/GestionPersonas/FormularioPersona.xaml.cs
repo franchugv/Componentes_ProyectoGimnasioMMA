@@ -51,8 +51,6 @@ public partial class FormularioPersona : ContentView
         }
     }
     
-
-
     // EVENTOS
 
     protected virtual void CargarEnConstructor(Escuela escuela, Usuario usuario)
@@ -72,8 +70,6 @@ public partial class FormularioPersona : ContentView
             Application.Current.MainPage.DisplayAlert("ERROR", error.Message, "Ok");
         }
     }
-
-
 
     protected virtual void entryUnfocus(object sender, FocusEventArgs e)
     {
@@ -123,10 +119,6 @@ public partial class FormularioPersona : ContentView
 
     }
 
-
-
-
-
     protected virtual void GenerarUI()
     {
         List<string> listaNombresEscuelas = new List<string>();
@@ -137,9 +129,9 @@ public partial class FormularioPersona : ContentView
         }
 
         // Inctanciar Componentes de la interfaz
-        _eDNI = GeneracionUI.CrearEntryError("DNI", "eDNI", entryUnfocus);
-        _eNombre = GeneracionUI.CrearEntryError("Nombre", "eNombre", entryUnfocus);
-        _eApellidos = GeneracionUI.CrearEntryError("Apellidos", "eApellidos", entryUnfocus);
+        _eDNI = GeneracionUI.CrearEntryError("DNI", "eDNI", 10, entryUnfocus);
+        _eNombre = GeneracionUI.CrearEntryError("Nombre", "eNombre", 50, entryUnfocus);
+        _eApellidos = GeneracionUI.CrearEntryError("Apellidos", "eApellidos", 100, entryUnfocus);
         _selectorEscuela = GeneracionUI.CrearPicker("sEscuela", "Seleccione una Escuela", listaNombresEscuelas, pickerFocusChanged);
 
         // Añadir interfaz al vsl

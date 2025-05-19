@@ -31,7 +31,7 @@ public partial class Login : ContentPage
 
     }
 
-
+    // PROPIEDADES
     public Usuario usuarioElegido
     {
         get
@@ -52,8 +52,6 @@ public partial class Login : ContentPage
         }
     }
 
-
-
     // EVENTOS
     private void cargarConstructor()
     {
@@ -65,6 +63,18 @@ public partial class Login : ContentPage
         catch (Exception error)
         {
             DisplayAlert("ERROR", error.Message, "OK");
+        }
+    }
+
+    private void entryCompletado(object sender, EventArgs e)
+    {
+        try
+        {
+            llamadaLogin();
+        }
+        catch(Exception error)
+        {
+            DisplayAlert("Error", error.Message, "Ok");
         }
     }
 
@@ -86,8 +96,6 @@ public partial class Login : ContentPage
             DisplayAlert("ERROR", error.Message, "Ok");
         }
     }
-
-
 
     private void entryUnfocus(object sender, FocusEventArgs e)
     {
@@ -153,7 +161,6 @@ public partial class Login : ContentPage
         }
     }
 
-
     // FUNCIONES
     private void GenerarInterfaz()
     {
@@ -179,10 +186,12 @@ public partial class Login : ContentPage
         };
 
         // Crear los Entries
-        _entryCorreo = GeneracionUI.CrearEntryError("Correo electrónico", "eCorreo", entryUnfocus);
-        _entryContrasenia = GeneracionUI.CrearEntryError("Contraseña", "eContrasenia", entryUnfocus);
-        _entryContrasenia.EntryEditar.IsPassword = true;
+        _entryCorreo = GeneracionUI.CrearEntryError("Correo electrónico", "eCorreo", 100, entryUnfocus);
+        _entryCorreo.EntryEditar.Completed += entryCompletado;
 
+        _entryContrasenia = GeneracionUI.CrearEntryError("Contraseña", "eContrasenia", 64, entryUnfocus);
+        _entryContrasenia.EntryEditar.IsPassword = true;
+        _entryContrasenia.EntryEditar.Completed += entryCompletado;
         // Crear el botón con un diseño moderno
         _botonLogin = GeneracionUI.CrearBoton("Iniciar sesión", "bLogin", controladorBoton);
         _botonLogin.BackgroundColor = Color.FromArgb("#4CAF50"); // Verde 
@@ -190,6 +199,7 @@ public partial class Login : ContentPage
         _botonLogin.CornerRadius = 10;
         _botonLogin.HeightRequest = 40;
         _botonLogin.FontAttributes = FontAttributes.Bold;
+        
 
         // Agregar al layout
         layoutInterno.Add(_entryCorreo);
@@ -207,14 +217,20 @@ public partial class Login : ContentPage
     }
 
 
+
+    /// <summary>
+    /// MÉTODO PARA obtener al usuario
+    /// </summary>    
     protected virtual void llamadaLogin()
     {
         _usuario = _api_bd.DevolverUsuario(_entryCorreo.Texto, _entryContrasenia.Texto);
-
-
-
     }
 
+    /// <summary>
+    /// Método para validar si el usuario puede entrar o no
+    /// </summary>
+    /// <param name="tipoUsuario"></param>
+    /// <exception cref="Exception"></exception>
     protected void FuncionLogin(TipoUsuario tipoUsuario)
     {
 

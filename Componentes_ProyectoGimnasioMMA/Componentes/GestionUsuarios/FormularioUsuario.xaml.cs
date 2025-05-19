@@ -167,9 +167,10 @@ public partial class FormularioUsuario : ContentView
         }
 
         // Inctanciar Componentes de la interfaz
-        _eCorreo = GeneracionUI.CrearEntryError("Ingrese el Correo", "eCorreo", entryUnfocus);
-        _eNombre = GeneracionUI.CrearEntryError("Ingrese el Nombre", "eNombre", entryUnfocus);
-        _eContrasenia = GeneracionUI.CrearEntryError("Ingrese la contraseña", "eContrasenia", entryUnfocus);
+        _eCorreo = GeneracionUI.CrearEntryError("Ingrese el Correo", "eCorreo", 100, entryUnfocus);
+        _eNombre = GeneracionUI.CrearEntryError("Ingrese el Nombre", "eNombre", 50, entryUnfocus);
+        _eContrasenia = GeneracionUI.CrearEntryError("Ingrese la contraseña", "eContrasenia", 64, entryUnfocus);
+        _eContrasenia.EntryEditar.IsPassword = true;
         _eTipoUsuario = GeneracionUI.CrearPicker("eTipoUsuario", "Seleccione un Tipo de Usuario", _tiposUsuariosPicker, SelectedIndexChanged);
         _selectorEscuela = GeneracionUI.CrearPicker("pEscuela", "Seleccione una Escuela", nombreEscuela, SelectedIndexChanged);
 

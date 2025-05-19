@@ -16,11 +16,8 @@ public partial class SelectorEscuela : ContentPage
     protected Usuario _usuario;
     protected Escuela _escuelaElegida;
 
-
     // Evento que será lanzado al hacer clic en una escuela
     public event Action<Escuela> EscuelaSeleccionadaEvento;
-
-
 
     /// <summary>
     /// Contructor en el cual, podremos seleccionar escuelas por Usuario
@@ -53,8 +50,6 @@ public partial class SelectorEscuela : ContentPage
         _listaEscuelas = _api_bd.ObtenerEscuelas();
 
         GenerarInterfaz();
-
-
     }
 
     // Propiedades
@@ -69,9 +64,6 @@ public partial class SelectorEscuela : ContentPage
             VerticalStackLayoutEscuelas = value;
         }
     }
-
-
-
 
     // EVENTOS
 
@@ -114,7 +106,8 @@ public partial class SelectorEscuela : ContentPage
 
     }
 
-    // Métodos
+    // MÉTODOS
+
     protected virtual void GenerarInterfaz()
     {
         foreach (Escuela escuela in _listaEscuelas)

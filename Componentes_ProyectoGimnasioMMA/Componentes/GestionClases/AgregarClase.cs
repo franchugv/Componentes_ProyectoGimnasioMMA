@@ -12,26 +12,31 @@ public class AgregarClase : ContentView
 	// RECURSOS
 	protected VerticalStackLayout MainVSL;
 
+    // Contoles
+    // TimePickes
 	protected TimePicker _tpHoraInicio;
 	protected TimePicker _tpHoraFin;
 
+    // Pickers
 	protected Picker _selectorDia;
 	protected Picker _selectorEscuela;
 	protected Picker _selectorDeporte;
 	protected Picker _selectorProfesor;
 
+    // Botones
 	protected Button _botonInsertar;
-	// Listas
+
+	// Listas Escuelas
 	List<Escuela> _listaEscuelas;
 	List<string> _listaNombreEscuelas;
     Escuela _escuelaElegida;
 
-
+    // Listas depores
     List<Deporte> _listaDeportes;
 	List<string> _listaNombreDeportes;
     Deporte _deporteElegido;
 
-
+    // Listas Profesores
     List<Profesores> _listaProfesores;
 	List<string> _listaNombreProfesores;
     Profesores _profesorElegido;
@@ -55,6 +60,7 @@ public class AgregarClase : ContentView
 
 	}
 
+    // INICIALIZACIÓN
 	private void CargarConstructor()
 	{
 		_api_bd = new API_BD();
@@ -93,8 +99,6 @@ public class AgregarClase : ContentView
 
 		GenerarUI();
 	}
-
-
 
     private void GenerarUI()
     {
@@ -145,7 +149,7 @@ public class AgregarClase : ContentView
 
     }
 
-
+    // VALIDACIÓN
     private void validarTimePickers()
     {
         if (_tpHoraInicio == null || _tpHoraFin == null)
@@ -165,8 +169,6 @@ public class AgregarClase : ContentView
     }
 
     // EVENTOS
-
-
     private void controladorBotones(object sender, EventArgs e)
     {
 		try
@@ -238,6 +240,7 @@ public class AgregarClase : ContentView
             Application.Current.MainPage.DisplayAlert("ERROR", error.Message, "Ok");
         }
     }
+
     private void pUnfocused(object sender, EventArgs e)
     {
 
