@@ -93,7 +93,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
             MAIN_VSL.Children.Add(
                 _pickerEliminarEscuela
             );
-            MAIN_VSL.Children.Add(
+            VSL_BOTON.Children.Add(
                 _botonEditar
             );
 

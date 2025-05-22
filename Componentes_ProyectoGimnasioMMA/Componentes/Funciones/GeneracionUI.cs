@@ -100,6 +100,8 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
 
             picker.SelectedIndexChanged += evento;
 
+            if (items.Count <= 0) picker.IsEnabled = false;
+
             return picker;
         }
 
@@ -122,6 +124,8 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             }
 
             picker.PickerEditar.SelectedIndexChanged += evento;
+
+            if(items.Count <= 0) picker.IsEnabled = false;
 
             return picker;
         }
@@ -152,13 +156,24 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
 
         public static Label CrearLabel(string texto, int size, Color colorClaro, Color colorOscuro)
         {
-            return new Label
+            Label label = null;
+            if (!string.IsNullOrEmpty(texto))
             {
-                Text = texto,
-                FontAttributes = FontAttributes.Bold,
-                FontSize = size,
-                TextColor = Application.Current.RequestedTheme == AppTheme.Dark ?  colorClaro : colorOscuro
-            };
+                label = new Label
+                {
+                    Text = texto,
+                    FontAttributes = FontAttributes.Bold,
+                    FontSize = size,
+                    TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? colorClaro : colorOscuro
+                };
+            }
+            else
+            {
+                label = new Label { Text = "Sin datos" };
+            }
+           
+
+            return label;
         }
         public static Frame CrearCarta()
         {
@@ -521,17 +536,30 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
         }
         public static Frame CrearCartaProfesorGestor(Profesores profesor, EventHandler<TappedEventArgs> evento, EventHandler editar, EventHandler eliminar, bool generarBotones)
         {
+            // Recursos
+            string nombreDeporte = "";
             // Crear el gesto de toque (tap)
             TapGestureRecognizer tapGesture = new TapGestureRecognizer();
             tapGesture.Tapped += evento;
+            
+            // Validar que deporte no sea null
+            if(profesor.Deporte != null)
+            {
+                nombreDeporte = "Deporte: "+profesor.Deporte.Nombre;
+            }
+            else
+            {
+                nombreDeporte = "Sin Deporte Asignado";
+            }
 
             // Crear la lista de elementos de la carta
-            var elementos = new List<View>
+
+            List<View> elementos = new List<View>
             {
                 CrearLabel(profesor.DNI, 16, Colors.LightGray, Colors.Gray),
                 CrearLabel(profesor.Nombre, 16, Colors.LightGray, Colors.Gray),
                 CrearLabel(profesor.Apellidos, 16, Colors.LightGray, Colors.Gray),
-                CrearLabel(profesor.Deporte.Nombre, 16, Colors.LightGray, Colors.Gray)
+                CrearLabel(nombreDeporte, 16, Colors.LightGray, Colors.Gray)
 
             };
 

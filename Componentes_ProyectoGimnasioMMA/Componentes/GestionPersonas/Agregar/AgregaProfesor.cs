@@ -109,37 +109,60 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
 
         protected override void GenerarUI()
         {
+            // Crear grid principal con dos filas
+            var gridPrincipal = new Grid
+            {
+                RowDefinitions =
+        {
+            new RowDefinition { Height = new GridLength(1, GridUnitType.Star) }, // Scrollable content
+            new RowDefinition { Height = GridLength.Auto } // Fixed button
+        }
+            };
 
+            // StackLayout con los campos dentro del ScrollView
+            var stackCampos = new VerticalStackLayout
+            {
+                Padding = 10,
+                Spacing = 10
+            };
 
-            // Inctanciar Componentes de la interfaz
+            // Instanciar componentes de la interfaz
             _eDNI = GeneracionUI.CrearEntryError("DNI", "eDNI", 10, entryUnfocus);
             _eNombre = GeneracionUI.CrearEntryError("Nombre", "eNombre", 50, entryUnfocus);
             _eApellidos = GeneracionUI.CrearEntryError("Apellidos", "eApellidos", 100, entryUnfocus);
             _selectorEscuela = GeneracionUI.CrearPicker("sEscuela", "Seleccione una Escuela", _listaNombreEscuelas, pickerFocusChanged);
-            if (_listaNombreEscuelas.Count <= 0) _selectorEscuela.IsEnabled = false;
+            _pDeporte = GeneracionUI.CrearPicker("pProfesor", "Seleccione un deporte", _listaNombreDeportes, pickerFocusChanged);
 
             _pSelectorUsuario = GeneracionUI.CrearPicker("sUsuario", "Seleccione un Usuario", _listaNombresUsuariosDisponibles, pickerFocusChanged);
-            if (_listaUsuariosDisponibles.Count <= 0) _pSelectorUsuario.IsEnabled = false;
 
             _eNivel = GeneracionUI.CrearEntryError("Inserte el nivel del Profesor", "eNivel", 50, entryUnfocus);
-            _pDeporte = GeneracionUI.CrearPicker("pDeporte", "Seleccione un deporte para el Profesorado", _listaNombreDeportes, selectedIndexChanged);
-            if (_listaNombreDeportes.Count <= 0) _pDeporte.IsEnabled = false;
+
 
             _botonInsertar = GeneracionUI.CrearBoton("Insertar Profesor", "bInsertar", controladorBoton);
             _botonInsertar.BackgroundColor = Colors.Green;
 
-            // Añadir interfaz al vsl
-            MAIN_VSL.Children.Add(_eDNI);
-            MAIN_VSL.Children.Add(_eNombre);
-            MAIN_VSL.Children.Add(_eApellidos);
-            MAIN_VSL.Children.Add(_eNivel);
-            MAIN_VSL.Children.Add(_selectorEscuela);
-            MAIN_VSL.Children.Add(_pDeporte);
-            MAIN_VSL.Children.Add(_pSelectorUsuario);
-            MAIN_VSL.Children.Add(_botonInsertar);
+            // Añadir elementos al stack
+            stackCampos.Children.Add(_eDNI);
+            stackCampos.Children.Add(_eNombre);
+            stackCampos.Children.Add(_eApellidos);
+            stackCampos.Children.Add(_eNivel);
+            stackCampos.Children.Add(_selectorEscuela);
+            stackCampos.Children.Add(_pDeporte);
+            stackCampos.Children.Add(_pSelectorUsuario);
 
-           
+            // ScrollView que contiene los campos
+            var scrollView = new ScrollView
+            {
+                Content = stackCampos
+            };
 
+            // Añadir ScrollView y Botón al grid
+            gridPrincipal.Add(scrollView, 0, 0);
+            VSL_BOTON.Add(_botonInsertar);
+
+            // Asignar el grid al layout principal
+            MAIN_VSL.Children.Clear(); // Asegúrate de limpiar antes de añadir uno nuevo
+            MAIN_VSL.Children.Add(gridPrincipal);
         }
 
         // EVENTOS

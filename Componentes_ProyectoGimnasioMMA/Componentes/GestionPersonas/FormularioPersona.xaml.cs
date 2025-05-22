@@ -50,7 +50,18 @@ public partial class FormularioPersona : ContentView
             UI_VSL = value;
         }
     }
-    
+
+    public VerticalStackLayout VSL_BOTON
+    {
+        get
+        {
+            return vslBoton;
+        }
+        set
+        {
+            vslBoton = value;
+        }
+    }
     // EVENTOS
 
     protected virtual void CargarEnConstructor(Escuela escuela, Usuario usuario)
@@ -127,7 +138,7 @@ public partial class FormularioPersona : ContentView
         {
             listaNombresEscuelas.Add(escuela.Nombre);
         }
-
+        
         // Inctanciar Componentes de la interfaz
         _eDNI = GeneracionUI.CrearEntryError("DNI", "eDNI", 10, entryUnfocus);
         _eNombre = GeneracionUI.CrearEntryError("Nombre", "eNombre", 50, entryUnfocus);

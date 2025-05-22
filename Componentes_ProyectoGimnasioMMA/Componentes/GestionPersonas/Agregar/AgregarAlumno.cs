@@ -53,7 +53,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
 
 
             MAIN_VSL.Add(_pickerCategoriaEdad);
-            MAIN_VSL.Add(_botonInsertar);
+            VSL_BOTON.Add(_botonInsertar);
 
         }
 

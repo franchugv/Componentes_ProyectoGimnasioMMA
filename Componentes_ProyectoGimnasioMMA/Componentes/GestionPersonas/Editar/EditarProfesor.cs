@@ -83,19 +83,14 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
             _eNivel = GeneracionUI.CrearEntryConfirmacion("Ingrese un nuevo nivel del Profesor", "eCNivel", 50, entryUnfocus);
 
             _selectorEscuelaNuevaAgregar = GeneracionUI.CrearPickerConfirmacion("sEscuelaAgregar", "Seleccione una Escuela a Agregar", _listaNombresEscuelasAgregar, pickerFocusChanged);
-            if (_listaNombresEscuelasAgregar.Count < 1) _selectorEscuelaNuevaAgregar.PickerEditar.IsEnabled = false;
 
             _selectorEscuelaViejaEliminar = GeneracionUI.CrearPickerConfirmacion("sEscuelaEliminar", "Seleccione una Escuela a Eliminar", _listaNombresEscuelasElimiminar, pickerFocusChanged);
-            if (_listaNombresEscuelasElimiminar.Count < 1) _selectorEscuelaViejaEliminar.PickerEditar.IsEnabled = false;
 
             _pSelectorUsuarioNuevo = GeneracionUI.CrearPickerConfirmacion("sUsuario", "Seleccione un Usuario a Cambiar", _listaNombresUsuariosDisponibles, pickerFocusChanged);
-            if (_listaNombresUsuariosDisponibles.Count < 1) _pSelectorUsuarioNuevo.PickerEditar.IsEnabled = false;
 
             _pDeporteNuevoAgregar = GeneracionUI.CrearPickerConfirmacion("pDeporteAgregar", "Seleccione un deporte nuevo para el Profesorado", _listaNombreDeportesAgregar, selectedIndexChanged);
-            if (_listaNombreDeportesAgregar.Count < 1) _pDeporteNuevoAgregar.PickerEditar.IsEnabled = false;
 
             _pDeporteViejoBorrar = GeneracionUI.CrearPickerConfirmacion("pDeporteEliminar", "Seleccione un deporte a Eliminar para el Profesorado", _listaNombreDeportesEliminar, selectedIndexChanged);
-            if (_listaNombreDeportesEliminar.Count < 1) _pDeporteViejoBorrar.PickerEditar.IsEnabled = false;
 
             _botonInsertar = GeneracionUI.CrearBoton("Actualizar Profesor", "bInsertar", controladorBoton);
             _botonInsertar.BackgroundColor = Colors.Green;
@@ -109,7 +104,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
                 {
                     new Label { Text = "Gestión del Profesorado", FontSize = 20, FontAttributes = FontAttributes.Bold, HorizontalOptions = LayoutOptions.Center },
 
-                    // === Datos personales ===
+                    // Datos personales 
                     new Label { Text = "DNI:" },
                     _eCDNI,
                     new Label { Text = "Nombre:" },
@@ -143,12 +138,14 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
 
                     new BoxView { HeightRequest = 1, Color = Colors.LightGray },
 
-                    _botonInsertar
+                    
                 }
-                        };
+            };
 
-                        // Agregar al layout principal
-                        MAIN_VSL.Children.Add(layout);
+            // Agregar al layout principal
+            MAIN_VSL.Children.Add(layout);
+
+            VSL_BOTON.Add(_botonInsertar);
 
                         // Asignar datos
                         AsignarDatos();
@@ -320,7 +317,24 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
         }
 
         // Controlador donde haremos la insercción
-        private void controladorBoton(object sender, EventArgs e)
+        private async void controladorBoton(object sender, EventArgs e)
+        {
+            try
+            {
+                bool confirmar = await GeneracionUI.MostrarConfirmacion(Application.Current.MainPage, "Ventana confirmación", $"¿Desea Actualizar a Profesor {_profesorEditar.Nombre}?");
+                
+                if (confirmar)
+                {
+                    ActualizarProfesor();
+                }
+            }
+            catch(Exception error)
+            {
+                await Application.Current.MainPage.DisplayAlert("ERROR", error.Message, "Ok");
+            }
+        }
+
+        private void ActualizarProfesor()
         {
             try
             {
@@ -333,7 +347,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
 
                 Deporte deporteViejoAEliminar = null;
                 Deporte deporteNuevo = null;
-                 
+
                 // VALIDACIÓN
                 //if (_pSelectorUsuarioNuevo.PickerEditar.SelectedItem == null) throw new Exception("Para poder cambiar de usuario debe seleccionar uno");
                 //if (_pDeporteNuevoAgregar.EstaSeleccionado && _pDeporteViejoBorrar.EstaSeleccionado) throw new Exception("Solo podemos seleccionar o un deporte a Agregar o un deporte a Eliminar, no Ambos");
@@ -381,12 +395,12 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
                 }
 
 
-            
+
                 Profesores profesor = new Profesores(_eCNombre.Texto, _eCApellidos.Texto, _eCDNI.Texto, _eNivel.Texto, _pSelectorUsuarioNuevo.PickerEditar.SelectedItem.ToString());
                 _api_bd.ValidarRepeticionDNIAlumno(profesor.DNI, _escuela.Id);
 
                 _api_bd.ActualizarProfesor(_profesorEditar.DNI, profesor.DNI, profesor.Nombre, profesor.Apellidos, profesor.Nivel, profesor.CorreoProfesor);
-                
+
                 EventoVolverPaginaPrincipal?.Invoke();
 
             }
