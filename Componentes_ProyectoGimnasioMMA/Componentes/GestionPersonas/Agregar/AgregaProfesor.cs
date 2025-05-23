@@ -128,6 +128,8 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
 
             // Instanciar componentes de la interfaz
             _eDNI = GeneracionUI.CrearEntryError("DNI", "eDNI", 10, entryUnfocus);
+            _eDNI.EntryEditar.TextChanged += textChangedDni;
+
             _eNombre = GeneracionUI.CrearEntryError("Nombre", "eNombre", 50, entryUnfocus);
             _eApellidos = GeneracionUI.CrearEntryError("Apellidos", "eApellidos", 100, entryUnfocus);
             _selectorEscuela = GeneracionUI.CrearPicker("sEscuela", "Seleccione una Escuela", _listaNombreEscuelas, pickerFocusChanged);
@@ -166,6 +168,31 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
         }
 
         // EVENTOS
+
+        #region EVENTOS TEXT CHANGED
+        private void textChangedDni(object sender, TextChangedEventArgs e)
+       {
+            try
+            {
+
+                if (_eDNI.EntryEditar.Text.Length == 9 && !_eDNI.EntryEditar.Text.Contains("-"))
+                {
+                    // entryDni.Text = entryDni.Text + "-";
+                    _eDNI.EntryEditar.Text = _eDNI.EntryEditar.Text.Insert(8, "-");
+                }
+
+
+            }
+            catch (Exception error)
+            {
+                Application.Current.MainPage.DisplayAlert("ERROR", error.Message, "Ok");
+            }
+        }
+
+        #endregion
+
+
+
         private void controladorBoton(object sender, EventArgs e)
         {
             try
@@ -204,7 +231,17 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
                     _api_bd.AgregarProfesor(profesor, usuarioElegido.Correo);
 
                 }
-                // TODO: Hacer que se pueda añadir un profesor sin usuario
+
+                // En caso de que no tengo ningún usuario seleccionado
+                if (_pSelectorUsuario.SelectedItem == null || _pSelectorUsuario.SelectedItem.ToString() == "")
+                {
+                    foreach (Usuario usuario in _listaUsuariosDisponibles)
+                    {
+                        if (usuario.Correo == usuarioElegidoCadena) usuarioElegido = usuario;
+                    }
+                    _api_bd.AgregarProfesor(profesor, null);
+
+                }
 
 
                 // Asignar a un profesor una escuela

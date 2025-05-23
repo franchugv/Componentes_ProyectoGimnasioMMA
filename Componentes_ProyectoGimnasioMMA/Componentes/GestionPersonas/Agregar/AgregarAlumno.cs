@@ -46,6 +46,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
         protected override void GenerarUI()
         {
             base.GenerarUI();
+            _eDNI.EntryEditar.TextChanged += textChangedDni;
 
             _pickerCategoriaEdad = GeneracionUI.CrearPicker("ePicker", "Seleccione una Categoría", Alumno.ObtenerCategoriasEdad, SelectedIndexChanged);
             _botonInsertar = GeneracionUI.CrearBoton("Insertar Alumno", "eBoton", controladorBoton);
@@ -58,6 +59,30 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
         }
 
         // EVENTOS
+
+        #region EVENTOS TEXT CHANGED
+        private void textChangedDni(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+
+                if (_eDNI.EntryEditar.Text.Length == 9 && !_eDNI.EntryEditar.Text.Contains("-"))
+                {
+                    // entryDni.Text = entryDni.Text + "-";
+                    _eDNI.EntryEditar.Text = _eDNI.EntryEditar.Text.Insert(8, "-");
+                }
+
+
+            }
+            catch (Exception error)
+            {
+                Application.Current.MainPage.DisplayAlert("ERROR", error.Message, "Ok");
+            }
+        }
+
+        #endregion
+
+
         protected override void entryUnfocus(object sender, FocusEventArgs e)
         {
             base.entryUnfocus(sender, e);

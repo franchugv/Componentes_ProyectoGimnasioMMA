@@ -57,6 +57,8 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
             }
             // Inctanciar Componentes de la interfaz
             _eDNI = GeneracionUI.CrearEntryConfirmacion("Ingrese un nuevo DNI", "eDNI", 10, entryUnfocus);
+            _eDNI.EntryEditar.TextChanged += textChangedDni;
+
             _eNombre = GeneracionUI.CrearEntryConfirmacion("Ingrese un nuevo Nombre", "eNombre", 50, entryUnfocus);
             _eApellidos = GeneracionUI.CrearEntryConfirmacion("Ingrese unos nuevos Apellidos", "eApellidos", 100, entryUnfocus);
 
@@ -109,6 +111,30 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
         }
 
         // EVENTOS
+
+        #region EVENTOS TEXT CHANGED
+        private void textChangedDni(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+
+                if (_eDNI.EntryEditar.Text.Length == 9 && !_eDNI.EntryEditar.Text.Contains("-"))
+                {
+                    // entryDni.Text = entryDni.Text + "-";
+                    _eDNI.EntryEditar.Text = _eDNI.EntryEditar.Text.Insert(8, "-");
+                }
+
+
+            }
+            catch (Exception error)
+            {
+                Application.Current.MainPage.DisplayAlert("ERROR", error.Message, "Ok");
+            }
+        }
+
+        #endregion
+
+
         protected override void entryUnfocus(object sender, FocusEventArgs e)
         {
             Entry entry = (Entry)sender;

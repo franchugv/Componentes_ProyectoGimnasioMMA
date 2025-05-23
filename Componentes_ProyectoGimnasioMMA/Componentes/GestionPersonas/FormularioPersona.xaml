@@ -18,7 +18,5 @@
 
         <VerticalStackLayout x:Name="vslBoton" Grid.Row="2"></VerticalStackLayout>
 
-
-
     </Grid>
 </ContentView>

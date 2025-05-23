@@ -2,12 +2,8 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Componentes_ProyectoGimnasioMMA.Componentes.EntryConfirmacion">
-    <VerticalStackLayout>
-        <HorizontalStackLayout>
-
-            <Entry x:Name="entryDato" />
-            
-        </HorizontalStackLayout>
-        <Label x:Name="lError" TextColor="Red"/>
-    </VerticalStackLayout>
+    <Grid RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, Auto">
+        <Entry x:Name="entryDato" Grid.Row="0" Grid.Column="0"/>
+        <Label x:Name="lError" TextColor="Red" Grid.Row="1" Grid.Column="0"/>
+    </Grid>
 </ContentView>

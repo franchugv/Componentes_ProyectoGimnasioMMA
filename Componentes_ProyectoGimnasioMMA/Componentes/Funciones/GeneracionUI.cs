@@ -13,6 +13,8 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
 {
     public static class GeneracionUI
     {
+
+
         #region Crear Entry Personalizados
         public static EntryValidacion CrearEntryError(string texto, string styleId, int numCarateres, EventHandler<FocusEventArgs> evento)
         {
@@ -88,6 +90,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
                 TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? Colors.White : Colors.Black,
                 Title = titulo,
                 Margin = new Thickness(10),
+                HorizontalOptions = LayoutOptions.Start,
 
                 // Tamaño fijo
                 WidthRequest = 300,
@@ -125,7 +128,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
 
             picker.PickerEditar.SelectedIndexChanged += evento;
 
-            if(items.Count <= 0) picker.IsEnabled = false;
+            if(items.Count <= 0) picker.PickerEditar.IsEnabled = false;
 
             return picker;
         }
@@ -153,6 +156,19 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
 
         #endregion
         #region Crear Cards Personalizados
+
+
+        public static Label CrearLabelPantallas(string texto, bool esTitulo = false)
+        {
+            return new Label
+            {
+                Text = texto,
+                FontSize = esTitulo ? 20 : Device.GetNamedSize(NamedSize.Default, typeof(Label)),
+                FontAttributes = esTitulo ? FontAttributes.Bold : FontAttributes.None,
+                HorizontalOptions = esTitulo ? LayoutOptions.Center : LayoutOptions.Start
+            };
+        }
+
 
         public static Label CrearLabel(string texto, int size, Color colorClaro, Color colorOscuro)
         {

@@ -9,18 +9,23 @@ namespace Componentes_ProyectoGimnasioMMA.Views;
 public partial class Login : ContentPage
 {
     // MIEMBROS
+    protected string _imagenPortadaClaro;
+    protected string _imagenPortadaOscuro;
+
     protected EntryValidacion _entryCorreo;
     protected EntryValidacion _entryContrasenia;
     protected Button _botonLogin;
     protected API_BD _api_bd;
     protected Usuario _usuario;
 
-    public Login(string imgPortada ,string titulo)
+    public Login(string imgPortadaClaro, string imgPortadaOscuro ,string titulo)
     {
         InitializeComponent();
 
         Titulo.Text = titulo;
-        imagenPortada.Source = imgPortada;
+
+        _imagenPortadaClaro = imgPortadaClaro;
+        _imagenPortadaOscuro = imgPortadaOscuro;
 
         Shell.SetNavBarIsVisible(this, false);
 
@@ -138,6 +143,22 @@ public partial class Login : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+
+        AjustarTamanioPantalla();
+
+        if (Application.Current.RequestedTheme == AppTheme.Dark)
+        {
+            imagenPortada.Source = _imagenPortadaOscuro;
+        }
+        else
+        {
+            imagenPortada.Source =_imagenPortadaClaro;
+        }
+
+    }
+
+    private async void AjustarTamanioPantalla()
+    {
         await Task.Delay(100);
 
         var displayInfo = DeviceDisplay.Current.MainDisplayInfo;
@@ -160,17 +181,24 @@ public partial class Login : ContentPage
             window.Y = y;
         }
     }
-
     // FUNCIONES
     private void GenerarInterfaz()
     {
+        // Detectar tema actual
+        var esModoOscuro = Application.Current.RequestedTheme == AppTheme.Dark;
+
+        // Colores adaptativos
+        Color fondoEntry = esModoOscuro ? Color.FromArgb("#1E1E1E") : Colors.White;
+        Color textoEntry = esModoOscuro ? Colors.White : Colors.Black;
+        Color fondoFrame = esModoOscuro ? Color.FromArgb("#2C2C2C") : Colors.White;
+
         // Estilo del Frame contenedor
         Frame frameLogin = new Frame
         {
             CornerRadius = 16,
             Padding = new Thickness(20),
             Margin = new Thickness(20),
-            BackgroundColor = Color.FromArgb("#ffffff"),
+            BackgroundColor = fondoFrame,
             HasShadow = true,
             HorizontalOptions = LayoutOptions.Center,
             VerticalOptions = LayoutOptions.Center,
@@ -185,32 +213,37 @@ public partial class Login : ContentPage
             VerticalOptions = LayoutOptions.Center
         };
 
-        // Crear los Entries
+        // Crear los Entries con márgenes y colores adaptativos
         _entryCorreo = GeneracionUI.CrearEntryError("Correo electrónico", "eCorreo", 100, entryUnfocus);
-        _entryCorreo.EntryEditar.Completed += entryCompletado;
+        _entryCorreo.Margin = new Thickness(15, 2); // 15 izq/der, 8 arriba/abajo
+        _entryCorreo.EntryEditar.BackgroundColor = fondoEntry;
+        _entryCorreo.EntryEditar.TextColor = textoEntry;
 
         _entryContrasenia = GeneracionUI.CrearEntryError("Contraseña", "eContrasenia", 64, entryUnfocus);
+        _entryContrasenia.Margin = new Thickness(15, 2);
         _entryContrasenia.EntryEditar.IsPassword = true;
         _entryContrasenia.EntryEditar.Completed += entryCompletado;
-        // Crear el botón con un diseño moderno
+        _entryContrasenia.EntryEditar.BackgroundColor = fondoEntry;
+        _entryContrasenia.EntryEditar.TextColor = textoEntry;
+
+        // Crear el botón
         _botonLogin = GeneracionUI.CrearBoton("Iniciar sesión", "bLogin", controladorBoton);
-        _botonLogin.BackgroundColor = Color.FromArgb("#4CAF50"); // Verde 
+        _botonLogin.BackgroundColor = Color.FromArgb("#4CAF50");
         _botonLogin.TextColor = Colors.White;
         _botonLogin.CornerRadius = 10;
         _botonLogin.HeightRequest = 40;
         _botonLogin.FontAttributes = FontAttributes.Bold;
-        
 
-        // Agregar al layout
+        // Agregar controles al layout
         layoutInterno.Add(_entryCorreo);
         layoutInterno.Add(_entryContrasenia);
         layoutInterno.Add(_botonLogin);
 
-        // Meter el layout al frame
+        // Agregar layout al frame
         frameLogin.Content = layoutInterno;
 
-        // Ajustar el Stack principal
-        mainVSL.Clear(); // Limpia si hay contenido previo
+        // Agregar frame al layout principal
+        mainVSL.Clear();
         mainVSL.HorizontalOptions = LayoutOptions.Center;
         mainVSL.VerticalOptions = LayoutOptions.Center;
         mainVSL.Add(frameLogin);
@@ -240,4 +273,7 @@ public partial class Login : ContentPage
         }
 
     }
+
+
+
 }
