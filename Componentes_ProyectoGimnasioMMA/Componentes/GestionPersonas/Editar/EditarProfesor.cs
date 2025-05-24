@@ -160,6 +160,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Editar
         {
             try
             {
+
                 _listaDeportesAgregar = new List<Deporte>();
                 _listaNombreDeportesAgregar = new List<string>();
                 // Cargar lista de deportes que un profesor no tenga asignado AGREGAR

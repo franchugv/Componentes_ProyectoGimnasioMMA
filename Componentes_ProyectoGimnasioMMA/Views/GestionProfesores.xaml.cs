@@ -72,7 +72,7 @@ public partial class GestionProfesores : ContentPage
             foreach (Profesores profesores in _listaProfesores)
             {
                 VerticalStackLayoutProfesores.Children.Add(
-                    GeneracionUI.CrearCartaProfesorGestor(
+                    GeneracionUI.CrearCartaProfesorGestor(_escuela.Id,
                         profesores,
                         CartaClickeadaProfesores,
                         controladorBotonesProfesor,
@@ -85,11 +85,7 @@ public partial class GestionProfesores : ContentPage
         else
         {
             VerticalStackLayoutProfesores.Children.Add(
-                new Label()
-                {
-                    Text = "No hay Profesores Disponibles",
-                    TextColor = Colors.Gray
-                }
+                new Label() { Text = "No hay Profesores Disponibles", TextColor = Colors.Gray, HorizontalOptions = LayoutOptions.Center }
             );
         }
     }
@@ -183,7 +179,7 @@ public partial class GestionProfesores : ContentPage
                     foreach (Profesores profesor in listaFiltrada)
                     {
                         VerticalStackLayoutProfesores.Children.Add(
-                            GeneracionUI.CrearCartaProfesorGestor(
+                            GeneracionUI.CrearCartaProfesorGestor(_escuela.Id,
                                 profesor,
                                 CartaClickeadaProfesores,
                                 controladorBotonesProfesor,
@@ -241,7 +237,7 @@ public partial class GestionProfesores : ContentPage
                 foreach (Profesores profesor in listaFiltrada)
                 {
                     VerticalStackLayoutProfesores.Children.Add(
-                        GeneracionUI.CrearCartaProfesorGestor(
+                        GeneracionUI.CrearCartaProfesorGestor(_escuela.Id,
                             profesor,
                             CartaClickeadaProfesores,
                             controladorBotonesProfesor,

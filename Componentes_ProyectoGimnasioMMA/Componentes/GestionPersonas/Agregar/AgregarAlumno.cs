@@ -90,16 +90,38 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
 
         public async virtual void controladorBoton(object sender, EventArgs e)
         {
+
+ 
+            try
+            {
+
+                bool confirmar = await GeneracionUI.MostrarConfirmacion(Application.Current.MainPage, "Ventana confirmación", $"¿Desea Agregar un nuevo Alumno?");
+
+                if (confirmar)
+                {
+
+                    AgregarAlumnoBD();
+                }
+
+            }
+            catch (Exception error)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", error.Message, "Ok");
+            }
+            
+        }
+
+        private void AgregarAlumnoBD()
+        {
             // Recursos
             Escuela nuevaEscuela = null;
-
             try
             {
                 if (_selectorEscuela.SelectedItem == null) throw new Exception("Seleccione una escuela");
                 foreach (Escuela escuela in _escuelaList)
                 {
                     // En caso de coincidir los nombres, asignaremos la escuela
-                    if(escuela.Nombre == _selectorEscuela.SelectedItem.ToString())
+                    if (escuela.Nombre == _selectorEscuela.SelectedItem.ToString())
                     {
                         nuevaEscuela = escuela;
                     }
@@ -109,18 +131,18 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
                 Alumno alumno = new Alumno(_eDNI.Texto, _eNombre.Texto, _eApellidos.Texto, Alumno.StringToCategoriaEdad(_pickerCategoriaEdad.SelectedItem.ToString()));
                 _api_bd.ValidarRepeticionDNIProfesor(alumno.DNI, _escuela.Id);
 
+                // Insertar Alumno
                 _api_bd.InsertarAlumno(alumno);
+                // Agregar al alumno a la Escuela
                 _api_bd.CrearRelacionEscuelaAlumno(alumno, nuevaEscuela.Id);
 
 
                 EventoVolverPaginaPrincipal?.Invoke();
-
             }
-            catch (Exception error)
+            catch(Exception error)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", error.Message, "Ok");
+                Application.Current.MainPage.DisplayAlert("Error", error.Message, "Ok");
             }
-            
         }
 
         private void SelectedIndexChanged(object sender, EventArgs e)

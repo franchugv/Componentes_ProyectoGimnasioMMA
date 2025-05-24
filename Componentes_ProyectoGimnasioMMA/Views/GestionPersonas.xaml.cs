@@ -88,13 +88,14 @@ public partial class GestionPersonas : ContentPage
             {
 
 
-                VerticalStackLayoutPersonas.Children.Add(GeneracionUI.CrearCartaProfesorGestor(profesores, CartaClickeadaProfesores, controladorBotonesProfesor, controladorBotonesProfesor, true));
+                VerticalStackLayoutPersonas.Children.Add(GeneracionUI.CrearCartaProfesorGestor(_escuela.Id, profesores, CartaClickeadaProfesores, controladorBotonesProfesor, controladorBotonesProfesor, true));
 
             }
         }
         else
         {
-            VerticalStackLayoutPersonas.Children.Add(new Label() { Text = "No hay Profesores Disponibles", TextColor = Colors.Gray });
+            VerticalStackLayoutPersonas.Children.Add(new Label() { Text = "No hay Profesores Disponibles", TextColor = Colors.Gray, HorizontalOptions = LayoutOptions.Center }
+);
         }
 
         // Generar Cards de Alumnos
@@ -111,7 +112,8 @@ public partial class GestionPersonas : ContentPage
         }
         else
         {
-            VerticalStackLayoutPersonas.Children.Add(new Label() { Text = "No hay Alumnos Disponibles", TextColor = Colors.Gray });
+            VerticalStackLayoutPersonas.Children.Add(new Label() { Text = "No hay Alumnos Disponibles", TextColor = Colors.Gray, HorizontalOptions = LayoutOptions.Center }
+);
         }
 
 

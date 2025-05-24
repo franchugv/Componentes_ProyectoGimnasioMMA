@@ -98,7 +98,10 @@ public class AgregarClase : ContentView
 		}
 
 		GenerarUI();
-	}
+
+        if (_api_bd.ObtenerProfesoresPorEscuela(_escuela.Id).Count <= 0) Application.Current.MainPage.DisplayAlert("Notificación", "No se puede Agregar una Clase sin Profesores, Agregue un Profesor", "Ok");
+
+    }
 
     private void GenerarUI()
     {
@@ -169,12 +172,29 @@ public class AgregarClase : ContentView
     }
 
     // EVENTOS
-    private void controladorBotones(object sender, EventArgs e)
+    private async void controladorBotones(object sender, EventArgs e)
     {
 		try
 		{
-           // validarTimePickers();
 
+            bool confirmar = await GeneracionUI.MostrarConfirmacion(Application.Current.MainPage, "Ventana confirmación", $"¿Desea una nueva Clase?");
+
+            if (confirmar)
+            {
+                AgregarClaseBD();
+            }
+        }
+        catch (Exception error)
+		{
+			await Application.Current.MainPage.DisplayAlert("ERROR", error.Message, "Ok");
+		}
+    }
+
+    private void AgregarClaseBD()
+    {
+
+        try
+        {
             // Asinar el profesor
             if (_selectorProfesor == null || _selectorProfesor.SelectedItem == null) throw new Exception("Debe seleccionar un Profesor");
 
@@ -203,17 +223,16 @@ public class AgregarClase : ContentView
             }
 
             Horario horario = new Horario
-                (_tpHoraInicio.Time, _tpHoraFin.Time, Horario.ConvertirStringADiaSemana(_selectorDia.SelectedItem.ToString()),_profesorElegido.DNI, _deporteElegido.Id, _escuelaElegida.Id);
+                (_tpHoraInicio.Time, _tpHoraFin.Time, Horario.ConvertirStringADiaSemana(_selectorDia.SelectedItem.ToString()), _profesorElegido.DNI, _deporteElegido.Id, _escuelaElegida.Id);
 
             _api_bd.InsertarHorario(horario);
 
             EventoVolverPaginaPrincipal?.Invoke();
-
         }
         catch (Exception error)
-		{
-			Application.Current.MainPage.DisplayAlert("ERROR", error.Message, "Ok");
-		}
+        {
+            Application.Current.MainPage.DisplayAlert("ERROR", error.Message, "Ok");
+        }
     }
 
     private void tpUnfocused(object sender, FocusEventArgs e)

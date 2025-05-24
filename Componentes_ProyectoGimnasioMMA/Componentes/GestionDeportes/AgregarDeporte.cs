@@ -74,29 +74,46 @@ public class AgregarDeporte : ContentView
     }
 
     // EVENTOS
-    private void controladorBotones(object sender, EventArgs e)
+    private async void controladorBotones(object sender, EventArgs e)
     {
 		try
 		{
+            bool confirmar = await GeneracionUI.MostrarConfirmacion(Application.Current.MainPage, "Ventana confirmación", $"¿Desea Agregar un nuevo Deporte?");
 
-			if (_selectorEscuela.SelectedItem == null) throw new Exception("Debe seleccionar una Escuela");
+            if (confirmar)
+            {
 
-			for(int indice = 0; indice < _listaEscuelas.Count; indice++)
-			{
-				if (_selectorEscuela.SelectedItem.ToString() == _listaEscuelas[indice].Nombre) _escuelaElegida = _listaEscuelas[indice];
-			}
-
-			Deporte deporte = new Deporte(_eNombre.Texto, _eFederacion.Texto, _escuelaElegida.Id);
-
-			// Insertamos el deporte
-			_api_BD.InsertarDeporte(deporte);
-            EventoVolverPaginaPrincipal?.Invoke();
-
+                AgregarDeporteBD();
+            }
         }
         catch (Exception error)
 		{
-			Application.Current.MainPage.DisplayAlert("ERROR", error.Message, "Ok");
+			await Application.Current.MainPage.DisplayAlert("ERROR", error.Message, "Ok");
 		}
+    }
+
+    private void AgregarDeporteBD()
+    {
+
+        try
+        {
+            if (_selectorEscuela.SelectedItem == null) throw new Exception("Debe seleccionar una Escuela");
+
+            for (int indice = 0; indice < _listaEscuelas.Count; indice++)
+            {
+                if (_selectorEscuela.SelectedItem.ToString() == _listaEscuelas[indice].Nombre) _escuelaElegida = _listaEscuelas[indice];
+            }
+
+            Deporte deporte = new Deporte(_eNombre.Texto, _eFederacion.Texto, _escuelaElegida.Id);
+
+            // Insertamos el deporte
+            _api_BD.InsertarDeporte(deporte);
+            EventoVolverPaginaPrincipal?.Invoke();
+        }
+        catch (Exception error)
+        {
+            Application.Current.MainPage.DisplayAlert("ERROR", error.Message, "Ok");
+        }
     }
 
     private void unfocusedPicker(object sender, EventArgs e)

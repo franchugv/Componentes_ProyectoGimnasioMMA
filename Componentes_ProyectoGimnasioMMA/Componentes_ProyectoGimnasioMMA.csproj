@@ -19,10 +19,15 @@
 
 	<ItemGroup>
 	  <Compile Remove="Componentes\GestionPersonas\Eliminar\**" />
+	  <Compile Remove="IMG\**" />
 	  <EmbeddedResource Remove="Componentes\GestionPersonas\Eliminar\**" />
+	  <EmbeddedResource Remove="IMG\**" />
 	  <MauiCss Remove="Componentes\GestionPersonas\Eliminar\**" />
+	  <MauiCss Remove="IMG\**" />
 	  <MauiXaml Remove="Componentes\GestionPersonas\Eliminar\**" />
+	  <MauiXaml Remove="IMG\**" />
 	  <None Remove="Componentes\GestionPersonas\Eliminar\**" />
+	  <None Remove="IMG\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -87,10 +92,6 @@
 	  <Reference Include="BibliotecaClases_ProyectoGimnasioMMA">
 	    <HintPath>..\..\BibliotecaClases_ProyectoGimnasioMMA\BibliotecaClases_ProyectoGimnasioMMA\bin\Debug\net7.0\BibliotecaClases_ProyectoGimnasioMMA.dll</HintPath>
 	  </Reference>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="IMG\" />
 	</ItemGroup>
 
 </Project>

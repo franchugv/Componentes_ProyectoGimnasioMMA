@@ -185,7 +185,13 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             }
             else
             {
-                label = new Label { Text = "Sin datos" };
+                label = new Label
+                {
+                    Text = "Sin datos",
+                    FontAttributes = FontAttributes.Bold,
+                    FontSize = size,
+                    TextColor = Application.Current.RequestedTheme == AppTheme.Dark ? colorClaro : colorOscuro
+                };
             }
            
 
@@ -531,16 +537,40 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
         }
 
         // PROFESORES
-        public static Frame CrearCartaProfesor(Profesores profesor, EventHandler<TappedEventArgs> evento)
+        public static Frame CrearCartaProfesor(int escuelaID, Profesores profesor, EventHandler<TappedEventArgs> evento)
         {
             Frame carta = CrearCarta();
+            API_BD _api_bd = new API_BD();
+            List<string> listaDeportes =  new List<string>();
+            string cadenaNombresDeportes = "";
+            // Asignar List
+
+            foreach(Deporte deporte in _api_bd.ObtenerDeportesAsignadosAProfesor(escuelaID, profesor.DNI))
+            {
+                listaDeportes.Add(deporte.Nombre);
+            }
+
+            // Validar que deporte no sea null
+            if (listaDeportes.Count <= 0)
+            {
+                cadenaNombresDeportes = "Sin Deporte Asignado";
+            }
+            else
+            {
+                if (listaDeportes.Count > 1) cadenaNombresDeportes = "Deportes:\n";
+                else cadenaNombresDeportes = "Deporte:\n";
+                cadenaNombresDeportes += string.Join("\n", listaDeportes);
+
+            }
 
             carta.Content = new VerticalStackLayout()
             {
                 CrearLabel(profesor.DNI, 16, Colors.LightGray, Colors.Gray),
                 CrearLabel(profesor.Nombre, 16, Colors.LightGray, Colors.Gray),
                 CrearLabel(profesor.Apellidos, 16, Colors.LightGray, Colors.Gray),
-                CrearLabel(profesor.Deporte.Nombre, 16, Colors.LightGray, Colors.Gray)
+                CrearLabel(cadenaNombresDeportes, 16, Colors.Red, Colors.DarkRed),
+                CrearLabel(profesor.CorreoProfesor, 16, Colors.LightGray, Colors.Gray)
+
 
             };
 
@@ -550,23 +580,38 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
 
             return carta;
         }
-        public static Frame CrearCartaProfesorGestor(Profesores profesor, EventHandler<TappedEventArgs> evento, EventHandler editar, EventHandler eliminar, bool generarBotones)
+        public static Frame CrearCartaProfesorGestor(int escuelaID, Profesores profesor, EventHandler<TappedEventArgs> evento, EventHandler editar, EventHandler eliminar, bool generarBotones)
         {
             // Recursos
-            string nombreDeporte = "";
             // Crear el gesto de toque (tap)
             TapGestureRecognizer tapGesture = new TapGestureRecognizer();
             tapGesture.Tapped += evento;
-            
-            // Validar que deporte no sea null
-            if(profesor.Deporte != null)
+
+            API_BD _api_bd = new API_BD();
+            List<string> listaDeportes = new List<string>();
+            string cadenaNombresDeportes = "";
+            // Asignar List
+
+            foreach (Deporte deporte in _api_bd.ObtenerDeportesAsignadosAProfesor(escuelaID, profesor.DNI))
             {
-                nombreDeporte = "Deporte: "+profesor.Deporte.Nombre;
+                listaDeportes.Add(deporte.Nombre);
+            }
+
+            // Validar que deporte no sea null
+            if (listaDeportes.Count <= 0)
+            {
+                cadenaNombresDeportes = "Sin Deporte Asignado";
             }
             else
             {
-                nombreDeporte = "Sin Deporte Asignado";
+                if(listaDeportes.Count > 1) cadenaNombresDeportes = "Deportes:\n";
+                else cadenaNombresDeportes = "Deporte:\n";
+
+
+                cadenaNombresDeportes += string.Join("\n", listaDeportes);
+
             }
+
 
             // Crear la lista de elementos de la carta
 
@@ -575,7 +620,9 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
                 CrearLabel(profesor.DNI, 16, Colors.LightGray, Colors.Gray),
                 CrearLabel(profesor.Nombre, 16, Colors.LightGray, Colors.Gray),
                 CrearLabel(profesor.Apellidos, 16, Colors.LightGray, Colors.Gray),
-                CrearLabel(nombreDeporte, 16, Colors.LightGray, Colors.Gray)
+                CrearLabel(cadenaNombresDeportes, 16, Colors.Red, Colors.DarkRed),
+                CrearLabel(profesor.CorreoProfesor, 16, Colors.LightGray, Colors.Gray)
+
 
             };
 

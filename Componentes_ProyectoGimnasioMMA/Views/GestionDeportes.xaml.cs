@@ -76,7 +76,8 @@ public partial class GestionDeportes : ContentPage
         }
         else
         {
-            VerticalStackLayoutPersonas.Children.Add(new Label() { Text = "No hay Deportes Disponibles", TextColor = Colors.Gray });
+            VerticalStackLayoutPersonas.Children.Add(new Label() { Text = "No hay Deportes Disponibles", TextColor = Colors.Gray, HorizontalOptions = LayoutOptions.Center }
+);
         }
 
 

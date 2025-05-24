@@ -62,6 +62,8 @@ public partial class GestionClases : ContentPage
             _listaHorarios = _api_bd.ObtenerClasesPorEscuela(_escuela.Id);
 
             generarUI();
+
+            if (_api_bd.ObtenerProfesoresPorEscuela(_escuela.Id).Count <= 0) DisplayAlert("Notificación", "No se puede Agregar una Clase sin Profesores, Agregue un Profesor", "Ok");
         }
         catch (Exception error)
         {

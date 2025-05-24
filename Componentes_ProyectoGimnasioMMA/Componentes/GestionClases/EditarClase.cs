@@ -140,12 +140,30 @@ public class EditarClase : ContentView
 
     // EVENTOS
 
-    private void controladorBotones(object sender, EventArgs e)
+    private async void controladorBotones(object sender, EventArgs e)
     {
         try
         {
-            // validarTimePickers();
 
+            bool confirmar = await GeneracionUI.MostrarConfirmacion(Application.Current.MainPage, "Ventana confirmación", $"¿Desea Editar la Clase ({_claseEditar.HoraInicio} - {_claseEditar.HoraFin}) en {_claseEditar.Dia} del Profesor {_api_bd.ObtenerProfesorPorDni(_claseEditar.ProfesorDni).Nombre}?");
+
+            if (confirmar)
+            {
+
+                EditarClaseBD();
+            }
+        }
+        catch (Exception error)
+        {
+            await Application.Current.MainPage.DisplayAlert("ERROR", error.Message, "Ok");
+        }
+    }
+
+    private void EditarClaseBD()
+    {
+
+        try
+        {
             // Asinar el profesor
             if (_selectorNuevoProfesor == null || _selectorNuevoProfesor.PickerEditar.SelectedItem == null) throw new Exception("Debe seleccionar un Profesor");
 
@@ -155,17 +173,16 @@ public class EditarClase : ContentView
                 if (_listaProfesores[indice].DNI == dni) _profesorElegido = _listaProfesores[indice];
             }
 
-         
+
 
             Horario horario = new Horario
                 (_tpHoraInicio.Time, _tpHoraFin.Time, Horario.ConvertirStringADiaSemana(_selectorDia.PickerEditar.SelectedItem.ToString()), _profesorElegido.DNI, _claseEditar.DeporteId, _claseEditar.IdEscuela);
 
             // Hacer Update
-            _api_bd.ActualizarClase(_claseEditar ,horario);
-            
+            _api_bd.ActualizarClase(_claseEditar, horario);
+
 
             EventoVolverPaginaPrincipal?.Invoke();
-
         }
         catch (Exception error)
         {

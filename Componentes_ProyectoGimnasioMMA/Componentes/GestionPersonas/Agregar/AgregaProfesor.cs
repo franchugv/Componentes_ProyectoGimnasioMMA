@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
 {
@@ -193,21 +194,41 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
 
 
 
-        private void controladorBoton(object sender, EventArgs e)
+        private async void controladorBoton(object sender, EventArgs e)
         {
             try
             {
 
+                bool confirmar = await GeneracionUI.MostrarConfirmacion(Application.Current.MainPage, "Ventana confirmación", $"¿Desea Agregar un nuevo Profesor?");
+
+                if (confirmar)
+                {
+
+                    AgregarProfesorBD();
+                }
+            }
+            catch (Exception error)
+            {
+                await Application.Current.MainPage.DisplayAlert("ERROR", error.Message, "Ok");
+            }
+            
+        }
+
+        private void AgregarProfesorBD()
+        {
+
+            try
+            {
                 // El deporte puede ser null
                 Deporte deporteElegido = null;
                 string usuarioElegidoCadena = null;
-                if(_pSelectorUsuario.SelectedItem != null)
+                if (_pSelectorUsuario.SelectedItem != null)
                 {
                     usuarioElegidoCadena = _pSelectorUsuario.SelectedItem.ToString();
                 }
 
 
-                if(_pDeporte.SelectedItem != null && _pDeporte.SelectedItem.ToString() != SIN_DEPORTE)
+                if (_pDeporte.SelectedItem != null && _pDeporte.SelectedItem.ToString() != SIN_DEPORTE)
                 {
                     foreach (Deporte deporte in _listaDeportes)
                     {
@@ -247,9 +268,9 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
                 // Asignar a un profesor una escuela
 
                 Escuela escuelaElegida = null;
-                if(_selectorEscuela.SelectedItem != null)
+                if (_selectorEscuela.SelectedItem != null)
                 {
-                    foreach(Escuela escuela in _escuelaList)
+                    foreach (Escuela escuela in _escuelaList)
                     {
                         if (escuela.Nombre == _selectorEscuela.SelectedItem.ToString()) escuelaElegida = escuela;
                     }
@@ -263,18 +284,16 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
 
                 EventoVolverPaginaPrincipal?.Invoke();
 
-
             }
             catch (Exception error)
             {
                 Application.Current.MainPage.DisplayAlert("ERROR", error.Message, "Ok");
             }
-            
+
         }
 
         private void selectedIndexChanged(object sender, EventArgs e)
         {
-
         }
 
         protected override void entryUnfocus(object sender, FocusEventArgs e)

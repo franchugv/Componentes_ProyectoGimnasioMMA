@@ -75,13 +75,33 @@ public class EditarDeportes : ContentView
     }
 
     // EVENTOS
-    private void controladorBotones(object sender, EventArgs e)
+    private async void controladorBotones(object sender, EventArgs e)
     {
         try
         {
 
+            bool confirmar = await GeneracionUI.MostrarConfirmacion(Application.Current.MainPage, "Ventana confirmación", $"¿Desea Editar el deporte {_deporte.Nombre}?");
 
+            if (confirmar)
+            {
 
+                EditarDeporteBD();
+            }
+        
+
+          
+
+        }
+        catch (Exception error)
+        {
+            await Application.Current.MainPage.DisplayAlert("ERROR", error.Message, "Ok");
+        }
+    }
+
+    private void EditarDeporteBD()
+    {
+        try
+        {
             string nombre = null;
             string federación = null;
 
@@ -98,15 +118,14 @@ public class EditarDeportes : ContentView
                 federación = deporteF.Federacion;
             }
 
-           
+
 
             _api_BD.EditarDeporte(_deporte.Id, nombre, federación);
-            
+
 
 
             // Insertamos el deporte
             EventoVolverPaginaPrincipal?.Invoke();
-
         }
         catch (Exception error)
         {

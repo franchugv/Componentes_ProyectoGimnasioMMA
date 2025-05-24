@@ -159,11 +159,8 @@ public partial class GestionUsuarios : ContentPage
         else
         {
             VerticalStackLayoutUsuarios.Children.Add(
-                new Label
-                {
-                    Text = "No hay Usuarios Disponibles",
-                    TextColor = Colors.Gray
-                }
+                new Label() { Text = "No hay Usuarios Disponibles", TextColor = Colors.Gray, HorizontalOptions = LayoutOptions.Center }
+
             );
         }
     }

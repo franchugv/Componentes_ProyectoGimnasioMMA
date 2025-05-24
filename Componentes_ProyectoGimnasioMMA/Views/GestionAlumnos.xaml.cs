@@ -104,11 +104,7 @@ public partial class GestionAlumnos : ContentPage
         else
         {
             VerticalStackLayoutAlumnos.Children.Add(
-                new Label
-                {
-                    Text = "No hay Alumnos Disponibles",
-                    TextColor = Colors.Gray
-                }
+                new Label() { Text = "No hay Alumnos Disponibles", TextColor = Colors.Gray, HorizontalOptions = LayoutOptions.Center }
             );
         }
     }
