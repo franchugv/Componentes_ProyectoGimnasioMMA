@@ -222,6 +222,10 @@ public class AgregarClase : ContentView
                 if (_listaEscuelas[indice].Nombre == escuelaNombre) _escuelaElegida = _listaEscuelas[indice];
             }
 
+            // Validar que tengamos seleccionado el día
+            if (_selectorDia == null || _selectorDia.SelectedItem == null) throw new Exception("Debe seleccionar un Día");
+
+
             Horario horario = new Horario
                 (_tpHoraInicio.Time, _tpHoraFin.Time, Horario.ConvertirStringADiaSemana(_selectorDia.SelectedItem.ToString()), _profesorElegido.DNI, _deporteElegido.Id, _escuelaElegida.Id);
 

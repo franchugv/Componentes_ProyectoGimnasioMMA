@@ -16,6 +16,7 @@
         <Button Text="Agregar Deportes"
                 x:Name="bagregar"
                 Clicked="ControladorBotones"
+                TextColor="White"
                 BackgroundColor="Green"
                 Grid.Row="1"
                 Grid.Column="0"

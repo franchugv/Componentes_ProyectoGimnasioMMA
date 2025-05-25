@@ -9,7 +9,7 @@
            HorizontalOptions="Center"/>
 
         <Grid ColumnDefinitions="*, *">
-            <Button Text="Agregar Profesores" Grid.Column="0" Grid.ColumnSpan="2" x:Name="bAlumnos" Clicked="controladorBotones" BackgroundColor="Green"/>
+            <Button Text="Agregar Profesores" Grid.Column="0" Grid.ColumnSpan="2" x:Name="bAlumnos" Clicked="controladorBotones" BackgroundColor="Green" TextColor="White"/>
         </Grid>
 
         <ScrollView VerticalOptions="FillAndExpand">

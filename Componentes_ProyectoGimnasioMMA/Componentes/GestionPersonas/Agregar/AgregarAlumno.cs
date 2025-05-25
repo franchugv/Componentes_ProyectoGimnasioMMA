@@ -117,7 +117,12 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
             Escuela nuevaEscuela = null;
             try
             {
-                if (_selectorEscuela.SelectedItem == null) throw new Exception("Seleccione una escuela");
+                // Validaciones
+                if (_selectorEscuela.SelectedItem == null) throw new Exception("Seleccione una escuela para el Alumno");
+
+                if (_pickerCategoriaEdad.SelectedItem == null) throw new Exception("Seleccione una categoria de Edad para el Alumno");
+
+                // Seleccionar escuela
                 foreach (Escuela escuela in _escuelaList)
                 {
                     // En caso de coincidir los nombres, asignaremos la escuela

@@ -18,6 +18,7 @@
                 x:Name="bagregar"
                 Clicked="ControladorBotones"
                 BackgroundColor="Green"
+                TextColor="White"
                 Grid.Row="1"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"

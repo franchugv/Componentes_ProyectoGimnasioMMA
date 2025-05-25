@@ -219,6 +219,8 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.GestionPersonas.Agregar
 
             try
             {
+                if (_selectorEscuela.SelectedItem == null) throw new Exception("Debe seleccionar una Escuela para el Usuario");
+
                 // El deporte puede ser null
                 Deporte deporteElegido = null;
                 string usuarioElegidoCadena = null;
