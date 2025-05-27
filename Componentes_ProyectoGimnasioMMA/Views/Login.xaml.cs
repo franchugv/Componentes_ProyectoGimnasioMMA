@@ -71,7 +71,7 @@ public partial class Login : ContentPage
         }
     }
 
-    private void entryCompletado(object sender, EventArgs e)
+    private async void entryCompletado(object sender, EventArgs e)
     {
         try
         {
@@ -79,11 +79,11 @@ public partial class Login : ContentPage
         }
         catch(Exception error)
         {
-            DisplayAlert("Error", error.Message, "Ok");
+            await DisplayAlert("Error", error.Message, "Ok");
         }
     }
 
-    private void controladorBoton(object sender, EventArgs e)
+    private async void controladorBoton(object sender, EventArgs e)
     {
         Button boton = (Button)sender;
         try
@@ -98,7 +98,7 @@ public partial class Login : ContentPage
         }
         catch (Exception error)
         {
-            DisplayAlert("ERROR", error.Message, "Ok");
+            await DisplayAlert("ERROR", error.Message, "Ok");
         }
     }
 
@@ -140,7 +140,7 @@ public partial class Login : ContentPage
     }
 
     // Evento encargado de que, al cargar el programa, este aparezca en el centro y con un tamaño predeterminado
-    protected override async void OnAppearing()
+    protected override void OnAppearing()
     {
         base.OnAppearing();
 
@@ -186,7 +186,7 @@ public partial class Login : ContentPage
     {
         // Detectar tema actual
         var esModoOscuro = Application.Current.RequestedTheme == AppTheme.Dark;
-
+        ScrollView scrollView;
         // Colores adaptativos
         Color fondoEntry = esModoOscuro ? Color.FromArgb("#1E1E1E") : Colors.White;
         Color textoEntry = esModoOscuro ? Colors.White : Colors.Black;
@@ -246,7 +246,12 @@ public partial class Login : ContentPage
         mainVSL.Clear();
         mainVSL.HorizontalOptions = LayoutOptions.Center;
         mainVSL.VerticalOptions = LayoutOptions.Center;
-        mainVSL.Add(frameLogin);
+
+        scrollView = new ScrollView
+        {
+            Content = frameLogin
+        };
+        mainVSL.Add(scrollView);
     }
 
 

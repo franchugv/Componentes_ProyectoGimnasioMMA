@@ -435,7 +435,8 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
         CrearLabel(alumno.DNI, 16, Colors.LightGray,  Colors.Gray),
         CrearLabel(alumno.Nombre, 16, Colors.LightGray,  Colors.Gray),
         CrearLabel(alumno.Apellidos, 16, Colors.LightGray,  Colors.Gray),
-
+        CrearLabel(alumno.CategoriaEdadAlumno.ToString(), 16, Colors.LightGrey, Colors.Gray)
+       
     };
 
             // Si se deben generar los botones, los agregamos a la lista
@@ -492,14 +493,16 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             TapGestureRecognizer tapGesture = new TapGestureRecognizer();
             tapGesture.Tapped += evento;
 
-            var elementos = new List<View>
+            List<View> elementos = new List<View>
             {
                 CrearLabel(alumno.DNI, 16, Colors.LightGray,  Colors.Gray),
                 CrearLabel(alumno.Nombre, 16, Colors.LightGray,  Colors.Gray),
                 CrearLabel(alumno.Apellidos, 16, Colors.LightGray,  Colors.Gray),
+                CrearLabel(alumno.CategoriaEdadAlumno.ToString(), 16, Colors.LightGrey, Colors.Gray)
+
             };
 
-            var botonSelector = new BotonSelector(texto, textoAlternativo, colorNormal, colorSeleccionado);
+            BotonSelector botonSelector = new BotonSelector(texto, textoAlternativo, colorNormal, colorSeleccionado);
             botonSelector.EstadoCambiado += (s, estaSeleccionado) =>
             {
                 seleccionCambioCallback?.Invoke(alumno, estaSeleccionado);
@@ -527,6 +530,8 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
                 CrearLabel(alumno.DNI, 16, Colors.LightGray,  Colors.Gray),
                 CrearLabel(alumno.Nombre, 16, Colors.LightGray,  Colors.Gray),
                 CrearLabel(alumno.Apellidos, 16, Colors.LightGray,  Colors.Gray),
+                CrearLabel(alumno.CategoriaEdadAlumno.ToString(), 16, Colors.LightGrey, Colors.Gray)
+
             };
 
             TapGestureRecognizer tapGesture = new TapGestureRecognizer();
@@ -541,25 +546,32 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
         {
             Frame carta = CrearCarta();
             API_BD _api_bd = new API_BD();
-            List<string> listaDeportes =  new List<string>();
+            List<string> listaNombreDeportes =  new List<string>();
             string cadenaNombresDeportes = "";
-            // Asignar List
 
-            foreach(Deporte deporte in _api_bd.ObtenerDeportesAsignadosAProfesor(escuelaID, profesor.DNI))
+            string correo = "";
+
+            if (string.IsNullOrEmpty(correo)) correo = "Sin correo Asignado";
+            else correo = profesor.CorreoProfesor;
+            // Asignar List
+            List<Deporte> listaDeportes = new List<Deporte>();
+            listaDeportes = _api_bd.ObtenerDeportesAsignadosAProfesor(escuelaID, profesor.DNI);
+
+            foreach (Deporte deporte in listaDeportes)
             {
-                listaDeportes.Add(deporte.Nombre);
+                listaNombreDeportes.Add(deporte.Nombre);
             }
 
             // Validar que deporte no sea null
-            if (listaDeportes.Count <= 0)
+            if (listaNombreDeportes.Count <= 0)
             {
                 cadenaNombresDeportes = "Sin Deporte Asignado";
             }
             else
             {
-                if (listaDeportes.Count > 1) cadenaNombresDeportes = "Deportes:\n";
+                if (listaNombreDeportes.Count > 1) cadenaNombresDeportes = "Deportes:\n";
                 else cadenaNombresDeportes = "Deporte:\n";
-                cadenaNombresDeportes += string.Join("\n", listaDeportes);
+                cadenaNombresDeportes += string.Join("\n", listaNombreDeportes);
 
             }
 
@@ -568,8 +580,9 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
                 CrearLabel(profesor.DNI, 16, Colors.LightGray, Colors.Gray),
                 CrearLabel(profesor.Nombre, 16, Colors.LightGray, Colors.Gray),
                 CrearLabel(profesor.Apellidos, 16, Colors.LightGray, Colors.Gray),
+                CrearLabel("Nivel: "+profesor.Nivel, 16, Colors.LightGray, Colors.Gray),
                 CrearLabel(cadenaNombresDeportes, 16, Colors.Red, Colors.DarkRed),
-                CrearLabel(profesor.CorreoProfesor, 16, Colors.LightGray, Colors.Gray)
+                CrearLabel("Correo: "+correo, 16, Colors.LightGray, Colors.Gray)
 
 
             };
@@ -588,27 +601,36 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
             tapGesture.Tapped += evento;
 
             API_BD _api_bd = new API_BD();
-            List<string> listaDeportes = new List<string>();
             string cadenaNombresDeportes = "";
-            // Asignar List
+            // Asignar List de deportes
 
-            foreach (Deporte deporte in _api_bd.ObtenerDeportesAsignadosAProfesor(escuelaID, profesor.DNI))
+            string correo = "";
+
+            if (string.IsNullOrEmpty(correo)) correo = "Sin correo Asignado";
+            else correo = profesor.CorreoProfesor;
+
+
+            List<string> listanNombreDeportes = new List<string>();
+            List<Deporte> listaDeportes = new List<Deporte>();
+            listaDeportes = _api_bd.ObtenerDeportesAsignadosAProfesor(escuelaID, profesor.DNI);
+
+            foreach (Deporte deporte in listaDeportes)
             {
-                listaDeportes.Add(deporte.Nombre);
+                listanNombreDeportes.Add(deporte.Nombre);
             }
 
             // Validar que deporte no sea null
-            if (listaDeportes.Count <= 0)
+            if (listanNombreDeportes.Count <= 0)
             {
                 cadenaNombresDeportes = "Sin Deporte Asignado";
             }
             else
             {
-                if(listaDeportes.Count > 1) cadenaNombresDeportes = "Deportes:\n";
+                if(listanNombreDeportes.Count > 1) cadenaNombresDeportes = "Deportes:\n";
                 else cadenaNombresDeportes = "Deporte:\n";
 
 
-                cadenaNombresDeportes += string.Join("\n", listaDeportes);
+                cadenaNombresDeportes += string.Join("\n", listanNombreDeportes);
 
             }
 
@@ -620,8 +642,9 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
                 CrearLabel(profesor.DNI, 16, Colors.LightGray, Colors.Gray),
                 CrearLabel(profesor.Nombre, 16, Colors.LightGray, Colors.Gray),
                 CrearLabel(profesor.Apellidos, 16, Colors.LightGray, Colors.Gray),
+                CrearLabel("Nivel: "+profesor.Nivel, 16, Colors.LightGray, Colors.Gray),
                 CrearLabel(cadenaNombresDeportes, 16, Colors.Red, Colors.DarkRed),
-                CrearLabel(profesor.CorreoProfesor, 16, Colors.LightGray, Colors.Gray)
+                CrearLabel("Correo: "+correo, 16, Colors.LightGray, Colors.Gray)
 
 
             };
