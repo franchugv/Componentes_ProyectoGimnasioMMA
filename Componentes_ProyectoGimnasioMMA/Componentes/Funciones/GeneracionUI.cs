@@ -551,7 +551,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
 
             string correo = "";
 
-            if (string.IsNullOrEmpty(correo)) correo = "Sin correo Asignado";
+            if (string.IsNullOrEmpty(profesor.CorreoProfesor)) correo = "Sin correo Asignado";
             else correo = profesor.CorreoProfesor;
             // Asignar List
             List<Deporte> listaDeportes = new List<Deporte>();
@@ -606,7 +606,7 @@ namespace Componentes_ProyectoGimnasioMMA.Componentes.Funciones
 
             string correo = "";
 
-            if (string.IsNullOrEmpty(correo)) correo = "Sin correo Asignado";
+            if (string.IsNullOrEmpty(profesor.CorreoProfesor)) correo = "Sin correo Asignado";
             else correo = profesor.CorreoProfesor;
 
 
