@@ -19,7 +19,7 @@ public class AgregarClase : ContentView
 
     // Pickers
 	protected Picker _selectorDia;
-	protected Picker _selectorEscuela;
+	//protected Picker _selectorEscuela;
 	protected Picker _selectorDeporte;
 	protected Picker _selectorProfesor;
 
@@ -27,9 +27,9 @@ public class AgregarClase : ContentView
 	protected Button _botonInsertar;
 
 	// Listas Escuelas
-	List<Escuela> _listaEscuelas;
-	List<string> _listaNombreEscuelas;
-    Escuela _escuelaElegida;
+	//List<Escuela> _listaEscuelas;
+	//List<string> _listaNombreEscuelas;
+    //Escuela _escuelaElegida;
 
     // Listas depores
     List<Deporte> _listaDeportes;
@@ -67,14 +67,14 @@ public class AgregarClase : ContentView
 
 
 		// Asignar Lista Escuelas
-		_listaEscuelas = new List<Escuela>();
-		_listaEscuelas = _api_bd.ObtenerEscuelasDeUsuario(_usuario.Correo);
-		_listaNombreEscuelas = new List<string>();
+		//_listaEscuelas = new List<Escuela>();
+		//_listaEscuelas = _api_bd.ObtenerEscuelasAsignadasAProfesorYUsuario(_usuario.Correo, );
+		//_listaNombreEscuelas = new List<string>();
 
-		foreach(Escuela escuela in _listaEscuelas)
-		{
-			_listaNombreEscuelas.Add(escuela.Nombre);
-		}
+		//foreach(Escuela escuela in _listaEscuelas)
+		//{
+		//	_listaNombreEscuelas.Add(escuela.Nombre);
+		//}
 
 		// Asignar Lista Deportes
 		_listaDeportes = new List<Deporte>();
@@ -110,7 +110,7 @@ public class AgregarClase : ContentView
         _tpHoraFin = GeneracionUI.CrearTimePicker("tpHoraFin", tpUnfocused);
 
         _selectorDia = GeneracionUI.CrearPicker("selectorDia", "Seleccione un Día de la Semana", Horario.DiasSemanaString, pUnfocused);
-        _selectorEscuela = GeneracionUI.CrearPicker("selectorEscuela", "Seleccione una Escuela", _listaNombreEscuelas, pUnfocused);
+        //_selectorEscuela = GeneracionUI.CrearPicker("selectorEscuela", "Seleccione una Escuela", _listaNombreEscuelas, pUnfocused);
         _selectorDeporte = GeneracionUI.CrearPicker("selectorDia", "Seleccione un Deporte para la Clase", _listaNombreDeportes, pUnfocused);
         if (_listaNombreDeportes.Count <= 0) _selectorDeporte.IsEnabled = false;
 
@@ -131,7 +131,7 @@ public class AgregarClase : ContentView
                  new Label(){Text = "Hora de Fin", Margin = new Thickness(10, 2, 2, 2)},
                 _tpHoraFin,
                 _selectorDia,
-                _selectorEscuela,
+                //_selectorEscuela,
                 _selectorDeporte,
                 _selectorProfesor
             }
@@ -214,20 +214,20 @@ public class AgregarClase : ContentView
             }
 
             // Asignar la escuela
-            if (_selectorEscuela == null || _selectorEscuela.SelectedItem == null) throw new Exception("Debe seleccionar una Escuela");
+            //if (_selectorEscuela == null || _selectorEscuela.SelectedItem == null) throw new Exception("Debe seleccionar una Escuela");
 
-            string escuelaNombre = _selectorEscuela.SelectedItem.ToString();
-            for (int indice = 0; indice < _listaEscuelas.Count; indice++)
-            {
-                if (_listaEscuelas[indice].Nombre == escuelaNombre) _escuelaElegida = _listaEscuelas[indice];
-            }
+            //string escuelaNombre = _selectorEscuela.SelectedItem.ToString();
+            //for (int indice = 0; indice < _listaEscuelas.Count; indice++)
+            //{
+            //    if (_listaEscuelas[indice].Nombre == escuelaNombre) _escuelaElegida = _listaEscuelas[indice];
+            //}
 
             // Validar que tengamos seleccionado el día
             if (_selectorDia == null || _selectorDia.SelectedItem == null) throw new Exception("Debe seleccionar un Día");
 
-
+            // He quitado el selector de escuelas, ya que si agregas una clase en una escuela en la cual no está el profesor asignado no tiene mucho sentido, asi que le asigno la escuela en la que esté 
             Horario horario = new Horario
-                (_tpHoraInicio.Time, _tpHoraFin.Time, Horario.ConvertirStringADiaSemana(_selectorDia.SelectedItem.ToString()), _profesorElegido.DNI, _deporteElegido.Id, _escuelaElegida.Id);
+                (_tpHoraInicio.Time, _tpHoraFin.Time, Horario.ConvertirStringADiaSemana(_selectorDia.SelectedItem.ToString()), _profesorElegido.DNI, _deporteElegido.Id, _escuela.Id);
 
             _api_bd.InsertarHorario(horario);
 

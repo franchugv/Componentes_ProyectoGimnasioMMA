@@ -81,13 +81,15 @@ public partial class Login : ContentPage
         {
             await DisplayAlert("Error", error.Message, "Ok");
         }
+
     }
 
-    private async void controladorBoton(object sender, EventArgs e)
+    private void controladorBoton(object sender, EventArgs e)
     {
         Button boton = (Button)sender;
         try
         {
+            _botonLogin.IsEnabled = false;
             switch (boton.StyleId)
             {
                 case "bLogin":
@@ -98,7 +100,11 @@ public partial class Login : ContentPage
         }
         catch (Exception error)
         {
-            await DisplayAlert("ERROR", error.Message, "Ok");
+            DisplayAlert("ERROR", error.Message, "Ok");
+        }
+        finally
+        {
+            _botonLogin.IsEnabled = true;
         }
     }
 
